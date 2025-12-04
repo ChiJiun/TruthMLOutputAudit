@@ -1,0 +1,14 @@
+# ZK 核心
+ezkl==10.2.7         # 穩定版本，若報錯可試試其他
+onnx>=1.14.0         # 處理模型結構
+onnxruntime>=1.15.0  # 用於驗證與測試
+onnxscript
+
+# 機器學習核心
+torch>=2.0.0         # PyTorch 2.0+ 支援更好
+torchvision>=0.15.0  # 如果你要做圖像識別
+numpy<2.0.0          # 注意！很多 ML 庫還不支援 numpy 2.0，建議鎖定在 1.x
+
+# 工具
+pandas               # 處理數據
+jupyter              # 方便測試
