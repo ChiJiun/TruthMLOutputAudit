@@ -1,0 +1,4 @@
+scale,quantized_accuracy,ezkl_status,proving_time_sec,verify_time_sec,proof_size_kb,verified,error
+8,0.84154,completed,0.1391,0.0762,11.8428,True,
+12,0.841335,completed,0.178,0.0883,11.8457,True,
+16,0.841335,completed,0.1499,0.0863,11.7734,True,

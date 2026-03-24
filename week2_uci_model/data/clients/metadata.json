@@ -1,0 +1,22 @@
+{
+  "num_clients": 3,
+  "random_seed": 42,
+  "total_train_samples": 39073,
+  "clients": [
+    {
+      "client_id": 0,
+      "num_samples": 13025,
+      "positive_ratio": 0.161075
+    },
+    {
+      "client_id": 1,
+      "num_samples": 13024,
+      "positive_ratio": 0.164158
+    },
+    {
+      "client_id": 2,
+      "num_samples": 13024,
+      "positive_ratio": 0.156404
+    }
+  ]
+}
