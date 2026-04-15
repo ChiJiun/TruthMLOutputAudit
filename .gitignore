@@ -12,6 +12,7 @@ env/
 
 # Editor settings
 .idea/
+.vs/
 
 # Local experiment outputs
 *.log

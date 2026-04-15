@@ -8,6 +8,8 @@
 - `week2_uci_model/`：Week 2 的 UCI Adult Income 模型實驗
 - `week3_scale_sweep/`：Week 3 的 scale sweep 實驗
 - `week4_baseline_charts/`：Week 4 的 baseline 圖表整理
+- `week5_fedavg_simulator/`：Week 5 的 FedAvg 聯邦學習 baseline
+- `week6_s0_charts/`：Week 6 的 S0 Round vs Accuracy 圖表
 - `docs/`：研究規劃與筆記
 - `requirements.txt`：目前專案使用的 Python 套件清單
 
@@ -49,8 +51,25 @@ Week 4 的 baseline 圖表，包含：
 - `results/scale_vs_proving_time.png`
 - `results/summary.md`
 
+### `week5_fedavg_simulator/`
+
+Week 5 的 FedAvg baseline，包含：
+
+- `run_fedavg.py`
+- `results/round_metrics.csv`
+- `results/summary.md`
+- `models/fedavg_global_model.pt`
+
+### `week6_s0_charts/`
+
+Week 6 的 S0 圖表，包含：
+
+- `generate_round_accuracy_chart.py`
+- `results/round_vs_accuracy.png`
+- `results/summary.md`
+
 ## 備註
 
 - 目前 Week 1 與 Week 2 都各自維持獨立可執行
 - 各週腳本支援兩種執行方式：從專案根目錄執行 `python weekX_xxx/script.py`，或先進入該週資料夾再執行 `python script.py`
-- 之後若新增 Week 5、Week 6，建議直接沿用同樣命名方式新增資料夾
+- 之後若新增 Week 7、Week 8，建議直接沿用同樣命名方式新增資料夾
