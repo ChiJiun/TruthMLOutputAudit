@@ -1,0 +1,4 @@
+epsilon,noise_multiplier,final_accuracy,best_accuracy,mean_round_time_sec,rounds,clip_norm
+0.5,0.16,0.842051,0.844815,2.2009,5,1.0
+1.0,0.08,0.843075,0.84502,2.5391,5,1.0
+2.0,0.04,0.843792,0.844611,3.3762,5,1.0

@@ -10,6 +10,8 @@
 - `week4_baseline_charts/`：Week 4 的 baseline 圖表整理
 - `week5_fedavg_simulator/`：Week 5 的 FedAvg 聯邦學習 baseline
 - `week6_s0_charts/`：Week 6 的 S0 Round vs Accuracy 圖表
+- `week7_dp_updater/`：Week 7 的 DP updater baseline
+- `week8_epsilon_sweep/`：Week 8 的 epsilon sweep 與圖表
 - `docs/`：研究規劃與筆記
 - `requirements.txt`：目前專案使用的 Python 套件清單
 
@@ -68,8 +70,27 @@ Week 6 的 S0 圖表，包含：
 - `results/round_vs_accuracy.png`
 - `results/summary.md`
 
+### `week7_dp_updater/`
+
+Week 7 的 DP baseline，包含：
+
+- `run_dp_fedavg.py`
+- `dp_fedavg_core.py`
+- `results/round_metrics_dp.csv`
+- `results/summary.md`
+
+### `week8_epsilon_sweep/`
+
+Week 8 的 epsilon sweep，包含：
+
+- `run_epsilon_sweep.py`
+- `generate_epsilon_chart.py`
+- `results/epsilon_sweep_results.csv`
+- `results/epsilon_vs_accuracy.png`
+- `results/summary.md`
+
 ## 備註
 
 - 目前 Week 1 與 Week 2 都各自維持獨立可執行
 - 各週腳本支援兩種執行方式：從專案根目錄執行 `python weekX_xxx/script.py`，或先進入該週資料夾再執行 `python script.py`
-- 之後若新增 Week 7、Week 8，建議直接沿用同樣命名方式新增資料夾
+- 之後若新增 Week 9、Week 10，建議直接沿用同樣命名方式新增資料夾
