@@ -1,8 +1,8 @@
-# VDP-FL 進度彙報（Week 1 - Week 8）
+# VDP-FL 進度彙報（Week 1 - Week 10）
 
 ## 一、目前完成進度
 
-目前已完成 Week 1 到 Week 8 的基礎實作，對應到三個主要階段：
+目前已完成 Week 1 到 Week 10 的基礎實作，對應到三個主要階段：
 
 - ZKML baseline 建立
 - FL baseline 建立
@@ -18,6 +18,8 @@
 - `week6_s0_charts/`
 - `week7_dp_updater/`
 - `week8_epsilon_sweep/`
+- `week9_clipping_verification/`
+- `week10_noise_verification/`
 
 ---
 
@@ -179,12 +181,51 @@
 
 ## 三、目前累積的研究意義
 
-目前這 8 週的進度，已經建立出以下基礎：
+### Week 9：Clipping 驗證原型
+
+目標是先把 `||Δw||^2 <= C^2` 的驗證邏輯整理成可重跑的原型。
+
+已完成：
+
+- 建立 clipping verification 腳本
+- 對每個 client 的 update 檢查 clipping bound
+- 建立 honest case 與 tampered case
+- 區分「超出 bound」與「雖在 bound 內但不符合 clipping 關係」兩種 fail case
+
+意義：
+
+- 先把後續 ZK 要驗證的數學條件定義清楚
+- 為之後的 circuit constraint 設計建立測試基準
+
+### Week 10：Noise 驗證原型
+
+目標是先把 `seed -> noise -> noisy update` 的驗證邏輯整理成可重跑的原型。
+
+已完成：
+
+- 建立 noise verification 腳本
+- 用固定 seed 生成可重現的 noise
+- 檢查 noise 是否真的對應指定 seed
+- 檢查 noisy update 是否真的等於 clipped update 加上 noise
+- 建立 honest case 與 tampered case
+
+意義：
+
+- 先把後續 ZK 要驗證的 noise 流程定義清楚
+- 為之後的 verifiable DP 整合建立第二個核心測試基準
+
+---
+
+## 三、目前累積的研究意義
+
+目前這 10 週的進度，已經建立出以下基礎：
 
 1. 已完成真實資料上的 ZKML baseline
 2. 已完成 FL baseline（S0）
 3. 已完成 DP baseline（S1）的第一版流程
 4. 已建立量化參數與隱私參數的基礎比較機制
+5. 已建立 clipping 條件的前置驗證原型
+6. 已建立 noise 生成與套用流程的前置驗證原型
 
 這代表後續可以開始進到：
 
@@ -211,7 +252,7 @@
 
 ## 五、下一步規劃
 
-接下來的重點會進入 S2，也就是：
+接下來的重點會繼續往 S2，也就是：
 
 - 驗證 clipping 條件是否可被零知識證明
 - 驗證 noise 生成與加噪流程是否可被驗證
@@ -219,7 +260,8 @@
 
 下一個主要目標是：
 
-- Week 9：`||Δw||^2 ≤ C^2` 的 clipping 驗證原型
+- 將 clipping 與 noise 驗證由 Python prototype 推進到可映射的 ZK constraint
+- 思考如何把 seed-based noise 設計接回實際訓練流程
 
 ---
 

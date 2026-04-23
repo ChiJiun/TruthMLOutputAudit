@@ -1,0 +1,10 @@
+client_id,seed,case_name,expected_result,verification_passed,clipped_update_norm,claimed_noise_norm,claimed_noisy_update_norm,noise_multiplier,clip_norm,seed_noise_ok,update_relation_ok,full_update_ok,noise_max_abs_error,update_relation_max_abs_error,full_update_max_abs_error
+0,42,honest_noise,pass,True,0.994414,0.213186,0.988213,0.08,1.0,True,True,True,0.0,0.0,0.0
+0,42,tampered_noise,fail,False,0.994414,0.225037,0.992487,0.08,1.0,False,True,False,0.05,0.0,0.05
+0,42,tampered_noisy_update,fail,False,0.994414,0.213186,0.986606,0.08,1.0,True,False,False,0.0,0.04,0.04
+1,142,honest_noise,pass,True,0.99672,0.288114,0.903756,0.08,1.0,True,True,True,0.0,0.0,0.0
+1,142,tampered_noise,fail,False,0.99672,0.280167,0.901425,0.08,1.0,False,True,False,0.05,0.0,0.05
+1,142,tampered_noisy_update,fail,False,0.99672,0.288114,0.907602,0.08,1.0,True,False,False,0.0,0.04,0.04
+2,242,honest_noise,pass,True,1.0,0.284026,1.045328,0.08,1.0,True,True,True,0.0,0.0,0.0
+2,242,tampered_noise,fail,False,1.0,0.288759,1.043903,0.08,1.0,False,True,False,0.05,0.0,0.05
+2,242,tampered_noisy_update,fail,False,1.0,0.284026,1.048186,0.08,1.0,True,False,False,0.0,0.04,0.04

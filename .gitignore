@@ -14,5 +14,11 @@ env/
 .idea/
 .vs/
 
+# Office / presentation files
+~$*.ppt*
+*.ppt
+*.pptx
+docs/*.pdf
+
 # Local experiment outputs
 *.log

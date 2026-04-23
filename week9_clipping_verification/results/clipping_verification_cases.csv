@@ -1,0 +1,10 @@
+client_id,case_name,expected_result,verification_passed,raw_update_norm,claimed_update_norm,clip_norm,bound_ok,relation_ok,relation_max_abs_error
+0,honest_clipped,pass,True,0.994414,0.994414,1.0,True,True,0.0
+0,tampered_bound_fail,fail,False,0.994414,1.243018,1.0,False,False,0.21282852
+0,tampered_relation_fail,fail,False,0.994414,0.997313,1.0,True,False,0.05
+1,honest_clipped,pass,True,0.99672,0.99672,1.0,True,True,0.0
+1,tampered_bound_fail,fail,False,0.99672,1.2459,1.0,False,False,0.21403265
+1,tampered_relation_fail,fail,False,0.99672,0.998128,1.0,True,False,0.05
+2,honest_clipped,pass,True,1.023506,1.0,1.0,True,True,0.0
+2,tampered_bound_fail,fail,False,1.023506,1.25,1.0,False,False,0.20689166
+2,tampered_relation_fail,fail,False,1.023506,0.998405,1.0,True,False,0.05
