@@ -17,7 +17,9 @@ if str(ROOT_DIR) not in sys.path:
 
 from week7_dp_updater.dp_fedavg_core import (
     SimpleLinearModel,
+    add_state_noise,
     clip_update,
+    generate_seeded_noise,
     load_client_datasets,
     load_test_dataset,
     set_seed,
@@ -44,34 +46,6 @@ def max_abs_difference(state_a: dict[str, torch.Tensor], state_b: dict[str, torc
     return max_diff
 
 
-def add_states(state_a: dict[str, torch.Tensor], state_b: dict[str, torch.Tensor]) -> dict[str, torch.Tensor]:
-    return {key: state_a[key] + state_b[key] for key in state_a}
-
-
-def subtract_states_local(state_a: dict[str, torch.Tensor], state_b: dict[str, torch.Tensor]) -> dict[str, torch.Tensor]:
-    return {key: state_a[key] - state_b[key] for key in state_a}
-
-
-def generate_seeded_noise(
-    reference_state: dict[str, torch.Tensor],
-    noise_multiplier: float,
-    clip_norm: float,
-    seed: int,
-) -> dict[str, torch.Tensor]:
-    noise_std = noise_multiplier * clip_norm
-    generator = torch.Generator(device="cpu")
-    generator.manual_seed(seed)
-
-    noise_state: dict[str, torch.Tensor] = {}
-    for key, tensor in reference_state.items():
-        noise_state[key] = torch.randn(
-            tensor.shape,
-            generator=generator,
-            dtype=tensor.dtype,
-        ) * noise_std
-    return noise_state
-
-
 def build_expected_noise_and_update(
     clipped_update: dict[str, torch.Tensor],
     noise_multiplier: float,
@@ -79,7 +53,7 @@ def build_expected_noise_and_update(
     seed: int,
 ) -> tuple[dict[str, torch.Tensor], dict[str, torch.Tensor]]:
     expected_noise = generate_seeded_noise(clipped_update, noise_multiplier, clip_norm, seed)
-    expected_noisy_update = add_states(clipped_update, expected_noise)
+    expected_noisy_update = add_state_noise(clipped_update, expected_noise)
     return expected_noise, expected_noisy_update
 
 
@@ -116,7 +90,7 @@ def verify_noise_application(
     )
 
     noise_error = max_abs_difference(expected_noise, claimed_noise)
-    update_relation_error = max_abs_difference(add_states(clipped_update, claimed_noise), claimed_noisy_update)
+    update_relation_error = max_abs_difference(add_state_noise(clipped_update, claimed_noise), claimed_noisy_update)
     full_update_error = max_abs_difference(expected_noisy_update, claimed_noisy_update)
 
     seed_noise_ok = noise_error <= tolerance
@@ -192,9 +166,9 @@ def write_summary(
         "- Honest cases satisfy both the seed-to-noise mapping and the noisy-update relation.",
         "- Tampered cases can break either the generated noise itself or the final noisy update relation.",
         "",
-        "Known gap:",
+        "Current status:",
         "- This prototype uses deterministic seed-based noise so the process can be verified.",
-        "- Week 7 baseline still uses direct runtime randomness, so a future integration step is needed to align the training path with this verifiable design.",
+        "- Week 7 baseline has been aligned to the same seed-based noise direction, but the project still needs formal DP accounting and ZK circuit mapping.",
     ]
     output_path.write_text("\n".join(lines), encoding="utf-8")
 
@@ -250,7 +224,7 @@ def main() -> int:
 
         cases = [
             ("honest_noise", "pass", case_seed, honest_noise, honest_noisy_update),
-            ("tampered_noise", "fail", case_seed, tampered_noise, add_states(clipped_update, tampered_noise)),
+            ("tampered_noise", "fail", case_seed, tampered_noise, add_state_noise(clipped_update, tampered_noise)),
             ("tampered_noisy_update", "fail", case_seed, honest_noise, tampered_noisy_update),
         ]
 

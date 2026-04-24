@@ -35,4 +35,4 @@ python run_noise_verification.py
 
 - 這一週做的是 `pre-ZK verification prototype`
 - 為了讓 noise 可驗證，這裡採用 `seed-based deterministic noise` 設計
-- 這和 Week 7 的 baseline `torch.randn_like(...)` 不完全相同，因此目前屬於「往可驗證版本收斂的原型」，不是直接宣稱已完成正式 DP accountant 或正式 ZK proof
+- Week 7 baseline 現在也已改成同樣的 seed-based noise 方向，但目前仍不是正式 DP accountant 或正式 ZK proof

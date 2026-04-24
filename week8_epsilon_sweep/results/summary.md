@@ -1,6 +1,6 @@
 # Week 8 Epsilon Sweep Summary
 
-- Best epsilon by accuracy: 1.0 -> 0.845020
+- Best epsilon by accuracy: 2.0 -> 0.844303
 
 Note:
 - This sweep uses a simplified epsilon-to-noise mapping for baseline comparison.

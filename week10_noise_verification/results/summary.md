@@ -9,6 +9,6 @@ Interpretation:
 - Honest cases satisfy both the seed-to-noise mapping and the noisy-update relation.
 - Tampered cases can break either the generated noise itself or the final noisy update relation.
 
-Known gap:
+Current status:
 - This prototype uses deterministic seed-based noise so the process can be verified.
-- Week 7 baseline still uses direct runtime randomness, so a future integration step is needed to align the training path with this verifiable design.
+- Week 7 baseline has been aligned to the same seed-based noise direction, but the project still needs formal DP accounting and ZK circuit mapping.

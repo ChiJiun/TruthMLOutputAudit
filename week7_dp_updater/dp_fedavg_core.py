@@ -146,16 +146,35 @@ def clip_update(update_state: dict[str, torch.Tensor], clip_norm: float) -> tupl
     return clipped_state, original_norm, scale
 
 
-def add_gaussian_noise(
-    update_state: dict[str, torch.Tensor],
+def generate_seeded_noise(
+    reference_state: dict[str, torch.Tensor],
     noise_multiplier: float,
     clip_norm: float,
+    seed: int,
 ) -> dict[str, torch.Tensor]:
     noise_std = noise_multiplier * clip_norm
-    return {
-        key: tensor + torch.randn_like(tensor) * noise_std
-        for key, tensor in update_state.items()
-    }
+    generator = torch.Generator(device="cpu")
+    generator.manual_seed(seed)
+
+    noise_state: dict[str, torch.Tensor] = {}
+    for key, tensor in reference_state.items():
+        noise_state[key] = torch.randn(
+            tensor.shape,
+            generator=generator,
+            dtype=tensor.dtype,
+        ) * noise_std
+    return noise_state
+
+
+def add_state_noise(
+    update_state: dict[str, torch.Tensor],
+    noise_state: dict[str, torch.Tensor],
+) -> dict[str, torch.Tensor]:
+    return {key: update_state[key] + noise_state[key] for key in update_state}
+
+
+def make_noise_seed(base_seed: int, round_idx: int, client_id: int) -> int:
+    return int(base_seed + round_idx * 10_000 + client_id * 100)
 
 
 def run_dp_fedavg_experiment(
@@ -186,6 +205,7 @@ def run_dp_fedavg_experiment(
             "mean_client_loss": "",
             "mean_update_norm": "",
             "mean_clip_scale": "",
+            "mean_noise_norm": "",
             "num_clients": len(clients),
             "local_epochs": local_epochs,
             "clip_norm": clip_norm,
@@ -202,8 +222,9 @@ def run_dp_fedavg_experiment(
         local_losses: list[float] = []
         update_norms: list[float] = []
         clip_scales: list[float] = []
+        noise_norms: list[float] = []
 
-        for x_client, y_client in clients:
+        for client_id, (x_client, y_client) in enumerate(clients):
             local_state, avg_loss = train_local_model(
                 global_model=global_model,
                 x_client=x_client,
@@ -215,13 +236,16 @@ def run_dp_fedavg_experiment(
             )
             update_state = subtract_states(local_state, global_state)
             clipped_state, update_norm, clip_scale = clip_update(update_state, clip_norm)
-            noisy_state = add_gaussian_noise(clipped_state, noise_multiplier, clip_norm)
+            noise_seed = make_noise_seed(seed, round_idx, client_id)
+            noise_state = generate_seeded_noise(clipped_state, noise_multiplier, clip_norm, noise_seed)
+            noisy_state = add_state_noise(clipped_state, noise_state)
 
             dp_updates.append(noisy_state)
             client_sizes.append(len(y_client))
             local_losses.append(avg_loss)
             update_norms.append(update_norm)
             clip_scales.append(clip_scale)
+            noise_norms.append(state_l2_norm(noise_state))
 
         averaged_update = weighted_average_states(dp_updates, client_sizes)
         next_state = add_states(global_state, averaged_update)
@@ -237,6 +261,7 @@ def run_dp_fedavg_experiment(
                 "mean_client_loss": round(float(np.mean(local_losses)), 6),
                 "mean_update_norm": round(float(np.mean(update_norms)), 6),
                 "mean_clip_scale": round(float(np.mean(clip_scales)), 6),
+                "mean_noise_norm": round(float(np.mean(noise_norms)), 6),
                 "num_clients": len(clients),
                 "local_epochs": local_epochs,
                 "clip_norm": clip_norm,
@@ -251,6 +276,7 @@ def run_dp_fedavg_experiment(
         "mean_round_time_sec": round(float(np.mean([row["round_time_sec"] for row in rows[1:]])), 4),
         "clip_norm": clip_norm,
         "noise_multiplier": noise_multiplier,
+        "noise_mode": "seeded_deterministic",
         "rounds": rounds,
         "clients": len(clients),
         "local_epochs": local_epochs,
@@ -268,6 +294,7 @@ def write_csv(rows: list[dict[str, object]], output_path: Path) -> None:
         "mean_client_loss",
         "mean_update_norm",
         "mean_clip_scale",
+        "mean_noise_norm",
         "num_clients",
         "local_epochs",
         "clip_norm",

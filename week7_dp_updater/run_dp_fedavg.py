@@ -34,9 +34,10 @@ def write_summary(summary: dict[str, object], output_path: Path) -> None:
         f"- local_epochs: {summary['local_epochs']}",
         f"- clip_norm: {summary['clip_norm']}",
         f"- noise_multiplier: {summary['noise_multiplier']}",
+        f"- noise_mode: {summary['noise_mode']}",
         "",
         "Note:",
-        "- This Week 7 baseline uses a simplified Gaussian-noise mapping for DP experimentation.",
+        "- This Week 7 baseline now uses seed-based deterministic noise so each client update can be replayed and verified.",
         "- It is useful for trend comparison, but not yet a formal privacy accountant implementation.",
     ]
     output_path.write_text("\n".join(lines), encoding="utf-8")
