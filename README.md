@@ -14,6 +14,7 @@
 - `week8_epsilon_sweep/`：Week 8 的 epsilon sweep 與圖表
 - `week9_clipping_verification/`：Week 9 的 clipping 驗證原型
 - `week10_noise_verification/`：Week 10 的 noise 驗證原型
+- `week11_quantized_constraints/`：Week 11 的整數 constraint 檢查原型
 - `docs/`：研究規劃與筆記
 - `requirements.txt`：目前專案使用的 Python 套件清單
 
@@ -107,8 +108,16 @@ Week 10 的 noise 驗證原型，包含：
 - `results/noise_verification_cases.csv`
 - `results/summary.md`
 
+### `week11_quantized_constraints/`
+
+Week 11 的整數 constraint 檢查原型，包含：
+
+- `run_quantized_constraint_checks.py`
+- `results/quantized_constraint_cases.csv`
+- `results/summary.md`
+
 ## 備註
 
 - 目前 Week 1 與 Week 2 都各自維持獨立可執行
 - 各週腳本支援兩種執行方式：從專案根目錄執行 `python weekX_xxx/script.py`，或先進入該週資料夾再執行 `python script.py`
-- 之後若新增 Week 11、Week 12，建議直接沿用同樣命名方式新增資料夾
+- 之後若新增 Week 12、Week 13，建議直接沿用同樣命名方式新增資料夾
