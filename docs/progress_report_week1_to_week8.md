@@ -283,11 +283,13 @@
 - 建立 S2 round decision demo
 - 模擬 1 個 tampered client + 2 個 honest clients
 - 根據推薦 profile 做接受 / 拒絕決策
+- 在 `zkML` 環境中補上小型 actual EZKL constraint demo
 
 意義：
 
 - 完成 repo-level 的 S2 整合示範
 - 讓整個 16 週計畫在目前環境下具備端到端敘事與可執行產物
+- 證明推薦 constraint profile 不只停留在 stub，也已經能接到真實 EZKL proof / verify smoke test
 
 ---
 

@@ -60,13 +60,11 @@ if __name__ == "__main__":
 
         print("\n[4/5] Checking for SRS...")
         if not Path(SRS_PATH).exists():
-            print("⚠ SRS not found. Attempting to download...")
-            # srs_path, settings_path
-            res = ezkl.get_srs(
-                str(SRS_PATH),
-                str(SETTINGS_JSON)
-            )
-            assert res is True
+            print("⚠ SRS not found. Generating locally...")
+            logrows = json.loads(Path(SETTINGS_JSON).read_text(encoding="utf-8"))["run_args"]["logrows"]
+            ezkl.gen_srs(str(SRS_PATH), logrows)
+            if not Path(SRS_PATH).exists():
+                raise RuntimeError("Local SRS generation did not produce the expected file.")
         else:
             print(f"✓ Using existing SRS: {SRS_PATH}")
 

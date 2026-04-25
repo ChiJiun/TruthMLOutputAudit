@@ -161,7 +161,9 @@ Week 15 的 backend-ready bundle，包含：
 Week 16 的 S2 整合 demo，包含：
 
 - `run_s2_integration_demo.py`
+- `run_actual_ezkl_constraint_demo.py`
 - `results/s2_round_decisions.csv`
+- `results/actual_ezkl_summary.md`
 - `results/summary.md`
 
 ## 備註

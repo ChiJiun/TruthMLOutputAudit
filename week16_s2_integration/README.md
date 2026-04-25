@@ -12,9 +12,11 @@ python week16_s2_integration/run_s2_integration_demo.py
 
 - `results/s2_round_decisions.csv`
 - `results/summary.md`
+- `results/actual_ezkl_summary.md`
 
 ## 重要說明
 
 - 這是 S2 的 repo-level integration prototype
 - 接受 / 拒絕決策是依據 Week 14 artifact 中的 constraint checks
 - 目前仍未接上真實 proof backend，因此屬於 pre-proof integration demo
+- 若 `zkML` conda 環境可用，還可額外執行 `run_actual_ezkl_constraint_demo.py` 做小型 actual backend 驗證
