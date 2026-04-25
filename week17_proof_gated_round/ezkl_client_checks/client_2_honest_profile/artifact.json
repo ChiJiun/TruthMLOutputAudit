@@ -1,0 +1,72 @@
+{
+  "meta": {
+    "scale": 10000,
+    "client_id": 2,
+    "case_name": "honest_profile",
+    "clip_norm": 1.0,
+    "noise_multiplier": 0.08,
+    "noise_seed": 10242,
+    "slack_ppm": 4201,
+    "slack_abs": 420100,
+    "shapes": {
+      "fc.weight": [
+        1,
+        9
+      ],
+      "fc.bias": [
+        1
+      ]
+    }
+  },
+  "public_inputs": {
+    "clip_rhs_bound_sq": 100000000,
+    "slack_abs": 420100,
+    "noise_seed": 10242,
+    "scale": 10000
+  },
+  "witness": {
+    "q_clipped": [
+      -569,
+      1185,
+      3492,
+      -1760,
+      2747,
+      -881,
+      580,
+      -2324,
+      -663,
+      -8276
+    ],
+    "q_noise": [
+      2070,
+      462,
+      -417,
+      -980,
+      567,
+      -700,
+      1059,
+      -494,
+      3,
+      -1546
+    ],
+    "q_noisy": [
+      1501,
+      1647,
+      3075,
+      -2740,
+      3314,
+      -1581,
+      1639,
+      -2818,
+      -660,
+      -9822
+    ]
+  },
+  "checks": {
+    "clip_lhs_sum_sq": 100010941,
+    "clip_bound_excess": 10941,
+    "relation_linf_gap": 0,
+    "clip_ok": true,
+    "relation_ok": true
+  }
+}

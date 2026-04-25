@@ -1,0 +1,9 @@
+{
+  "verified": true,
+  "clip_sum_sq": 99337072.0,
+  "relation_sum_sq": 1.0,
+  "clip_rhs_bound_sq": 100000000,
+  "slack_abs": 420100,
+  "clip_ok": true,
+  "relation_ok": false
+}

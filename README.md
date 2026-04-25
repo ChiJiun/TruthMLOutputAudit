@@ -20,6 +20,8 @@
 - `week14_constraint_artifacts/`：Week 14 的 constraint artifact 匯出
 - `week15_zk_backend_stub/`：Week 15 的 backend-ready bundle
 - `week16_s2_integration/`：Week 16 的 S2 整合 demo
+- `week17_proof_gated_round/`：Week 17 的 proof-gated round 實驗
+- `week18_end_to_end_s2_round/`：Week 18 的 end-to-end S2 round outcome
 - `docs/`：研究規劃與筆記
 - `requirements.txt`：目前專案使用的 Python 套件清單
 
@@ -164,6 +166,24 @@ Week 16 的 S2 整合 demo，包含：
 - `run_actual_ezkl_constraint_demo.py`
 - `results/s2_round_decisions.csv`
 - `results/actual_ezkl_summary.md`
+- `results/summary.md`
+
+### `week17_proof_gated_round/`
+
+Week 17 的 proof-gated round 實驗，包含：
+
+- `run_actual_proof_gated_round.py`
+- `results/proof_gated_round.csv`
+- `results/accepted_aggregate.json`
+- `results/summary.md`
+
+### `week18_end_to_end_s2_round/`
+
+Week 18 的 end-to-end S2 round outcome，包含：
+
+- `run_end_to_end_s2_round.py`
+- `results/accepted_average_q_noisy.json`
+- `results/ungated_average_q_noisy.json`
 - `results/summary.md`
 
 ## 備註

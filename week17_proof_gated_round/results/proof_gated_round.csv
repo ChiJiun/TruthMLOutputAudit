@@ -1,0 +1,4 @@
+client_id,case_name,verified,clip_ok,relation_ok,accepted,summary_path,export_returncode,pipeline_returncode
+0,honest_profile,True,True,True,True,week17_proof_gated_round\ezkl_client_checks\client_0_honest_profile\summary.json,0,0
+1,tampered_noisy_profile,True,True,False,False,week17_proof_gated_round\ezkl_client_checks\client_1_tampered_noisy_profile\summary.json,0,0
+2,honest_profile,True,True,True,True,week17_proof_gated_round\ezkl_client_checks\client_2_honest_profile\summary.json,0,0
