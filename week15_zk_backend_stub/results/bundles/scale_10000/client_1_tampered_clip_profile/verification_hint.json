@@ -1,0 +1,6 @@
+{
+  "expected_clip_ok": false,
+  "expected_relation_ok": true,
+  "expected_clip_bound_excess": 8148085,
+  "expected_relation_linf_gap": 0
+}

@@ -1,8 +1,8 @@
-# VDP-FL 進度彙報（Week 1 - Week 13）
+# VDP-FL 進度彙報（Week 1 - Week 16）
 
 ## 一、目前完成進度
 
-目前已完成 Week 1 到 Week 13 的基礎實作，對應到三個主要階段：
+目前已完成 Week 1 到 Week 16 的 repo-level 實作，對應到三個主要階段：
 
 - ZKML baseline 建立
 - FL baseline 建立
@@ -23,6 +23,9 @@
 - `week11_quantized_constraints/`
 - `week12_canonical_witness/`
 - `week13_recommended_constraints/`
+- `week14_constraint_artifacts/`
+- `week15_zk_backend_stub/`
+- `week16_s2_integration/`
 
 ---
 
@@ -240,6 +243,52 @@
 - 為後續 S2 電路設計提供更接近規格的候選版本
 - 將「探索問題」進一步收斂成「可採用設計」
 
+### Week 14：Constraint Artifact Export
+
+目標是把推薦 constraint profile 轉成更接近電路輸入的固定 artifact。
+
+已完成：
+
+- 匯出 `public_inputs`
+- 匯出 `witness`
+- 匯出 `checks`
+- 建立 honest / tampered artifact corpus
+
+意義：
+
+- 固定後續 circuit-facing 的資料格式
+- 降低之後接 ZK backend 時的格式不確定性
+
+### Week 15：ZK Backend Stub
+
+目標是把 Week 14 artifact 再整理成 backend-ready bundle。
+
+已完成：
+
+- 匯出 `io_bundle.json`
+- 匯出 `verification_hint.json`
+- 匯出 backend note
+
+意義：
+
+- 讓未來接 EZKL 或其他 backend 時有明確 handoff 格式
+- 在沒有安裝 `ezkl` 的環境下，先完成 repo 內可交付的 stub 整合
+
+### Week 16：S2 Integration Demo
+
+目標是做一個可重跑的 S2 整合原型，展示 tampered client 會被過濾。
+
+已完成：
+
+- 建立 S2 round decision demo
+- 模擬 1 個 tampered client + 2 個 honest clients
+- 根據推薦 profile 做接受 / 拒絕決策
+
+意義：
+
+- 完成 repo-level 的 S2 整合示範
+- 讓整個 16 週計畫在目前環境下具備端到端敘事與可執行產物
+
 ---
 
 ## 三、目前累積的研究意義
@@ -281,7 +330,7 @@
 
 ## 三、目前累積的研究意義
 
-目前這 13 週的進度，已經建立出以下基礎：
+目前這 16 週的進度，已經建立出以下基礎：
 
 1. 已完成真實資料上的 ZKML baseline
 2. 已完成 FL baseline（S0）
@@ -292,13 +341,17 @@
 7. 已定位 quantized constraint 的 rounding 問題
 8. 已找到 canonical witness 與 clipping slack 的可行設計方向
 9. 已收斂出推薦 constraint profile
+10. 已固定 circuit-facing artifact 格式
+11. 已建立 backend-ready handoff bundle
+12. 已完成 repo-level S2 integration demo
 
 這代表後續可以開始進到：
 
 - clipping 可驗證
 - noise 可驗證
 - constraint profile 固定化
-- S2（FL + DP + ZK）整合
+- circuit-facing artifact 固定化
+- S2（FL + DP + ZK）repo-level 整合
 
 ---
 
@@ -319,21 +372,16 @@
 
 ## 五、下一步規劃
 
-接下來的重點會繼續往 S2，也就是：
+接下來若要再往下延伸，重點會是：
 
-- 驗證 clipping 條件是否可被零知識證明
-- 驗證 noise 生成與加噪流程是否可被驗證
-- 整合 FL + DP + ZK 的完整流程
-
-下一個主要目標是：
-
-- 將推薦 constraint profile 繼續推進到可落地的 ZK 電路表示
-- 思考如何把 seed-based noise 設計與固定 slack 規則接回實際訓練流程
+- 將推薦 constraint profile 實際映射到真實 ZK backend
+- 實作至少一輪真正的 proof / verify
+- 測量 proving time、verification time、proof size、memory
 
 ---
 
 ## 六、簡短結論
 
-目前已完成從 ZKML baseline、FL baseline，到 DP baseline 的初步整合。  
-整體流程已從 demo 推進到真實資料、client split、多輪聚合、DP update 與 epsilon sweep。  
-後續研究將聚焦於「可驗證差分隱私（VDP）」的核心，也就是如何讓 clipping 與 noise 流程本身能被第三方驗證。
+目前已完成從 ZKML baseline、FL baseline、DP baseline，到 S2 constraint profile、artifact、backend stub 與 integration demo 的 repo-level 串接。  
+整體流程已從 demo 推進到真實資料、client split、多輪聚合、DP update、constraint 固定化與 S2 接受/拒絕決策示範。  
+若要進一步完成研究型成果，下一步將是把目前已固定的 profile 真正接入可執行的 ZK backend。

@@ -1,0 +1,4 @@
+client_id,selected_case,accepted_by_s2,clip_ok,relation_ok,clip_bound_excess,relation_linf_gap
+0,honest_profile,True,True,True,0,0
+1,tampered_noisy_profile,False,True,False,0,1
+2,honest_profile,True,True,True,10941,0

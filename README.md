@@ -17,6 +17,9 @@
 - `week11_quantized_constraints/`：Week 11 的整數 constraint 檢查原型
 - `week12_canonical_witness/`：Week 12 的 canonical witness 實驗
 - `week13_recommended_constraints/`：Week 13 的推薦 constraint profile
+- `week14_constraint_artifacts/`：Week 14 的 constraint artifact 匯出
+- `week15_zk_backend_stub/`：Week 15 的 backend-ready bundle
+- `week16_s2_integration/`：Week 16 的 S2 整合 demo
 - `docs/`：研究規劃與筆記
 - `requirements.txt`：目前專案使用的 Python 套件清單
 
@@ -134,8 +137,35 @@ Week 13 的推薦 constraint profile，包含：
 - `results/recommended_constraint_cases.csv`
 - `results/summary.md`
 
+### `week14_constraint_artifacts/`
+
+Week 14 的 constraint artifact 匯出，包含：
+
+- `run_constraint_artifact_export.py`
+- `results/artifact_index.csv`
+- `results/artifacts/*.json`
+- `results/summary.md`
+
+### `week15_zk_backend_stub/`
+
+Week 15 的 backend-ready bundle，包含：
+
+- `run_zk_backend_stub.py`
+- `results/bundle_index.csv`
+- `results/bundles/*/io_bundle.json`
+- `results/bundles/*/verification_hint.json`
+- `results/summary.md`
+
+### `week16_s2_integration/`
+
+Week 16 的 S2 整合 demo，包含：
+
+- `run_s2_integration_demo.py`
+- `results/s2_round_decisions.csv`
+- `results/summary.md`
+
 ## 備註
 
 - 目前 Week 1 與 Week 2 都各自維持獨立可執行
 - 各週腳本支援兩種執行方式：從專案根目錄執行 `python weekX_xxx/script.py`，或先進入該週資料夾再執行 `python script.py`
-- 之後若新增 Week 14、Week 15，建議直接沿用同樣命名方式新增資料夾
+- 若後續再延伸，建議直接沿用同樣命名方式新增資料夾

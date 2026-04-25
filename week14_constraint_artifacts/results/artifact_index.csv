@@ -1,0 +1,10 @@
+scale,client_id,case_name,expected_result,clip_ok,relation_ok,clip_bound_excess,relation_linf_gap,artifact_path,local_loss
+10000,0,honest_profile,pass,True,True,0,0,results\artifacts\scale_10000\client_0_honest_profile.json,0.475945
+10000,0,tampered_clip_profile,fail,False,True,7653825,0,results\artifacts\scale_10000\client_0_tampered_clip_profile.json,0.475945
+10000,0,tampered_noisy_profile,fail,True,False,0,1,results\artifacts\scale_10000\client_0_tampered_noisy_profile.json,0.475945
+10000,1,honest_profile,pass,True,True,0,0,results\artifacts\scale_10000\client_1_honest_profile.json,0.476529
+10000,1,tampered_clip_profile,fail,False,True,8148085,0,results\artifacts\scale_10000\client_1_tampered_clip_profile.json,0.476529
+10000,1,tampered_noisy_profile,fail,True,False,0,1,results\artifacts\scale_10000\client_1_tampered_noisy_profile.json,0.476529
+10000,2,honest_profile,pass,True,True,10941,0,results\artifacts\scale_10000\client_2_honest_profile.json,0.474137
+10000,2,tampered_clip_profile,fail,False,True,8536941,0,results\artifacts\scale_10000\client_2_tampered_clip_profile.json,0.474137
+10000,2,tampered_noisy_profile,fail,True,False,10941,1,results\artifacts\scale_10000\client_2_tampered_noisy_profile.json,0.474137

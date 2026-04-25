@@ -1,0 +1,5 @@
+{
+  "status": "stub_only",
+  "reason": "ezkl backend not available in current environment",
+  "next_step": "map q_clipped/q_noise/q_noisy vectors into real circuit inputs and witness generation"
+}
