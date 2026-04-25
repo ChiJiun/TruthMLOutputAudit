@@ -1,8 +1,8 @@
-# VDP-FL 進度彙報（Week 1 - Week 10）
+# VDP-FL 進度彙報（Week 1 - Week 13）
 
 ## 一、目前完成進度
 
-目前已完成 Week 1 到 Week 10 的基礎實作，對應到三個主要階段：
+目前已完成 Week 1 到 Week 13 的基礎實作，對應到三個主要階段：
 
 - ZKML baseline 建立
 - FL baseline 建立
@@ -20,6 +20,9 @@
 - `week8_epsilon_sweep/`
 - `week9_clipping_verification/`
 - `week10_noise_verification/`
+- `week11_quantized_constraints/`
+- `week12_canonical_witness/`
+- `week13_recommended_constraints/`
 
 ---
 
@@ -179,6 +182,66 @@
 
 ---
 
+### Week 11：Quantized Constraint Mapping
+
+目標是先觀察 clipping 與 noise relation 在 fixed-point / integer constraint 下會出現哪些 rounding 問題。
+
+已完成：
+
+- 建立整數 constraint 檢查腳本
+- 比較 `q(a+b)` 與 `q(a) + q(b)` 的差異
+- 檢查 clipping bound 是否會因量化而跨界
+
+重要觀察：
+
+- `q(a+b)` 與 `q(a) + q(b)` 在 honest case 下不會自然精確相等
+- clipping bound 在邊界案例下可能因 rounding 輕微超界
+
+意義：
+
+- 提前定位未來電路設計的 rounding 問題
+- 證明後續必須選擇 canonical witness 與明確 slack policy
+
+### Week 12：Canonical Witness + Slack Sweep
+
+目標是找到更穩定的 witness 形式與 clipping slack 規則。
+
+已完成：
+
+- 建立 canonical witness 原型
+- 確認 honest noise relation 可達到 `9/9` 精確成立
+- 建立 slack policy sweep
+- 找出 honest / tampered 之間的 slack 可行區間
+
+重要觀察：
+
+- honest 最大 clipping excess 為 `4200 ppm`
+- tampered 最小 clipping excess 為 `73300 ppm`
+- 已出現足夠大的安全區間可供固定 slack 使用
+
+意義：
+
+- 將 noise relation 從 prototype 推進到穩定可映射 constraint
+- 將 clipping 驗證推進到可設定固定 slack 的設計階段
+
+### Week 13：Recommended Constraint Profile
+
+目標是把目前最穩定的 witness 與 slack 組合成單一推薦版本。
+
+已完成：
+
+- 建立推薦 constraint profile 腳本
+- 固定 canonical witness
+- 固定推薦 slack 候選值
+- 同時檢查 clipping 與 noisy-update relation
+
+意義：
+
+- 為後續 S2 電路設計提供更接近規格的候選版本
+- 將「探索問題」進一步收斂成「可採用設計」
+
+---
+
 ## 三、目前累積的研究意義
 
 ### Week 9：Clipping 驗證原型
@@ -218,7 +281,7 @@
 
 ## 三、目前累積的研究意義
 
-目前這 10 週的進度，已經建立出以下基礎：
+目前這 13 週的進度，已經建立出以下基礎：
 
 1. 已完成真實資料上的 ZKML baseline
 2. 已完成 FL baseline（S0）
@@ -226,11 +289,15 @@
 4. 已建立量化參數與隱私參數的基礎比較機制
 5. 已建立 clipping 條件的前置驗證原型
 6. 已建立 noise 生成與套用流程的前置驗證原型
+7. 已定位 quantized constraint 的 rounding 問題
+8. 已找到 canonical witness 與 clipping slack 的可行設計方向
+9. 已收斂出推薦 constraint profile
 
 這代表後續可以開始進到：
 
 - clipping 可驗證
 - noise 可驗證
+- constraint profile 固定化
 - S2（FL + DP + ZK）整合
 
 ---
@@ -260,8 +327,8 @@
 
 下一個主要目標是：
 
-- 將 clipping 與 noise 驗證由 Python prototype 推進到可映射的 ZK constraint
-- 思考如何把 seed-based noise 設計接回實際訓練流程
+- 將推薦 constraint profile 繼續推進到可落地的 ZK 電路表示
+- 思考如何把 seed-based noise 設計與固定 slack 規則接回實際訓練流程
 
 ---
 
