@@ -1,0 +1,7 @@
+dataset,mode,rounds,clip_norm,noise_multiplier,fl_final_mean,dp_final_mean,final_accuracy_gap,dp_retention_ratio,dp_effect_preserved
+banknote_authentication,dp_sweep,5,1.0,0.08,0.573333,0.467879,0.105455,0.816067,False
+banknote_authentication,dp_sweep,5,1.0,0.04,0.573333,0.51394,0.059394,0.896406,False
+banknote_authentication,dp_sweep,5,1.0,0.02,0.573333,0.549091,0.024242,0.957717,True
+banknote_authentication,dp_sweep,10,1.0,0.08,0.8,0.791515,0.008485,0.989394,True
+banknote_authentication,dp_sweep,10,1.0,0.04,0.8,0.797576,0.002424,0.99697,True
+banknote_authentication,dp_sweep,10,2.0,0.04,0.8,0.791515,0.008485,0.989394,True

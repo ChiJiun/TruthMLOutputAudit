@@ -3,7 +3,14 @@
     "breast_cancer_wisconsin",
     "pima_diabetes",
     "german_credit",
-    "banknote_authentication"
+    "banknote_authentication",
+    "spambase",
+    "tic_tac_toe",
+    "titanic",
+    "ilpd",
+    "pc4",
+    "blood_transfusion",
+    "kc2"
   ],
   "seeds": [
     42,

@@ -31,6 +31,13 @@ DATASETS = {
     "pima_diabetes": {"source": "openml", "data_id": 37},
     "german_credit": {"source": "openml", "data_id": 31},
     "banknote_authentication": {"source": "openml", "data_id": 1462},
+    "spambase": {"source": "openml", "data_id": 44},
+    "tic_tac_toe": {"source": "openml", "data_id": 50},
+    "titanic": {"source": "openml", "data_id": 40945},
+    "ilpd": {"source": "openml", "data_id": 1480},
+    "pc4": {"source": "openml", "data_id": 1049},
+    "blood_transfusion": {"source": "openml", "data_id": 1464},
+    "kc2": {"source": "openml", "data_id": 1063},
 }
 
 
