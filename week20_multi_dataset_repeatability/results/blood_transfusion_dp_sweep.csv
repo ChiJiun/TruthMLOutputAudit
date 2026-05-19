@@ -1,0 +1,8 @@
+dataset,mode,rounds,clip_norm,noise_multiplier,fl_final_mean,dp_final_mean,final_accuracy_gap,dp_retention_ratio,dp_effect_preserved
+blood_transfusion,dp_sweep,5,1.0,0.08,0.615556,0.535555,0.08,0.870036,False
+blood_transfusion,dp_sweep,5,1.0,0.04,0.615556,0.573333,0.042222,0.931408,True
+blood_transfusion,dp_sweep,5,1.0,0.02,0.615556,0.597778,0.017778,0.971119,True
+blood_transfusion,dp_sweep,10,1.0,0.08,0.724444,0.682222,0.042222,0.941718,True
+blood_transfusion,dp_sweep,10,1.0,0.04,0.724444,0.715555,0.008889,0.98773,True
+blood_transfusion,dp_sweep,10,2.0,0.04,0.724444,0.682222,0.042222,0.941718,True
+blood_transfusion,dp_sweep,15,1.0,0.04,0.753333,0.744445,0.008889,0.988201,True

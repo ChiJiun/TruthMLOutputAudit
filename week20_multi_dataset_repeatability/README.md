@@ -28,6 +28,12 @@ Run the banknote-specific DP parameter sweep:
 python week20_multi_dataset_repeatability\run_banknote_dp_sweep.py
 ```
 
+Run the blood-transfusion-specific DP parameter sweep:
+
+```powershell
+python week20_multi_dataset_repeatability\run_blood_transfusion_dp_sweep.py
+```
+
 ## Outputs
 
 - `results/multi_dataset_runs.csv`
@@ -36,3 +42,5 @@ python week20_multi_dataset_repeatability\run_banknote_dp_sweep.py
 - `results/config.json`
 - `results/banknote_dp_sweep.csv`
 - `results/banknote_dp_sweep_summary.md`
+- `results/blood_transfusion_dp_sweep.csv`
+- `results/blood_transfusion_dp_sweep_summary.md`
