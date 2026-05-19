@@ -23,6 +23,7 @@
 - `week17_proof_gated_round/`：Week 17 的 proof-gated round 實驗
 - `week18_end_to_end_s2_round/`：Week 18 的 end-to-end S2 round outcome
 - `week19_breast_cancer_repeatability/`：Week 19 的相似資料集重複實驗
+- `week20_multi_dataset_repeatability/`：Week 20 的多資料集重複實驗
 - `docs/`：研究規劃與筆記
 - `requirements.txt`：目前專案使用的 Python 套件清單
 
@@ -193,6 +194,16 @@ Week 19 的相似資料集重複實驗，包含：
 
 - `run_breast_cancer_repeats.py`
 - `results/repeat_runs.csv`
+- `results/summary.md`
+- `results/config.json`
+
+### `week20_multi_dataset_repeatability/`
+
+Week 20 的多資料集重複實驗，包含：
+
+- `run_multi_dataset_repeats.py`
+- `results/multi_dataset_runs.csv`
+- `results/multi_dataset_summary.csv`
 - `results/summary.md`
 - `results/config.json`
 

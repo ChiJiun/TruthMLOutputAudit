@@ -1,0 +1,5 @@
+dataset,samples,input_dim,fl_final_mean,fl_final_std,dp_final_mean,dp_final_std,final_accuracy_gap,dp_retention_ratio,fl_best_mean,dp_best_mean,dp_effect_preserved
+banknote_authentication,1372,4,0.573333,0.171497,0.467879,0.176563,0.105455,0.816067,0.573333,0.467879,False
+breast_cancer_wisconsin,569,30,0.912281,0.018949,0.891813,0.040726,0.020468,0.977564,0.912281,0.897661,True
+german_credit,1000,61,0.711667,0.006236,0.71,0.010801,0.001667,0.997658,0.713333,0.716667,True
+pima_diabetes,768,8,0.731602,0.031958,0.714286,0.028055,0.017316,0.976332,0.738095,0.720779,True
