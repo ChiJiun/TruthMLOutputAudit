@@ -19,6 +19,7 @@ env/
 *.ppt
 *.pptx
 docs/*.pdf
+docs/*.png
 
 # Local experiment outputs
 *.log

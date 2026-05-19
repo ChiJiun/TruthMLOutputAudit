@@ -1,0 +1,16 @@
+{
+  "seeds": [
+    42,
+    52,
+    62,
+    72,
+    82
+  ],
+  "rounds": 5,
+  "local_epochs": 1,
+  "batch_size": 64,
+  "lr": 0.01,
+  "clients": 3,
+  "clip_norm": 1.0,
+  "noise_multiplier": 0.08
+}

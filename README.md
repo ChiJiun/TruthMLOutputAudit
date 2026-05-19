@@ -22,6 +22,7 @@
 - `week16_s2_integration/`：Week 16 的 S2 整合 demo
 - `week17_proof_gated_round/`：Week 17 的 proof-gated round 實驗
 - `week18_end_to_end_s2_round/`：Week 18 的 end-to-end S2 round outcome
+- `week19_breast_cancer_repeatability/`：Week 19 的相似資料集重複實驗
 - `docs/`：研究規劃與筆記
 - `requirements.txt`：目前專案使用的 Python 套件清單
 
@@ -185,6 +186,15 @@ Week 18 的 end-to-end S2 round outcome，包含：
 - `results/accepted_average_q_noisy.json`
 - `results/ungated_average_q_noisy.json`
 - `results/summary.md`
+
+### `week19_breast_cancer_repeatability/`
+
+Week 19 的相似資料集重複實驗，包含：
+
+- `run_breast_cancer_repeats.py`
+- `results/repeat_runs.csv`
+- `results/summary.md`
+- `results/config.json`
 
 ## 備註
 

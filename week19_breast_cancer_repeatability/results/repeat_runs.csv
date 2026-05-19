@@ -1,0 +1,11 @@
+dataset,mode,seed,clients,rounds,initial_accuracy,final_accuracy,best_accuracy,mean_round_loss,input_dim,test_size
+breast_cancer_wisconsin,fl,42,3,5,0.438596,0.903509,0.903509,0.487787,30,114
+breast_cancer_wisconsin,dp,42,3,5,0.438596,0.877193,0.877193,0.510361,30,114
+breast_cancer_wisconsin,fl,52,3,5,0.035088,0.894737,0.894737,0.763398,30,114
+breast_cancer_wisconsin,dp,52,3,5,0.035088,0.850877,0.850877,0.78404,30,114
+breast_cancer_wisconsin,fl,62,3,5,0.201754,0.938596,0.938596,0.502652,30,114
+breast_cancer_wisconsin,dp,62,3,5,0.201754,0.947368,0.964912,0.454294,30,114
+breast_cancer_wisconsin,fl,72,3,5,0.394737,0.95614,0.95614,0.45852,30,114
+breast_cancer_wisconsin,dp,72,3,5,0.394737,0.938596,0.938596,0.482753,30,114
+breast_cancer_wisconsin,fl,82,3,5,0.587719,0.973684,0.973684,0.398274,30,114
+breast_cancer_wisconsin,dp,82,3,5,0.587719,0.973684,0.973684,0.405071,30,114
