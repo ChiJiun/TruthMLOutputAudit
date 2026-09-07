@@ -1,0 +1,17 @@
+attack,policy,seeds,final_accuracy_mean,final_accuracy_std,clean_retention_mean,attacker_acceptance_rate_mean,accepted_updates_mean,training_sec_mean
+bounded_sign_flip,current_vdp_gate,3,0.090566,0.043574,0.179797,1.0,30.0,12.038
+bounded_sign_flip,strengthened_vdp_gate,3,0.090566,0.043574,0.179797,1.0,30.0,12.081
+bounded_sign_flip,ungated,3,0.090566,0.043574,0.179797,1.0,30.0,12.157
+clip_bypass,current_vdp_gate,3,0.297167,0.145031,0.585848,0.0,24.0,12.151
+clip_bypass,strengthened_vdp_gate,3,0.297167,0.145031,0.585848,0.0,24.0,12.034
+clip_bypass,ungated,3,0.60392,0.013977,1.227617,1.0,30.0,11.945
+none,current_vdp_gate,3,0.495314,0.046423,1.0,0.0,30.0,14.893
+relation_tamper,current_vdp_gate,3,0.297167,0.145031,0.585848,0.0,24.0,12.017
+relation_tamper,strengthened_vdp_gate,3,0.297167,0.145031,0.585848,0.0,24.0,12.082
+relation_tamper,ungated,3,0.557886,0.026498,1.129527,1.0,30.0,12.018
+replay,current_vdp_gate,3,0.483748,0.054604,0.975868,1.0,30.0,11.99
+replay,strengthened_vdp_gate,3,0.360719,0.114308,0.718373,0.0,26.0,12.222
+replay,ungated,3,0.483748,0.054604,0.975868,1.0,30.0,12.046
+zero_noise,current_vdp_gate,3,0.589173,0.013675,1.197807,1.0,30.0,12.105
+zero_noise,strengthened_vdp_gate,3,0.297167,0.145031,0.585848,0.0,24.0,12.088
+zero_noise,ungated,3,0.589173,0.013675,1.197807,1.0,30.0,12.041

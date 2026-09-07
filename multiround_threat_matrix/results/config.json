@@ -1,0 +1,21 @@
+{
+  "seeds": [
+    42,
+    52,
+    62
+  ],
+  "train_size": 100000,
+  "clients": 10,
+  "partition": "dirichlet_0.1",
+  "rounds": 3,
+  "local_epochs": 1,
+  "batch_size": 2048,
+  "lr": 0.01,
+  "clip_norm": 1.0,
+  "noise_multiplier": 0.08,
+  "test_fraction": 0.2,
+  "min_client_size": 64,
+  "attacker_fraction": 0.2,
+  "tamper_amount": 0.5,
+  "clip_bypass_factor": 2.0
+}
