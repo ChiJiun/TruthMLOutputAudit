@@ -1,4 +1,4 @@
-# OTH4：VDP-FL（ZKML + DP + FL）16週計劃
+# OTH4：VDP-FL（ZKML + DP + FL）研究里程碑計畫
 
 ## 計畫目標
 
@@ -24,11 +24,11 @@
 - Round time
 - Communication overhead
 
-## 16 週甘特圖
+## 計畫甘特圖
 
 ```mermaid
 gantt
-  title OTH4：VDP-FL（ZKML+DP+FL）16週甘特圖（安全版）
+  title OTH4：VDP-FL（ZKML+DP+FL）研究甘特圖
   dateFormat  YYYY-MM-DD
   axisFormat  %m/%d
 
@@ -60,20 +60,42 @@ gantt
 
 ## 當前進度對齊
 
-目前 repo 中已經完成或部分完成的內容如下：
+截至 2026-08-06，repo 已完成計劃書的三個核心系統層級與後續擴展：
 
-- Week 1：已完成 EZKL demo baseline
-- Week 2：已完成 UCI Adult Income 前處理、模型訓練、ZK pipeline，並已補上 `K=3` client split
-- Week 3：已建立 scale sweep 腳本與 CSV 輸出骨架；完整 prove/verify 量測需在安裝 `ezkl` 的環境執行
+- the foundational ZKML and FL modules：完成 EZKL、UCI Adult、量化、FedAvg 與 S0 baseline
+- the DP-update verification modules：完成 DP updater、epsilon sweep、clipping 與 noise verification prototype
+- the quantized-constraint through proof-gated aggregation modules：完成 canonical quantized constraints、actual EZKL proof/verify、proof-gated aggregation 與 end-to-end S2 round
+- the repeatability and multiclass proof evaluations：完成多個二元／多類別資料集的重複實驗，以及 Wine/Digits 完整更新向量的 VDP/ZK 成本驗證
+- ZK cost scaling：以 Iris/Wine/Digits、3 個 seeds 補上 proving/verification time、peak RSS 與 application-layer communication overhead benchmark；9/9 honest runs 通過
+- Gaussian privacy accounting：完成 client-level Gaussian RDP accountant 與 45 組 privacy-utility paired runs；確認 public deterministic seed 現況為 `epsilon = infinity`，秘密 Gaussian 條件下 `noise_multiplier=0.08` 仍為 `epsilon = 3504.357`（10 rounds、replace-one、`delta=1e-5`）
+- CoverType large-data scaling：新增 Forest CoverType（581,012 筆、54 特徵、7 類別）大型資料 scaling；以 10,000、100,000、464,809 筆 training split、3 seeds 比較 FL／clipping-only／DP-update 共 27 runs，並完成 385 維 CoverType update 的 honest/tampered actual EZKL 檢查
+- non-IID client scaling：以 CoverType 100,000 筆 training subset 完成 K=3/10、IID/Dirichlet alpha=0.5/0.1、5 seeds 的 90-run client/partition scaling；六個條件均完成，DP/FL retention 為 0.762431–0.962019
+- multi-round threat matrix：以 K=10、Dirichlet alpha=0.1、3 rounds 完成 48 條 threat trajectories 與 1,440 次 client 決策；current gate 對 relation/clip 違規接受率為 0%，但對 replay/zero-noise 為 100%，strengthened policy 可將後兩者降為 0%
+- experimental-rigor audit：完成 the large-data, non-IID, and threat-matrix evaluations raw results 的完整性、唯一鍵、paired effect/CI、exact permutation、Holm correction、環境版本與 SHA-256 稽核；33 組比較均保留，並確認小 seed 數不支持「統計顯著」措辭
+- context-bound randomness protocol：完成 context-bound hidden-randomness reference protocol；commit-before-challenge、單一 challenge、hidden seed derivation、exact reference sampler、freshness/replay checks 與 10/10 threat cases 均通過，但仍明列為 circuit 前規格而非 actual proof
+
+因此，原計劃的 S0、S1、S2、聲明範圍內的惡意更新拒絕、主要成本量測、大型樣本、non-IID/client scaling 與條件式 privacy accountant 均已有可重現證據。Gaussian privacy accounting 與 multi-round threat matrix 同時界定主張邊界：public seed 不能形成正式 DP，現有 gate 也不能阻止 bounded model poisoning；仍需 secret verifiable randomness、circuit-level context binding、local-training proof 或 robust aggregation。完整假設判定見 `docs/hypothesis_evidence_matrix.md`。
+
+## 審查意見後的範圍修正
+
+本研究依審查意見做出五項明確修正：
+
+1. **技術可行性由抽象預期改為量化判定。** ZK cost scaling 實測 15、42、650 維更新的 proving time、verification time、proof size、peak RSS、key size 與 application payload，並在 `docs/reviewer_feedback_response.md` 明訂綠／黃／紅工程門檻。
+2. **貢獻不再宣稱新 DP/ZKP 演算法。** 本研究定位為 VDP constraint formulation、canonical quantized witness、fixed-slack policy、proof-gated aggregation contract 與可重現系統評估。
+3. **資料集由少數案例擴充至 16 個，並加入大型/non-IID client scaling。** Adult Income 為主線，另有 11 個二元表格資料集、Iris/Wine/Digits 三個小型多類別資料集，以及 581,012 筆的 Forest CoverType；non-IID client scaling 進一步涵蓋 K=3/10 與 IID/Dirichlet partition，但仍誠實限制於線性模型與最多 10 clients。
+4. **固定 baseline 與 evaluation protocol。** S0/S1 採相同 seed、split、client partition 與初始化進行 paired comparison；S2 加入 honest/tampered acceptance、proof cost、RSS 與 payload 指標。
+5. **正式區分 DP utility prototype 與 privacy guarantee。** Gaussian privacy accounting 完成 RDP accounting，明確揭露 public deterministic seed 使 verifier 可扣除 noise；有限 epsilon 僅在 secret independent Gaussian noise 的條件下成立。
+
+完整逐項回應與可直接使用的答辯文字見 `docs/reviewer_feedback_response.md`。
 
 因此，下面的週計畫同時兼具兩個用途：
 
-- 作為正式的 16 週研究時程
+- 作為正式研究時程
 - 作為目前 repo 的實作對照表
 
 ---
 
-## Week 1：環境建置（PyTorch / ONNX / EZKL）
+## minimal EZKL demo：環境建置（PyTorch / ONNX / EZKL）
 
 **期間：** 2026-02-24 至 2026-03-02
 
@@ -93,7 +115,7 @@ gantt
 
 **預期產出**
 
-- `week1_demo/` 中可執行的 demo pipeline
+- `zk_ezkl_demo/` 中可執行的 demo pipeline
 - 一份成功通過的 proof
 - 可重現的執行步驟
 
@@ -110,7 +132,7 @@ gantt
 
 ---
 
-## Week 2：UCI 資料處理＋切成 K=3 clients
+## Adult Income model：UCI 資料處理＋切成 K=3 clients
 
 **期間：** 2026-03-03 至 2026-03-09
 
@@ -130,8 +152,8 @@ gantt
 
 **預期產出**
 
-- `week2_uci_model/data/processed/`
-- `week2_uci_model/data/clients/`
+- `adult_income_model/data/processed/`
+- `adult_income_model/data/clients/`
 - `metadata.json` 記錄每個 client 的樣本數與 label 比例
 
 **驗收標準**
@@ -151,7 +173,7 @@ gantt
 
 ---
 
-## Week 3：小 MLP 訓練＋ONNX 匯出
+## quantization scale sweep：小 MLP 訓練＋ONNX 匯出
 
 **期間：** 2026-03-10 至 2026-03-16
 
@@ -191,7 +213,7 @@ gantt
 
 ---
 
-## Week 4：EZKL setup（settings → compile → pk/vk）
+## baseline visualization：EZKL setup（settings → compile → pk/vk）
 
 **期間：** 2026-03-17 至 2026-03-23
 
@@ -232,7 +254,7 @@ gantt
 
 ---
 
-## Week 5：ZK prove / verify 跑通＋量測腳本
+## FedAvg baseline：ZK prove / verify 跑通＋量測腳本
 
 **期間：** 2026-03-24 至 2026-03-30
 
@@ -272,7 +294,7 @@ gantt
 
 ---
 
-## Week 6-7：Quantization sweep（scale / bits）
+## the FL-to-DP transition modules：Quantization sweep（scale / bits）
 
 **期間：** 2026-03-31 至 2026-04-13
 
@@ -291,14 +313,14 @@ gantt
 
 **預期產出**
 
-- `week3_scale_sweep/results/scale_sweep_results.csv`
+- `quantization_scale_sweep/results/scale_sweep_results.csv`
 - scale / bits 與 accuracy / cost 對照表
 
 **驗收標準**
 
 - 至少完成 3 組 scale 比較
 - 每組結果有 accuracy 與成本欄位
-- 結果可直接供 Week 8 繪圖
+- 結果可直接供 privacy-utility sweep 繪圖
 
 **目前狀態**
 
@@ -312,14 +334,14 @@ gantt
 
 ---
 
-## Week 8：FL 模擬器（FedAvg, K=3, R=5, E=1）
+## privacy-utility sweep：FL 模擬器（FedAvg, K=3, R=5, E=1）
 
 **期間：** 2026-04-14 至 2026-04-20
 
 **目標**
 
 - 建立聯邦學習 baseline 訓練流程
-- 使用 Week 2 的 client split 執行多輪聚合
+- 使用 Adult Income model 的 client split 執行多輪聚合
 
 **主要工作**
 
@@ -347,7 +369,7 @@ gantt
 
 ---
 
-## Week 9：S0 實驗：Round vs Accuracy
+## clipping verification：S0 實驗：Round vs Accuracy
 
 **期間：** 2026-04-21 至 2026-04-27
 
@@ -379,7 +401,7 @@ gantt
 
 ---
 
-## Week 10：DP 更新器（clipping + noise）
+## noise-relation verification：DP 更新器（clipping + noise）
 
 **期間：** 2026-04-28 至 2026-05-04
 
@@ -411,7 +433,7 @@ gantt
 
 ---
 
-## Week 11：S1 實驗：epsilon sweep（0.5 / 1 / 2）
+## quantized-constraint analysis：S1 實驗：epsilon sweep（0.5 / 1 / 2）
 
 **期間：** 2026-05-05 至 2026-05-11
 
@@ -442,7 +464,7 @@ gantt
 
 ---
 
-## Week 12-13：ZK：clipping 驗證（||Δw||^2 ≤ C^2）
+## the canonical-witness and constraint-profile modules：ZK：clipping 驗證（||Δw||^2 ≤ C^2）
 
 **期間：** 2026-05-12 至 2026-05-25
 
@@ -474,7 +496,7 @@ gantt
 
 ---
 
-## Week 14-15：ZK：noise 可驗證（seed → noise，Δw~ = Δw + noise）
+## the artifact and backend-bundle modules：ZK：noise 可驗證（seed → noise，Δw~ = Δw + noise）
 
 **期間：** 2026-05-26 至 2026-06-08
 
@@ -505,7 +527,7 @@ gantt
 
 ---
 
-## Week 16：S2 整合測試＋成本彙整
+## EZKL constraint integration：S2 整合測試＋成本彙整
 
 **期間：** 2026-06-09 至 2026-06-15
 
@@ -556,7 +578,7 @@ gantt
 
 ## 建議交付節奏
 
-為了讓每週都有可展示內容，建議每週至少固定產出一項：
+為了讓每個里程碑都有可展示內容，建議每個研究單元至少固定產出一項：
 
 - 一個可執行腳本
 - 一份結果 CSV / JSON

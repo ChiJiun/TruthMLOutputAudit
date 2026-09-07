@@ -1,8 +1,8 @@
-# VDP-FL 進度彙報（Week 1 - Week 16）
+# VDP-FL 進度彙報（minimal EZKL demo - EZKL constraint integration）
 
 ## 一、目前完成進度
 
-目前已完成 Week 1 到 Week 16 的 repo-level 實作，對應到三個主要階段：
+目前已完成 minimal EZKL demo 到 EZKL constraint integration 的 repo-level 實作，對應到三個主要階段：
 
 - ZKML baseline 建立
 - FL baseline 建立
@@ -10,28 +10,28 @@
 
 目前已完成的資料夾如下：
 
-- `week1_demo/`
-- `week2_uci_model/`
-- `week3_scale_sweep/`
-- `week4_baseline_charts/`
-- `week5_fedavg_simulator/`
-- `week6_s0_charts/`
-- `week7_dp_updater/`
-- `week8_epsilon_sweep/`
-- `week9_clipping_verification/`
-- `week10_noise_verification/`
-- `week11_quantized_constraints/`
-- `week12_canonical_witness/`
-- `week13_recommended_constraints/`
-- `week14_constraint_artifacts/`
-- `week15_zk_backend_stub/`
-- `week16_s2_integration/`
+- `zk_ezkl_demo/`
+- `adult_income_model/`
+- `quantization_scale_sweep/`
+- `baseline_charts/`
+- `fedavg_baseline/`
+- `fedavg_round_charts/`
+- `dp_fedavg_baseline/`
+- `privacy_utility_sweep/`
+- `clipping_verification/`
+- `noise_relation_verification/`
+- `quantized_constraint_analysis/`
+- `canonical_witness/`
+- `constraint_profile/`
+- `constraint_artifacts/`
+- `zk_backend_bundle/`
+- `ezkl_constraint_integration/`
 
 ---
 
-## 二、各週完成內容
+## 二、各研究單元完成內容
 
-### Week 1：ZKML 最小流程跑通
+### minimal EZKL demo：ZKML 最小流程跑通
 
 目標是驗證 `PyTorch -> ONNX -> EZKL -> prove -> verify` 是否可行。
 
@@ -47,7 +47,7 @@
 - 確認 ZKML 基本工具鏈可用
 - 建立後續真實資料實驗的技術基礎
 
-### Week 2：真實資料與 client split
+### Adult Income model：真實資料與 client split
 
 目標是將 demo 換成真實資料，並準備 FL 所需資料。
 
@@ -70,7 +70,7 @@
 - 完成真實資料上的 ZKML baseline
 - 為後續聯邦學習建立資料基礎
 
-### Week 3：Scale sweep
+### quantization scale sweep：Scale sweep
 
 目標是測試不同量化 `scale` 對 accuracy 與 ZK 成本的影響。
 
@@ -90,9 +90,9 @@
 
 - `scale = 8` 是目前較佳的 baseline 設定
 
-### Week 4：Baseline 圖表整理
+### baseline visualization：Baseline 圖表整理
 
-目標是將 Week 3 的結果轉為可視化圖表。
+目標是將 quantization scale sweep 的結果轉為可視化圖表。
 
 已完成：
 
@@ -103,7 +103,7 @@
 
 - 能更直觀地說明量化參數對 accuracy 與證明成本的影響
 
-### Week 5：FedAvg 聯邦學習 baseline
+### FedAvg baseline：FedAvg 聯邦學習 baseline
 
 目標是建立 S0，也就是不含 DP 與 ZK 驗證的 FL baseline。
 
@@ -128,9 +128,9 @@
 - 模型在第 1 輪後快速收斂
 - 第 2 輪達到最佳 accuracy
 
-### Week 6：S0 Round vs Accuracy
+### FedAvg round analysis：S0 Round vs Accuracy
 
-目標是將 Week 5 的結果轉成 `Round vs Accuracy` 圖。
+目標是將 FedAvg baseline 的結果轉成 `Round vs Accuracy` 圖。
 
 已完成：
 
@@ -142,7 +142,7 @@
 - 可觀察 FL baseline 的收斂趨勢
 - 作為後續 S1、S2 的比較基準
 
-### Week 7：DP updater baseline
+### DP updater baseline：DP updater baseline
 
 目標是在 FedAvg 上加入 `clipping + Gaussian noise`，建立 S1 的第一版 baseline。
 
@@ -163,7 +163,7 @@
 
 - 在目前這組 baseline 設定下，加入簡化版 DP update 後，模型沒有明顯崩潰
 
-### Week 8：Epsilon sweep
+### privacy-utility sweep：Epsilon sweep
 
 目標是測試不同 `epsilon` 設定對 S1 baseline 的影響。
 
@@ -185,7 +185,7 @@
 
 ---
 
-### Week 11：Quantized Constraint Mapping
+### quantized-constraint analysis：Quantized Constraint Mapping
 
 目標是先觀察 clipping 與 noise relation 在 fixed-point / integer constraint 下會出現哪些 rounding 問題。
 
@@ -205,7 +205,7 @@
 - 提前定位未來電路設計的 rounding 問題
 - 證明後續必須選擇 canonical witness 與明確 slack policy
 
-### Week 12：Canonical Witness + Slack Sweep
+### canonical-witness analysis：Canonical Witness + Slack Sweep
 
 目標是找到更穩定的 witness 形式與 clipping slack 規則。
 
@@ -227,7 +227,7 @@
 - 將 noise relation 從 prototype 推進到穩定可映射 constraint
 - 將 clipping 驗證推進到可設定固定 slack 的設計階段
 
-### Week 13：Recommended Constraint Profile
+### constraint-profile selection：Recommended Constraint Profile
 
 目標是把目前最穩定的 witness 與 slack 組合成單一推薦版本。
 
@@ -243,7 +243,7 @@
 - 為後續 S2 電路設計提供更接近規格的候選版本
 - 將「探索問題」進一步收斂成「可採用設計」
 
-### Week 14：Constraint Artifact Export
+### constraint-artifact export：Constraint Artifact Export
 
 目標是把推薦 constraint profile 轉成更接近電路輸入的固定 artifact。
 
@@ -259,9 +259,9 @@
 - 固定後續 circuit-facing 的資料格式
 - 降低之後接 ZK backend 時的格式不確定性
 
-### Week 15：ZK Backend Stub
+### backend-bundle preparation：ZK Backend Stub
 
-目標是把 Week 14 artifact 再整理成 backend-ready bundle。
+目標是把 constraint-artifact export artifact 再整理成 backend-ready bundle。
 
 已完成：
 
@@ -274,7 +274,7 @@
 - 讓未來接 EZKL 或其他 backend 時有明確 handoff 格式
 - 在沒有安裝 `ezkl` 的環境下，先完成 repo 內可交付的 stub 整合
 
-### Week 16：S2 Integration Demo
+### EZKL constraint integration：S2 Integration Demo
 
 目標是做一個可重跑的 S2 整合原型，展示 tampered client 會被過濾。
 
@@ -288,14 +288,14 @@
 意義：
 
 - 完成 repo-level 的 S2 整合示範
-- 讓整個 16 週計畫在目前環境下具備端到端敘事與可執行產物
+- 讓整個研究計畫在目前環境下具備端到端敘事與可執行產物
 - 證明推薦 constraint profile 不只停留在 stub，也已經能接到真實 EZKL proof / verify smoke test
 
 ---
 
 ## 三、目前累積的研究意義
 
-### Week 9：Clipping 驗證原型
+### clipping verification：Clipping 驗證原型
 
 目標是先把 `||Δw||^2 <= C^2` 的驗證邏輯整理成可重跑的原型。
 
@@ -311,7 +311,7 @@
 - 先把後續 ZK 要驗證的數學條件定義清楚
 - 為之後的 circuit constraint 設計建立測試基準
 
-### Week 10：Noise 驗證原型
+### noise-relation verification：Noise 驗證原型
 
 目標是先把 `seed -> noise -> noisy update` 的驗證邏輯整理成可重跑的原型。
 
@@ -332,7 +332,7 @@
 
 ## 三、目前累積的研究意義
 
-目前這 16 週的進度，已經建立出以下基礎：
+目前的完整研究進度已經建立出以下基礎：
 
 1. 已完成真實資料上的 ZKML baseline
 2. 已完成 FL baseline（S0）
@@ -361,7 +361,7 @@
 
 目前仍有幾個限制需要在報告中說清楚：
 
-1. Week 7 與 Week 8 的 DP 部分，目前是 baseline 實驗版  
+1. DP updater baseline 與 privacy-utility sweep 的 DP 部分，目前是 baseline 實驗版
    `epsilon` 與 `noise_multiplier` 的關係，尚未接上正式 privacy accountant。
 
 2. 目前模型仍以簡化線性模型為主  
