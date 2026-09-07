@@ -1,0 +1,19 @@
+{
+  "datasets": [
+    "iris",
+    "wine",
+    "digits"
+  ],
+  "seeds": [
+    42,
+    52,
+    62
+  ],
+  "rounds": 10,
+  "local_epochs": 2,
+  "batch_size": 64,
+  "lr": 0.03,
+  "clients": 3,
+  "clip_norm": 1.0,
+  "noise_multiplier": 0.08
+}

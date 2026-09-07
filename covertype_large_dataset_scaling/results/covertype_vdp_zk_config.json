@@ -1,0 +1,13 @@
+{
+  "seed": 42,
+  "client_id": 0,
+  "clients": 3,
+  "local_epochs": 1,
+  "batch_size": 1024,
+  "lr": 0.01,
+  "scale": 10000,
+  "clip_norm": 1.0,
+  "noise_multiplier": 0.08,
+  "slack_ppm": 4201,
+  "artifacts_dir": "D:\\Code\\GitHub Desktop\\TruthMLOutputAudit\\multiclass_vdp_zk\\results\\ezkl_cases\\covertype_profile"
+}

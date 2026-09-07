@@ -1,0 +1,3 @@
+dataset,case_name,vector_dim,verified,clip_ok,relation_ok,accepted,pipeline_sec,prove_sec,verify_sec,pipeline_peak_rss_bytes,proof_size_bytes,pk_size_bytes,srs_size_bytes,num_rows,total_assignments,update_payload_bytes,s2_payload_bytes
+covertype,honest_profile,385,True,True,True,True,4.435238,0.305527,0.039568,451108864,12293,14164203,524548,3468,6936,1836,14283
+covertype,tampered_noisy_profile,385,True,True,False,False,2.845373,0.364999,0.045118,455049216,12263,14164203,524548,3468,6936,1836,14253

@@ -1,0 +1,17 @@
+{
+  "dataset": "digits",
+  "seed": 42,
+  "client_id": 0,
+  "clients": 3,
+  "local_epochs": 2,
+  "batch_size": 64,
+  "lr": 0.03,
+  "scale": 10000,
+  "clip_norm": 1.0,
+  "noise_multiplier": 0.08,
+  "slack_ppm": 4201,
+  "cases": [
+    "honest_profile",
+    "tampered_noisy_profile"
+  ]
+}

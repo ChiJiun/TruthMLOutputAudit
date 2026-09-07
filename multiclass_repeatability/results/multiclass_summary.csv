@@ -1,0 +1,4 @@
+dataset,description,samples,input_dim,num_classes,fl_final_mean,fl_final_std,dp_final_mean,dp_final_std,final_accuracy_gap,dp_retention_ratio,fl_best_mean,dp_best_mean,dp_effect_preserved
+digits,10-class handwritten digit classification,1797,64,10,0.961111,0.006,0.946296,0.007291,0.014815,0.984586,0.96574,0.949074,True
+iris,3-class flower classification,150,4,3,0.866667,0.054433,0.866666,0.04714,0.0,1.0,0.877778,0.866666,True
+wine,3-class wine cultivar classification,178,13,3,0.972222,0.022681,0.981481,0.026189,-0.009259,1.009524,0.981481,0.981481,True

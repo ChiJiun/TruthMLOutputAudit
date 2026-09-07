@@ -1,0 +1,32 @@
+{
+  "train_sizes": [
+    "10000",
+    "100000",
+    "-1"
+  ],
+  "seeds": [
+    42,
+    52,
+    62
+  ],
+  "modes": [
+    "fl",
+    "clip",
+    "dp"
+  ],
+  "rounds": 5,
+  "local_epochs": 1,
+  "batch_size": 1024,
+  "lr": 0.01,
+  "clients": 3,
+  "test_fraction": 0.2,
+  "clip_norm": 1.0,
+  "noise_multiplier": 0.08,
+  "torch_threads": 0,
+  "cpu": true,
+  "resume": true,
+  "results_dir": "D:\\Code\\GitHub Desktop\\TruthMLOutputAudit\\covertype_large_dataset_scaling\\results",
+  "train_size": -1,
+  "seed": 42,
+  "mode": "fl"
+}
