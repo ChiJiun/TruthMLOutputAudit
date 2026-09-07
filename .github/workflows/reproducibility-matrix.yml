@@ -1,0 +1,39 @@
+name: Reproducibility matrix
+
+on:
+  push:
+    branches: ["codex/context-bound-randomness"]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  halo2-and-accountant:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Install focused Python dependencies
+        run: python -m pip install --upgrade numpy scipy psutil
+      - name: Run exact accountant tests
+        run: python -m unittest discrete_noise_accounting.test_centered_binomial_accountant -v
+      - name: Run Halo2 constraint tests
+        working-directory: halo2_verifiable_randomness
+        run: cargo test --release
+      - name: Generate three actual proofs and hardware manifest
+        run: >-
+          python cross_backend_reproducibility/run_halo2_seed_benchmark.py
+          --seeds 42 52 62
+          --label ${{ runner.os }}-${{ runner.arch }}
+          --output-dir cross_backend_reproducibility/ci-results/${{ runner.os }}
+      - uses: actions/upload-artifact@v6
+        with:
+          name: reproducibility-${{ runner.os }}
+          path: cross_backend_reproducibility/ci-results/${{ runner.os }}

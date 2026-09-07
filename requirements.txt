@@ -11,4 +11,8 @@ numpy<2.0.0          # 注意！很多 ML 庫還不支援 numpy 2.0，建議鎖�
 
 # 工具
 pandas               # 處理數據
+matplotlib           # 產生實驗圖表
+psutil               # 量測 EZKL 原生程序的 RSS peak memory
+scikit-learn         # 載入與切分 UCI / sklearn 實驗資料集
+scipy                 # experimental-rigor audit paired confidence interval 與嚴謹性稽核
 jupyter              # 方便測試

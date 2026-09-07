@@ -1,0 +1,18 @@
+{
+  "protocol": "vdp-fl-context-randomness-v1",
+  "cases": [
+    "honest",
+    "replay",
+    "round_swap",
+    "model_swap",
+    "challenge_swap",
+    "zero_noise",
+    "secret_swap",
+    "clip_bypass",
+    "noisy_tamper",
+    "challenge_reissue"
+  ],
+  "noise_sampler": "host-reference centered-binomial(k=16)",
+  "actual_zk": false,
+  "finite_epsilon_claim": false
+}

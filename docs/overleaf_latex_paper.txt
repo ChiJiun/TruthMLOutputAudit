@@ -1,0 +1,572 @@
+% !TeX program = xelatex
+% !TeX encoding = UTF-8 Unicode
+% Overleaf compiler: XeLaTeX
+\documentclass[11pt]{article}
+
+\usepackage{xeCJK}
+\IfFontExistsTF{TW-Kai}{
+  \setCJKmainfont{TW-Kai}[AutoFakeBold=2.3]
+}{
+  \IfFontExistsTF{Noto Serif CJK TC}{
+    \setCJKmainfont{Noto Serif CJK TC}[AutoFakeBold=2.3]
+  }{
+    \setCJKmainfont{AR PL UMing TW}[AutoFakeBold=2.3]
+  }
+}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{hyperref}
+\usepackage[top=2cm, bottom=2cm, left=3cm, right=3cm, a4paper]{geometry}
+\usepackage{setspace}
+\usepackage{apacite}
+\usepackage{natbib}
+\usepackage{authblk}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{array,longtable}
+\usepackage{caption}
+\usepackage{enumitem}
+\usepackage{indentfirst}
+\usepackage{cleveref}
+\usepackage[marginal]{footmisc}
+
+\crefname{table}{Table}{Tables}
+\crefname{figure}{Figure}{Figures}
+\lstset{keywordstyle={\bfseries \color{blue}}}
+
+%%%%%%%  global config  %%%%%%%
+\onehalfspacing
+\setlength{\parskip}{1em}
+\setlength{\parindent}{2em}
+\renewcommand{\arraystretch}{1.5}
+\setlist[itemize]{leftmargin=1.6em}
+\setlist[enumerate]{leftmargin=1.8em}
+
+% --- 標題設定 ---
+\title{基於零知識機器學習（ZKML）之可驗證差分隱私架構 -- 以聯邦學習為例}
+\author{翁祺鈞}
+%\affil{National Central University, Taiwan}
+\date{\today}
+
+%%%%% 文件開始 %%%%%
+\begin{document}
+
+\maketitle
+
+% 摘要
+\begin{abstract}
+聯邦學習可讓多個客戶端在不直接共享原始資料的情況下共同訓練模型，但伺服器通常仍需相信客戶端已正確執行差分隱私更新，例如更新裁剪與雜訊注入。此信任假設使得差分隱私流程缺乏可審計性。本研究依據三階段計畫建構可驗證差分隱私聯邦學習原型：首先建立聯邦學習基準流程；接著加入差分隱私更新器；最後將差分隱私更新中的核心條件轉換為可由 ZKML/EZKL 驗證的約束條件。實驗結果顯示，推薦約束條件設定可使誠實設定檔以 9/9 通過，篡改設定檔以 18/18 被拒絕；實際 EZKL 約束條件證明展示中，誠實案例通過驗證，而篡改含雜訊更新的案例因關係檢查失敗而被拒絕。進一步地，驗證後聚合在一輪端到端實驗中接受 2/3 個客戶端並拒絕篡改客戶端，模型準確率從 0.694851 提升至 0.839697。跨資料集實驗最終涵蓋 16 個資料集；其中 Forest CoverType 有 581,012 筆，完整 training split 的 FL／clipping-only／DP-update final accuracy 為 0.719890／0.700633／0.636799，單次訓練約 51--52 秒、peak RSS 約 716 MiB。其 385 維完整更新亦完成 actual EZKL，honest case 被接受、tampered noisy update 被拒絕。三資料集、三 seeds 的成本實驗中 9/9 honest runs 通過，平均 proving time 為 0.100--0.586 秒，peak RSS 為 410.0--426.0 MiB，proof size 約 11.9--12.3 KB。CoverType non-IID/client scaling 另完成 K=3/10、三種 partition、5 seeds 共 90 runs；多輪 threat matrix 完成 48 條 trajectories 與 1,440 次 client 決策，current gate 對 relation/clip 違規接受率為 0\%，但 replay/zero-noise 為 100\%，加入 context/randomness policy 後可降為 0\%。Bounded sign-flip 仍以 100\% 通過，顯示 update audit 不等於完整 local-training proof。最後，RDP accountant 顯示現行 public deterministic seed 讓 verifier 可重建 noise，故實際 privacy budget 為 $\epsilon=\infty$；即使假設秘密 Gaussian noise，10 輪、replace-one、$\delta=10^{-5}$ 下的原設定亦為 $\epsilon=3504.357$。因此本研究證明的是 ZKML 可審計 DP-update 原型的可行性，而非已完成有限 privacy budget 或任意 poisoning defense 的部署系統。
+\end{abstract}
+
+% (一) 緒論
+\section{緒論}
+
+聯邦學習（Federated Learning, FL）將模型訓練分散於多個客戶端，使客戶端可保留原始資料並僅提交模型更新。此設計降低了資料集中化風險，但並不等於完整隱私保護，因為模型更新本身仍可能洩漏資料特徵。差分隱私（Differential Privacy, DP）常被用於緩解此問題，其核心流程通常包含更新裁剪（clipping）與雜訊注入（noise injection）。然而，在一般 FL+DP 流程中，伺服器往往只能相信客戶端已正確執行 DP 更新，無法直接驗證其是否真的依照規則完成裁剪與加噪。
+
+若用較直觀的比喻說明，傳統 FL+DP 像是多個客戶端把「已模糊處理過的模型更新包裹」交給伺服器，但伺服器只能相信包裹真的依規定先裁剪、再加噪；本研究希望讓每個包裹都附上一張不洩漏內容的「數學收據」，使伺服器能確認包裹符合 DP 處理規則，再決定是否納入聚合。
+
+本研究的核心問題是：\textbf{差分隱私更新是否能被轉換成可驗證的約束條件，並在不揭露客戶端資料的前提下由 ZKML 進行審計？}此問題對應計畫書中的三個系統層級：S0 為 FL 基準實驗，S1 為 FL+DP，S2 為 FL+DP+ZK 驗證。與完整將整個本地訓練流程寫入單一 ZKML 電路不同，本研究採取較務實的切入點：本地訓練仍在客戶端完成，而 ZKML 聚焦驗證 DP 更新中的關鍵條件。
+
+本文依照 REL 規則組織論述：每個主張均對應實驗數據或形式化定義；基準實驗的限制被明確指出；方法流程依序拆成資料、FL、DP、VDP 約束條件與驗證後聚合；最後再討論限制與未來補償方向。本文貢獻如下：
+
+需要先界定本文的貢獻邊界：本文不宣稱提出新的 DP optimizer、ZKP protocol 或底層 proof system。研究的新意定位於方法工程與系統實證，即如何把 DP 更新重構為可穩定量化的見證與約束、如何讓驗證結果直接控制聚合，以及如何用 honest/tampered cases 與成本指標評估此審計介面。
+
+\begin{itemize}
+    \item 建立 UCI Adult Income 上的 FL、DP 與 ZKML 原型流程，對應計畫書中的 S0、S1 與 S2。
+    \item 將差分隱私更新中的裁剪與雜訊關係形式化為可驗證約束條件。
+    \item 提出標準化量化見證與固定容差策略，以處理量化後的捨入問題。
+    \item 以 EZKL 實際驗證推薦約束條件，並完成驗證後聚合與端到端單輪結果。
+    \item 於 16 個資料集上進行重複實驗，並以 581,012 筆 Forest CoverType 檢查大型樣本規模下的 FL／clipping-only／DP-update utility、時間與記憶體。
+    \item 於 Iris、Wine 與 Digits 多類別資料集上驗證完整 DP 更新向量，並量測不同模型維度下的 EZKL proof size、proving/verification time、peak RSS、key size 與 application-layer payload。
+    \item 建立 client-level Gaussian RDP accountant 與 privacy--utility frontier，並辨識 public deterministic seed 使現行機制不具有限 privacy budget 的關鍵限制。
+    \item 以 CoverType K=3/10、IID/Dirichlet partition 與多輪攻擊矩陣量測 client heterogeneity、惡意接受率及安全拒絕的 utility/availability 代價。
+    \item 對核心 raw results 執行完整性、paired effect、exact permutation、Holm correction、環境版本與 SHA-256 稽核，明確限制小 seed 數的統計解讀。
+\end{itemize}
+
+% (二) 文獻回顧
+\section{文獻回顧}
+
+聯邦學習的基本目標是在不集中原始資料的情況下訓練全域模型。McMahan 等人提出的 FedAvg 是常見基準方法，其優點是簡潔且易於實作 \cite{mcmahan2017}，但其限制是伺服器通常無法驗證客戶端更新是否依規則產生。更重要的是，FL 並不等於資料完全不會洩漏；Zhu 等人的 Deep Leakage from Gradients 顯示，梯度資訊本身可能被用於重建訓練資料 \cite{zhu2019dlg}，Geiping 等人也進一步指出，在部分設定下僅共享梯度仍可能造成嚴重隱私風險 \cite{geiping2020inverting}。因此，若把 FL 比喻成「資料不離開手機或醫院」，模型更新仍像是從資料中擠出的摘要，摘要本身仍可能透露原始資料的輪廓。
+
+差分隱私則透過限制敏感度與加入隨機雜訊提供統計隱私保護，例如 Dwork 的差分隱私定義 \cite{dwork2006} 與 Abadi 等人的 DP-SGD \cite{abadi2016}。安全聚合也可降低伺服器直接取得個別更新的風險 \cite{bonawitz2017}。然而，傳統 DP 流程仍面臨一個問題：即使演算法描述包含裁剪與雜訊，伺服器仍不一定能確認每個客戶端實際提交的更新符合這些條件。Nasr 等人的 DP auditing 研究也說明，DP 系統需要被檢查與審計，因為實作錯誤或參數設定不當可能讓理論保證與實際行為產生落差 \cite{nasr2023tight}。本研究延續此問題意識，但將焦點放在 FL client update 的「每一筆 DP 更新是否可被驗證」。
+
+Verifiable DP 的關鍵困難是 verifier 必須確認 randomizer 正確，卻不能因此取得可扣除的 noise。Biswas 與 Cormode 以 private/public randomness 的組合建立可驗證 DP counting \cite{biswas2023}；Bontekoe 等人進一步在 local/shuffle model 中處理 input authenticity 與 malicious-client manipulation，並提供形式化安全與可重現 artifact \cite{bontekoe2025}。近期 V$\epsilon$rity 也把 randomizer tampering、dropout 與 input authenticity 明確納入威脅模型，使用共同衍生的 PRF randomness 與證明機制 \cite{bellclark2026}。這些工作顯示，只驗證 additive relation 或隱藏 JSON seed 都不足以構成投稿等級的 verifiable randomness；本文因此將 public-seed 負面結果與 context-bound hidden-randomness contract 明列為方法演進的一部分。
+
+零知識證明（Zero-Knowledge Proofs, ZKP）與 ZKML 提供另一種方向：使證明者能證明某個計算符合規則，而不揭露私有輸入。相關研究已嘗試整合 FL、DP 與 ZKP，以驗證本地訓練或模型更新的合法性。例如 Shakeb 等人提出的 \emph{Zero-Knowledge AI: Enhancing Data Privacy in Federated Learning Models} 將 TinyViT、DP、zk-SNARKs 與 client selection 整合為 ZK-FedTransformer++，並以 RSNA Breast Cancer Detection 醫療影像資料集展示 91.2\% accuracy 與隱私洩漏降低效果 \cite{shakeb2025}。相較於這類整體框架，本研究更聚焦於 \textbf{VDP 更新步驟本身的可審計性}。換言之，本文不宣稱已將完整 FL 本地訓練、反向傳播與 FedAvg 全部寫入同一個 ZKML 電路，而是驗證 DP 更新中的核心條件是否能轉換為可被 ZKML 檢查的約束條件，並將驗證結果接回聚合決策。
+
+\subsection{與相關 ZK-FL 研究之比較}
+
+Shakeb 等人的研究與本文題目相近，皆關注 ZK 技術如何提升 FL 場景中的資料隱私與可信度。然而，兩者的切入點不同。該研究較偏向從醫療影像應用出發，提出整合 TinyViT、DP、zk-SNARKs 與 client selection 的完整 ZK-FL 架構；本文則進一步把 DP 更新中的裁剪與雜訊關係拆解成可實作、可量測、可拒絕篡改案例的 ZKML 約束條件。換句話說，若將 ZK-FL 比喻為替聯邦學習流程加上「防偽封條」，Shakeb 等人的研究說明防偽封條能提升整體信任，而本文實作並測量的是「封條檢查項目」本身：更新是否真的被裁剪、雜訊是否真的被加到更新上，以及不符合規則的 client 是否會被排除。
+
+\begin{table}[H]
+\centering
+\caption{本文與相近 ZK-FL 研究之比較}
+\label{tab:related_compare}
+\begin{tabular}{p{3.2cm}p{5.2cm}p{5.2cm}}
+\toprule
+比較面向 & Shakeb 等人 \cite{shakeb2025} & 本研究 \\
+\midrule
+研究焦點 & 醫療影像 FL 的整體 ZK-FedTransformer++ 架構 & 聚焦 DP 更新本身，將 clipping 與 noise relation 形式化為可審計 ZKML 約束 \\
+DP 可驗證性 & 將 DP 納入整體隱私保護流程，強調 noise-perturbed gradients 與 cryptographic proof circuits & 實作 VDP constraint，驗證 $q_{noisy}=q_{clip}+q_{noise}$ 與 clipping bound \\
+實驗資料 & RSNA Breast Cancer Detection 醫療影像資料集 & Adult Income、11 個二元表格資料集、Iris/Wine/Digits，以及 581,012 筆 Forest CoverType \\
+實驗定位 & 展示完整 ZK-FL 醫療應用架構與 accuracy/privacy leakage trade-off & 完成 proof-gated aggregation，並補 Wine/Digits 多類別 VDP/ZK 成本量測 \\
+拒絕篡改更新 & 主要討論可信與隱私提升方向 & 設計 tampered noisy update，實驗顯示 relation check 失敗而被拒絕 \\
+成本量測 & 討論 computational overhead 與 scalability 問題 & 以 15、42、650 維更新重複量測 proving/verification time、proof size、circuit rows、peak RSS、key size 與 application payload \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% (三) 研究方法
+\section{研究方法}
+
+\subsection{問題形式化}
+
+\subsubsection{聯邦學習設定}
+
+設有 $K$ 個客戶端，每個客戶端 $k$ 擁有本地資料 $D_k$。第 $t$ 輪時，伺服器持有全域模型參數 $w_t$，客戶端本地訓練後得到 $w_{t,k}$，其更新量定義為
+\[
+\Delta w_{t,k} = w_{t,k} - w_t.
+\]
+在一般 FedAvg 中，伺服器對客戶端更新做加權平均並更新全域模型：
+\[
+w_{t+1} = w_t + \sum_{k=1}^{K} \alpha_k \Delta w_{t,k},
+\]
+其中 $\alpha_k$ 通常與客戶端資料量成比例。
+
+\subsubsection{差分隱私更新}
+
+差分隱私更新先對 $\Delta w_{t,k}$ 進行裁剪，使其 L2 範數不超過指定界線 $C$：
+\[
+\Delta w^{clip}_{t,k} =
+\Delta w_{t,k} \cdot \min\left(1, \frac{C}{\|\Delta w_{t,k}\|_2}\right).
+\]
+接著加入高斯雜訊：
+\[
+\widetilde{\Delta w}_{t,k}
+= \Delta w^{clip}_{t,k} + z_{t,k},
+\quad
+z_{t,k} \sim \mathcal{N}(0, \sigma^2 C^2 I).
+\]
+本研究中的 $C$ 對應 \texttt{clip\_norm}，$\sigma$ 對應 \texttt{noise\_multiplier}。
+
+\subsubsection{可驗證差分隱私約束條件}
+
+為了讓 DP 更新可被 ZKML 審計，本文將浮點更新轉換為 fixed-point integer witness。給定 scale $s$，定義：
+\[
+q_{clip} = \mathrm{round}(s \cdot \Delta w^{clip}),
+\quad
+q_{noise} = \mathrm{round}(s \cdot z),
+\quad
+q_{noisy} = q_{clip} + q_{noise}.
+\]
+本文採用標準化見證，因此不直接要求
+\[
+q_{noisy} = \mathrm{round}(s(\Delta w^{clip}+z)),
+\]
+因為實驗顯示 $q(a+b)$ 與 $q(a)+q(b)$ 可能存在 1 個量化單位的捨入落差。推薦約束條件包含：
+
+\[
+\sum_i q_{clip,i}^2 \leq (Cs)^2 + \lambda,
+\]
+以及
+\[
+q_{noisy,i} = q_{clip,i} + q_{noise,i}, \quad \forall i.
+\]
+其中 $\lambda$ 為容差，用來吸收誠實案例的量化邊界誤差。本研究推薦設定為 $s=10000$、$C=1.0$、\texttt{noise\_multiplier}$=0.08$、\texttt{slack\_ppm}$=4201$，對應 $\lambda=420100$。
+
+\subsection{系統流程與實作方法}
+
+本節依照計畫書的 S0/S1/S2 結構介紹方法流程。整體流程先建立可比較基準實驗，再將 DP 更新形式化為可驗證約束條件，最後以驗證後聚合將驗證結果接回 FL。
+
+此設計對齊原先計畫書中的三階段目標：S0 檢查聯邦學習在資料與模型設定下是否能穩定收斂；S1 檢查加入 DP 後 accuracy 與隱私保護之間的權衡；S2 則檢查 ZK 驗證是否能在可接受成本下提升系統可信度。原計畫書列出的主要量化指標包含 accuracy、proving time、verification time、proof size、peak memory、round time 與 communication overhead；本文已在 16 個資料集、CoverType 大型資料 scaling，以及 Iris/Wine/Digits/CoverType VDP/ZK 實驗中對應呈現 accuracy、training time、proof size、proving time、verification time、circuit rows、peak RSS 與 application-layer communication payload。
+
+\subsubsection{S0：聯邦學習基準實驗}
+
+S0 使用 FedAvg 建立聯邦學習基準。資料先切成 3 個客戶端，各客戶端本地訓練後將模型更新交由伺服器聚合。此基準實驗的目的不是提供隱私保證，而是確認資料與模型設定下 FL 是否能穩定提升準確率。其限制是無法檢查客戶端是否誠實產生更新。
+
+\subsubsection{S1：加入差分隱私的聯邦學習}
+
+S1 在客戶端更新中加入裁剪與雜訊注入。每個客戶端先產生 $\Delta w$，接著裁剪至範數上限以限制敏感度，再加入以種子產生的可重現雜訊。使用可重現雜訊的理由是：若雜訊完全不可重現，後續便無法驗證其是否依規則生成或套用。因此，這一步是從 DP 基準實驗走向 VDP 的必要前置。
+
+\subsubsection{S2：ZKML 可審計 VDP}
+
+S2 將 DP 更新中的兩個核心條件轉換為 ZKML 可驗證形式。第一是裁剪上限，第二是加性雜訊關係。量化約束分析顯示，直接將浮點條件搬進整數約束條件會造成誠實案例誤判，因此後續引入標準化見證並固定推薦約束條件設定。Constraint artifact 單元將公開輸入、見證與檢查結果匯出為 JSON 成果檔；EZKL integration 單元進一步以 EZKL Python API 對小型 ONNX 檢查模型進行實際證明與驗證；proof-gated aggregation 與 end-to-end round 單元則將驗證結果接回聚合。
+
+\subsection{實驗設定}
+
+\subsubsection{主要資料集}
+
+主要資料集為 UCI Adult Income，用於建立主線 FL、DP、VDP 與 ZKML 實驗。資料經前處理、標準化與 train/test split 後，訓練資料切為 $K=3$ 個客戶端。模型採用小型線性模型，以降低 ZKML 映射與 proof 成本。
+
+\subsubsection{額外資料集}
+
+為檢查方法是否只對 Adult Income 有效，本研究額外使用 11 個表格型二元分類資料集進行 FL/DP 基準重複實驗：Breast Cancer Wisconsin、Pima Diabetes、German Credit、Banknote Authentication、Spambase、Tic-Tac-Toe、Titanic、ILPD、PC4、Blood Transfusion 與 KC2。這些資料集涵蓋醫療、信用、軟體缺陷、垃圾郵件、乘客生還與其他二元分類任務。
+
+此外，為測試方法是否能擴展到非二元分類，本研究新增 Iris、Wine 與 Digits 三個多類別資料集。Iris 與 Wine 各包含 3 個類別，Digits 則包含 10 個手寫數字類別。此實驗將模型輸出層從單一 sigmoid logit 改為每個類別一個 logit，損失函數從二元交叉熵改為交叉熵損失，並使用分層方式切分客戶端資料，以降低小型資料集中類別分布不均的影響。
+
+\subsubsection{超參數與評估方式}
+
+主線設定包含 $K=3$ 個客戶端、5 輪聯邦學習、本地訓練週期為 1、\texttt{clip\_norm}$=1.0$、\texttt{noise\_multiplier}$=0.08$。多資料集實驗使用 3 個隨機種子：42、52、62。評估指標包含最終準確率、最佳準確率、DP/FL 保留率，以及證明/檢查是否通過。DP/FL 保留率定義為：
+\[
+\mathrm{Retention} = \frac{\mathrm{Accuracy}_{DP}}{\mathrm{Accuracy}_{FL}}.
+\]
+本文以 90\% 保留率作為基準層級的有效性門檻。
+
+\subsubsection{Baseline 定義與 paired evaluation protocol}
+
+為避免 baseline 定義不清，本文將比較對象固定如下。S0 為不含 clipping、noise 與 proof 的 FedAvg；S1 在相同 FedAvg 流程加入 clipping 與 seeded Gaussian noise，但不加入 proof gate；S2 則在 S1 更新前加入 EZKL proof、clipping/relation public decision，且只有三項檢查均通過的更新可進入聚合。
+
+\begin{table}[H]
+\centering
+\caption{S0/S1/S2 baseline 與評估目的}
+\label{tab:baseline_protocol}
+\begin{tabular}{p{1.0cm}p{5.2cm}p{7.0cm}}
+\toprule
+系統 & 組成 & 評估目的與指標\\
+\midrule
+S0 & FedAvg & FL 收斂基準；round/final/best accuracy 與 round time\\
+S1 & FedAvg + clipping + seeded Gaussian noise & DP update 對 utility 的影響；final accuracy 與 DP/FL retention\\
+S2 & S1 + EZKL proof + accepted-only aggregation & honest acceptance、tampered rejection、prove/verify time、proof size、peak RSS 與 payload\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+所有資料先以 80/20 stratified train/test split 切分；preprocessing transformer 僅在 train split 上 fit。S0 與 S1 對同一 seed 重新設定相同 RNG，因此共用相同 split、client partition、模型初始化與本地訓練 shuffle；DP noise 使用額外 deterministic generator，不改變配對的本地訓練軌跡。二元多資料集使用 3 clients、5 rounds、1 local epoch；多類別資料集使用 3 clients、10 rounds、2 local epochs 與分層 client partition；兩者皆使用 seeds 42、52、62。DP/FL retention 是兩模式 final accuracy 平均值之比。調參實驗會保留並另行報告預設結果，不以調參後數字取代原始 baseline。S2 fail case 對 $q_{noisy}$ 偏移 1 個量化單位，只有 proof verified、clip OK 與 relation OK 同時成立時才接受。
+
+\subsection{技術可行性與風險控制}
+
+為回應 ZKML 成本可能被低估的風險，本文不再只使用「可接受成本」的定性描述，而以 15、42、650 維完整更新建立量化基準。三個維度的平均 proving time 分別為 0.100、0.154、0.586 秒，peak RSS 為 410.0、412.5、426.0 MiB，proving key 為 0.89、1.57、25.18 MB。從 15 到 650 維時，circuit rows 由 138 增至 5851，proving key 增加約 28.4 倍，顯示模型擴展風險即使在目前結果可執行時仍不能忽略。
+
+本專題另設定工程風險門檻；此門檻用於控制大專專題資源，不是通用 ZKML 標準。綠色範圍為 proving time 不超過 10 秒、peak RSS 不超過 2 GiB、單一 proving artifact 不超過 256 MiB，可納入重複實驗。若 proving time 為 10--60 秒、RSS 為 2--8 GiB 或 artifact 為 256 MiB--1 GiB，列為黃色範圍，優先降低維度或拆分 constraint proof。超過 60 秒、8 GiB 或 1 GiB 時列為紅色範圍，不納入本文的實務可行性主張。完整 local training circuit 與深度模型目前沒有量測，因此直接列為未來工作。
+
+\subsection{Privacy accounting 的觀察者與隨機性假設}
+
+本文採用 R\'enyi Differential Privacy（RDP）追蹤 Gaussian mechanism 的 sequential composition \cite{mironov2017}。目前每個 client 每輪直接釋出一個 clipping 後更新，client participation 為 $q=1$，因此沒有 subsampling amplification。若 clipping bound 為 $C$、raw noise standard deviation 為 $mC$，則保守 replace-one adjacency 的 sensitivity 為 $2C$，effective noise multiplier 為 $\sigma_{eff}=m/2$。經過 $T$ 輪後：
+
+\[
+\epsilon_{RDP}(\alpha)
+= \frac{T\alpha}{2\sigma_{eff}^{2}},
+\qquad
+\epsilon(\delta)
+= \min_{\alpha>1}\left[
+\epsilon_{RDP}(\alpha)+\frac{\log(1/\delta)}{\alpha-1}
+\right].
+\]
+
+此 accountant 是 client-level，而不是 record-level DP-SGD accountant。更重要的是，有限 $\epsilon$ 的前提是 noise 對觀察者保持秘密且確實由獨立 Gaussian randomness 產生。目前 artifact 卻把 deterministic \texttt{noise\_seed} 放入 public inputs；verifier 可由 seed 重建 $q_{noise}$，再以 $q_{noisy}-q_{noise}$ 還原 $q_{clip}$。因此，現行 verifier view 的 privacy budget 必須記為 $\epsilon=\infty$。本文仍計算秘密 Gaussian noise 的條件式結果，用於判斷未來修正後可能面臨的 utility trade-off，但不把該數字誤列為目前系統保證。
+
+% (四) 研究結果與討論
+\section{研究結果與討論}
+
+\subsection{約束條件設定驗證}
+
+推薦約束條件設定顯示，誠實設定檔以 9/9 通過，篡改設定檔以 18/18 被拒絕。實驗亦觀察到誠實案例最大裁剪超額為 4200 ppm，而篡改案例最小裁剪超額為 73300 ppm，因此存在明確安全區間：
+\[
+4200 < \texttt{slack\_ppm} < 73300.
+\]
+本研究採用 \texttt{slack\_ppm}$=4201$，作為保守且可行的候選值。此結果支撐本文主張：標準化量化見證加上固定容差策略可穩定接受誠實案例並拒絕篡改案例。
+
+\subsection{實際 EZKL 約束條件證明}
+
+EZKL constraint integration 實際使用 EZKL 對推薦約束條件設定建立小型 ONNX 檢查模型。結果如表 \ref{tab:ezkl} 所示。誠實設定檔通過裁剪與關係檢查；篡改含雜訊設定檔雖然裁剪檢查仍通過，但關係檢查未通過，關係平方和為 1.0。這表示該篡改案例即使只偏移 1 個量化單位，仍能被關係約束條件偵測。
+
+\begin{table}[h]
+\centering
+\caption{實際 EZKL 約束條件證明展示結果}
+\label{tab:ezkl}
+\begin{tabular}{lcccc}
+\toprule
+案例 & 已驗證 & 裁剪通過 & 關係通過 & 關係平方和\\
+\midrule
+honest\_profile & True & True & True & 0.0\\
+tampered\_noisy\_profile & True & True & False & 1.0\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{驗證後聚合}
+
+Proof-gated single-round 實驗中，3 個客戶端裡 2 個誠實客戶端被接受，1 個篡改客戶端被拒絕。被拒絕的原因不是裁剪失敗，而是含雜訊更新不符合
+\[
+q_{noisy} = q_{clip}+q_{noise}.
+\]
+因此該更新不進入聚合。end-to-end proof-gated round 將 accepted aggregate 實際回寫 global model，結果如表 \ref{tab:round} 所示。
+
+\begin{table}[h]
+\centering
+\caption{驗證後聚合的端到端一輪結果}
+\label{tab:round}
+\begin{tabular}{lc}
+\toprule
+設定 & 準確率\\
+\midrule
+初始模型 & 0.694851\\
+驗證後聚合 & 0.839697\\
+未經驗證聚合 & 0.836831\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+此結果顯示，ZKML 對 DP 更新的驗證並非獨立展示，而是已實際影響聚合決策。驗證後聚合在拒絕篡改客戶端後，仍維持接近甚至略高於未經驗證聚合的準確率。
+
+\subsection{多資料集重複實驗}
+
+多資料集實驗檢查 DP 基準是否在不同表格型二元分類任務中仍接近 FL 基準。表 \ref{tab:multi} 顯示預設參數下 11 個資料集中的結果。9/11 個資料集達到 90\% 保留率，表示該流程並非只對 Adult Income 有效。
+
+\begin{longtable}{lrrrr}
+\caption{多資料集 FL/DP 基準重複實驗}\label{tab:multi}\\
+\toprule
+資料集 & FL 最終 & DP 最終 & 差距 & 保留率\\
+\midrule
+\endfirsthead
+\toprule
+資料集 & FL 最終 & DP 最終 & 差距 & 保留率\\
+\midrule
+\endhead
+banknote\_authentication & 0.573333 & 0.467879 & 0.105455 & 0.816067\\
+blood\_transfusion & 0.615556 & 0.535555 & 0.080000 & 0.870036\\
+breast\_cancer\_wisconsin & 0.912281 & 0.891813 & 0.020468 & 0.977564\\
+german\_credit & 0.711667 & 0.710000 & 0.001667 & 0.997658\\
+ilpd & 0.609687 & 0.601140 & 0.008547 & 0.985981\\
+kc2 & 0.793651 & 0.784127 & 0.009524 & 0.988000\\
+pc4 & 0.820776 & 0.794521 & 0.026256 & 0.968011\\
+pima\_diabetes & 0.731602 & 0.714286 & 0.017316 & 0.976332\\
+spambase & 0.913138 & 0.907347 & 0.005791 & 0.993658\\
+tic\_tac\_toe & 0.656250 & 0.645833 & 0.010417 & 0.984126\\
+titanic & 0.821883 & 0.790076 & 0.031807 & 0.961300\\
+\bottomrule
+\end{longtable}
+
+預設參數下 banknote\_authentication 與 blood\_transfusion 未達 90\% 保留率。依 REL 的觀察歸因原則，本文不將其解讀為方法失效，而進一步進行參數掃描。結果顯示，banknote 將訓練輪數從 5 增至 10 並將 \texttt{noise\_multiplier} 從 0.08 降至 0.04 後，保留率從 0.816067 提升至 0.996970。blood\_transfusion 將訓練輪數增至 15 並將 \texttt{noise\_multiplier} 降至 0.04 後，保留率從 0.870036 提升至 0.988201。這表示兩者屬於參數敏感資料集，而非 DP 原型不相容。
+
+\begin{table}[h]
+\centering
+\caption{未達標資料集之 DP 參數調整結果}
+\label{tab:sweep}
+\begin{tabular}{lrrrr}
+\toprule
+資料集 & 輪數 & 雜訊 & FL 最終 & DP 最終 / 保留率\\
+\midrule
+banknote\_authentication & 10 & 0.04 & 0.800000 & 0.797576 / 0.996970\\
+blood\_transfusion & 15 & 0.04 & 0.753333 & 0.744445 / 0.988201\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{非二元多類別資料集實驗}
+
+為進一步檢查本研究流程是否只適用於二元分類，本研究新增 Iris、Wine 與 Digits 三個多類別資料集。此實驗使用 3 個隨機種子、3 個客戶端、10 輪聯邦學習、local epoch 為 2、\texttt{clip\_norm}$=1.0$、\texttt{noise\_multiplier}$=0.08$。多類別設定下，模型輸出層改為每個類別一個 logit，訓練目標改為交叉熵損失。
+
+結果如表 \ref{tab:multiclass} 所示，3/3 個多類別資料集皆達到 90\% DP/FL 保留率門檻。其中 Digits 為 10 類分類，DP 最終平均準確率為 0.946296，FL 最終平均準確率為 0.961111，保留率為 0.984586。此結果顯示，DP 更新原型不只可用於表格型二元分類，也可延伸至多類別輸出設定。
+
+\begin{table}[h]
+\centering
+\caption{非二元多類別資料集 FL/DP 基準重複實驗}
+\label{tab:multiclass}
+\begin{tabular}{lrrrr}
+\toprule
+資料集 & 類別數 & FL 最終平均 & DP 最終平均 & 保留率\\
+\midrule
+digits & 10 & 0.961111 & 0.946296 & 0.984586\\
+iris & 3 & 0.866667 & 0.866666 & 1.000000\\
+wine & 3 & 0.972222 & 0.981481 & 1.009524\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{多類別 VDP/ZK 成本實驗}
+
+為補強 ZK 驗證不只適用於 Adult Income，本研究進一步選擇 Wine 與 Digits 多類別資料集進行實際 EZKL-backed VDP 約束檢查。Wine 任務為 3 類分類，線性模型包含 42 個參數；Digits 任務為 10 類分類，線性模型包含 650 個參數。因此本實驗驗證完整 DP 更新向量，而非只驗證部分切片。設定包含 \texttt{scale}$=10000$、\texttt{clip\_norm}$=1.0$、\texttt{noise\_multiplier}$=0.08$、\texttt{slack\_ppm}$=4201$。
+
+表 \ref{tab:winezk} 顯示，誠實更新同時通過 EZKL proof verification、裁剪檢查與關係檢查，因此被接受。篡改 noisy update 的案例仍可對其算術輸出產生有效 proof，但因 $q_{noisy}=q_{clip}+q_{noise}$ 關係檢查失敗而被拒絕。此結果說明，ZK proof 本身證明的是檢查模型的算術輸出，而伺服器仍需依公開檢查結果執行 proof-gated decision。從成本角度看，Digits 的向量維度由 42 增至 650，circuit rows 從 379 增至 5851，honest proving time 從 0.140052 秒增至 0.622663 秒，顯示模型維度會推升證明成本，但在本實驗規模下仍可完成實際 proof/verify。
+
+\begin{table}[h]
+\centering
+\caption{多類別資料集之實際 EZKL VDP 檢查與成本}
+\label{tab:winezk}
+\begin{tabular}{llrrrrrr}
+\toprule
+資料集 & 案例 & 維度 & 接受 & 證明秒數 & 驗證秒數 & 證明大小 & Rows\\
+\midrule
+wine & honest\_profile & 42 & True & 0.140052 & 0.044162 & 11910 & 379\\
+wine & tampered\_noisy\_profile & 42 & False & 0.144741 & 0.052252 & 11925 & 379\\
+digits & honest\_profile & 650 & True & 0.622663 & 0.034368 & 11952 & 5851\\
+digits & tampered\_noisy\_profile & 650 & False & 0.589810 & 0.040578 & 11995 & 5851\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+為補齊 peak memory 與 communication overhead，本研究再以 seeds 42、52、62 對 Iris、Wine 與 Digits 的 honest profile 進行重複量測。每個 dataset/seed 均在獨立 Python process 執行，並以 5 ms polling 記錄 process RSS 峰值。S1 payload 定義為 compact JSON 序列化的 client id 與量化 noisy update；S2 payload 則再加入 proof JSON 與 audit policy metadata。此估計不包含 TCP、TLS 或 HTTP framing，因此代表可重現的 application-layer wire size，而不是真實網路封包量。
+
+\begin{table}[h]
+\centering
+\caption{多類別更新維度之 EZKL 重複成本、peak RSS 與通訊 payload}
+\label{tab:zkscaling}
+\begin{tabular}{lrrrrrr}
+\toprule
+資料集 & 維度 & 通過 & Prove 秒 & Verify 秒 & Peak RSS MiB & S1/S2 bytes\\
+\midrule
+iris & 15 & 3/3 & $0.100064\pm0.006598$ & $0.032662\pm0.001165$ & $410.018\pm0.391$ & 99 / 12519\\
+wine & 42 & 3/3 & $0.153746\pm0.011348$ & $0.040995\pm0.006190$ & $412.462\pm0.085$ & 222 / 12331\\
+digits & 650 & 3/3 & $0.586401\pm0.008719$ & $0.034425\pm0.001359$ & $425.966\pm0.653$ & 3056 / 15198\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+更新維度由 15 增至 650 時，平均 proving time 增至 5.860 倍、pipeline peak RSS 增至 1.039 倍，而 S2 application payload 增至 1.214 倍。Proof JSON 平均大小仍約 11.9--12.3 KB，因此固定 proof 成本在小向量上造成較高相對通訊負擔；向量變大後，原始更新 payload 的占比上升。EZKL calibration 對大型量化 lookup input 會輸出警告，但 9/9 runs 均完成 compile/prove/verify；Digits fidelity report 的 mean absolute percent error 約為 $1.8\times10^{-6}\%$。因此本文只主張目前三個線性模型設定可完成驗證，不將結果外推為深度模型的線性 scaling。
+
+\subsection{Privacy accounting 與 privacy--utility frontier}
+
+在 $T=10$、$\delta=10^{-5}$、replace-one adjacency 下，現行 $m=0.08$ 即使改成秘密 Gaussian noise，條件式 $\epsilon$ 仍為 3504.357。反解相同 RDP bound 可得，目標 $\epsilon=128,32,8$ 分別需要 raw noise multiplier 0.531228、1.396075、4.366154。本研究在 Iris、Wine、Digits 上以 seeds 42、52、62 完成 45 組 paired runs；表 \ref{tab:privacyutility} 顯示 privacy 增強時的 utility 下降。
+
+\begin{table}[H]
+\centering
+\caption{秘密 Gaussian 條件下的 client-level privacy--utility frontier}
+\label{tab:privacyutility}
+\begin{tabular}{lrrrr}
+\toprule
+資料集 & $m=0.08$ / $\epsilon=3504$ & $\epsilon=128$ & $\epsilon=32$ & $\epsilon=8$\\
+\midrule
+Digits & 0.984586 & 0.536609 & 0.252409 & 0.171483\\
+Iris & 1.000000 & 0.782051 & 0.500000 & 0.384615\\
+Wine & 1.009524 & 0.876190 & 0.609524 & 0.457143\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+表中數值為 DP/FL final accuracy retention。原始 $m=0.08$ 在三個資料集均維持 90\% 以上 retention，但 privacy budget 幾乎沒有實質意義；當 noise 提升到較小 $\epsilon$ 所需程度時，所有資料集均跌破 90\%。此外，表中所有有限 $\epsilon$ 仍只是假設 seed 對 verifier 保密的條件式結果；public-seed 現況為 $\infty$。這個負面結果說明，驗證「某個 noise vector 被加上」並不等於驗證「不可預測且符合指定分布的 DP randomness」。
+
+\subsection{Forest CoverType 大型資料 scaling}
+
+為回應小型資料集不足的疑慮，本研究加入 Forest CoverType（581,012 筆、54 特徵、7 類別）\cite{blackard1998}。固定 20\% test split，使用 10,000、100,000 與完整 464,809 筆 training split；每個規模以 seeds 42、52、62 執行 FL、clipping-only 與 DP-update，共 27 組 paired runs。Clipping-only control 用來避免將 S0/S1 差距全部誤歸因於 noise。
+
+\begin{table}[H]
+\centering
+\caption{Forest CoverType 大型資料 FL/DP scaling}
+\label{tab:covertype}
+\begin{tabular}{lrrrrrr}
+\toprule
+Training & FL & Clip only & DP update & Clip/FL & DP/FL & Train sec F/C/D\\
+\midrule
+10,000 & 0.627299 & 0.627299 & 0.569942 & 1.000000 & 0.908566 & 12.8/12.6/12.8\\
+100,000 & 0.712285 & 0.701078 & 0.667886 & 0.984266 & 0.937666 & 20.8/20.4/20.0\\
+464,809 & 0.719890 & 0.700633 & 0.636799 & 0.973251 & 0.884579 & 51.1/50.7/52.0\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+完整分割的 peak RSS 約為 715--716 MiB。總 accuracy gap 為 0.083091，其中 clipping-only gap 為 0.019257，加入 noise 後額外 gap 為 0.063834；此為 control-based 差距分解，不宣稱一般性的因果比例。CoverType 線性模型的完整更新為 385 維；actual EZKL honest case 通過，prove/verify 為 0.305527/0.039568 秒、proof 12,293 bytes、peak RSS 430.2 MiB。Tampered $q_{noisy}+1$ 的 proof 可驗證算術輸出，但 relation check 失敗而被拒絕。這表示大型樣本可由現有訓練原型處理，且其更新可接入 S2；但 constraint-only proof 並未包含整個 local training trace，calibration 的大型 lookup input 警告亦保留為量化與工具鏈風險。
+
+\subsection{Non-IID 與 client scaling}
+
+為移除 K=3、stratified IID 的單一設定限制，本研究固定 CoverType 100,000 筆 training subset，比較 K=3/10 與 IID、Dirichlet $\alpha=0.5/0.1$；每個條件使用 5 seeds，FL、clipping-only、DP-update 共完成 90 runs。K=10 IID、$\alpha=0.5$、$\alpha=0.1$ 的 DP/FL retention 分別為 0.962019、0.921883、0.834961；K=3 的三者則為 0.888716、0.848033、0.762431。六個條件均可執行，但高度 non-IID 的效用與 seed variation 明顯惡化，因此結果支持 client/partition 可執行性，而不支持所有條件皆能維持 90\% retention。
+
+\subsection{多輪 proof-gated threat matrix}
+
+本研究再以 CoverType K=10、Dirichlet $\alpha=0.1$、3 rounds、20\% attackers 比較 relation tamper、clip bypass、replay、zero-noise 與 bounded sign-flip；3 seeds 共完成 48 條 trajectories 與 1,440 次 client 決策。這些決策重用前期 actual EZKL 的 verified-artifact/check contract，屬於 policy simulation，並非逐更新產生 1,440 份 actual proofs。Current proof+clip+relation gate 對 relation tamper 與 clip bypass 的惡意接受率皆為 0\%，但對 replay 與 zero-noise 皆為 100\%。加入 client/round/model binding、replay protection 與 noise-generation policy 後，後兩者降為 0\%。然而 bounded sign-flip 在 current 與 strengthened policy 下仍為 100\%，且 final accuracy 相對 clean trajectory 僅 0.179797；這證明 update-level VDP gate 不能被解讀為完整 training provenance 或任意 poisoning defense。拒絕兩個最大 non-IID clients 時，部分 strengthened trajectories 的 clean retention 為 0.585848，亦顯示安全拒絕與 availability/utility 的取捨。
+
+\subsection{實驗完整性、統計與可重現性稽核}
+
+本研究另直接讀取 CoverType large-data scaling--27 raw CSV 檢查 expected rows、primary-key uniqueness 與 seed pairing；27/27 large-scaling runs、90/90 non-IID runs、48/48 threat trajectories 與 1,440/1,440 decisions 全部齊全。33 組 accuracy comparisons 以 seed 為分析單位，報告 paired difference、Student-$t$ 95\% CI、paired Cohen $d_z$、two-sided exact sign-flip permutation $p$ 與 family-level Holm correction。由於 $n=3$ 的最小 two-sided exact $p=0.25$，$n=5$ 的最小 $p=0.0625$，所有 Holm-adjusted $p$ 皆未低於 0.05。因此本文不宣稱 accuracy 差異具有統計顯著性，而將其定位為描述性 effect、範圍與工程可行性證據。精確 Python/OS/package versions 與核心 scripts/results SHA-256 亦一併保存。
+
+\subsection{Context-bound hidden-randomness reference protocol}
+
+為將 replay、context swap 與 zero-noise 缺口轉成可 circuit 化的精確規格，本研究建立 commit-before-challenge state machine。Client 在 server challenge 前先承諾 clipped update，且於 rounds 前註冊不可替換的 randomness commitment；server 對每個 commitment 只發出一次 challenge。Hidden seed 綁定 client、round、model hash、nonce、update commitment 與 challenge，public statement 不包含 client secret、derived seed 或 $q_{noise}$。Reference evaluator 對 honest、replay、round/model/challenge swap、zero-noise、secret swap、clip bypass、noisy tamper 與 challenge reissue 共 10 cases 達成 10/10 預期決策。
+
+此結果是 intended circuit relation 的 executable oracle，而非 actual ZK proof。Host reference 使用 HMAC-SHA256、SHAKE256 與 centered-binomial sampler；投稿版仍須選定 circuit-friendly primitives，對 exact quantized sampler 建立 DP theorem/accountant，並產生真正多輪 proofs。因此本節的貢獻是消除 protocol ambiguity 與建立 regression contract，不宣稱已修復 finite-epsilon verifiable DP。
+
+\subsection{綜合討論}
+
+本研究的主要觀察可分為九層。第一，FL 基準與 noise-injection utility prototype 顯示，在多數表格型二元分類資料集上，加入裁剪與低強度雜訊後，模型仍可維持接近 FL 基準的準確率；新增的非二元多類別實驗亦顯示 Iris、Wine 與 Digits 均維持 90\% 以上保留率。第二，ZKML 約束條件實驗顯示，DP update 中的核心條件可被形式化為可驗證約束條件，並能偵測僅偏移 1 個量化單位的篡改含雜訊更新；Wine 的 42 維、CoverType 的 385 維與 Digits 的 650 維更新顯示此檢查可擴展到 Adult Income 以外的多類別資料集。第三，驗證後聚合顯示，這些檢查可接回 FL 聚合決策，讓伺服器只聚合通過驗證的更新。第四，CoverType 顯示 58 萬筆資料可在約 716 MiB peak RSS 下完成，但完整分割的 DP/FL retention 降至 0.884579，資料量本身不能取代 clipping/noise 調參。第五，K=3/10 與 IID/Dirichlet 矩陣證明原型可在較異質 federation 中執行，但高度 non-IID 會降低 utility。第六，多輪威脅矩陣證明 current gate 的 clip/relation 聲明成立，也揭露 replay、randomness 與 training provenance 邊界。第七，完整性/統計稽核確認 raw matrices 可追溯且配對，也限制小 seed 數的推論強度。第八，context-bound reference protocol 將 hidden randomness 與 freshness 轉成 executable circuit contract。第九，privacy accountant 顯示 auditability 與 formal privacy 不能混為一談：public seed 讓現行 privacy budget 為 infinity，而有限 epsilon 所需 noise 又造成明顯 utility 損失。
+
+從具體結果推廣到一般結論的角度看，Adult Income 上的驗證後聚合結果是具體案例，而共 16 個資料集上的 FL/DP 實驗支撐較一般性的說法：目前 DP 更新原型在多種分類任務與大型樣本設定上具備可執行性。不過，banknote、blood\_transfusion 與 CoverType 完整分割的未達標結果也提醒我們，DP 參數不能無條件固定。資料維度、更新幅度、每輪本地最佳化步數與基準穩定性都可能改變相同 clipping/noise 設定的相對干擾。
+
+\subsection{限制與未來工作}
+
+本研究仍有幾項限制。第一，目前 ZKML 實際驗證的是 VDP 核心約束條件，而不是完整的本地訓練、反向傳播與 FedAvg 聚合單一大型電路；bounded sign-flip 結果具體證明此邊界。第二，雖已完成 client-level RDP accountant，但 public deterministic seed 使現行機制不具有限 privacy budget；context-bound randomness protocol 只完成 hidden-seed/context reference semantics，尚未在電路內驗證 exact noise distribution。第三，本文已在 15、42、385、650 維更新上量測 actual proof，並以 CoverType 補上大型樣本規模，但仍限於線性模型；RSS polling 不等同硬體層級 profiler，payload 估計也不含實際網路 framing。第四，non-IID client scaling 雖已完成 K=10、Dirichlet non-IID 與 5 seeds，仍不足以代表 production federation；其餘多數跨資料集實驗只有 3 seeds。第五，context/replay/noise-generation contract 尚未綁入 actual ZK circuit，selective abort、collusion 與 registration authenticity 亦待形式化。
+
+未來工作的最高優先順序是把 context-bound randomness protocol contract 轉成 actual verifiable-randomness circuit：選定 circuit-friendly PRF/commitment 與 integer sampler、證明 exact sampler 的 privacy guarantee，並讓 accountant 直接讀取同一組 parameters。其次，採用 FedScale 等具 natural client partition 與統一 protocol 的 benchmark \cite{lai2022fedscale}，在 10/50/100 clients 上產生真正多輪 proofs，量測 latency、throughput、memory、proof/key size 與 payload。最後，以 local-training proof 或 robust aggregation 處理 bounded poisoning，並透過 power analysis 規劃 utility experiments。
+
+\subsection{結論}
+
+本文依據 VDP-FL 計畫完成了從 FL 基準、noise-injection utility prototype 到 ZKML 可審計 DP-update 原型的完整實驗鏈。核心主張是：\textbf{DP update 中的裁剪與雜訊加性關係可被轉換為 ZKML 可驗證約束，並控制聯邦學習聚合；但正式 verifiable DP 與完整訓練正確性還必須證明 noise 的秘密性、不可預測性、分布正確性、context freshness 與 training provenance。}實驗證據包含誠實／篡改 constraint cases、actual EZKL proof、proof-gated round、16 個資料集、581,012 筆 CoverType、K=3/10 IID/Dirichlet 的 90 runs、48 條多輪 threat trajectories、15/42/385/650 維 actual proof、45 組 privacy--utility runs、33 組 paired audit，以及 10/10 context/randomness reference threats。$\epsilon=\infty$、小 seed 數、replay/zero-noise 與 bounded poisoning 結果不是被隱藏的失敗，而是精確界定系統尚缺哪些元件的重要研究發現。context-bound randomness protocol 進一步把 hidden randomness 與 context freshness 轉成可 circuit 化 contract，但未冒充 actual proof。整體而言，本研究完成的是「將 DP update 作為 ZKML 可審計約束」的原型、風險實證與投稿版方法規格。
+
+\begin{thebibliography}{14}
+
+\bibitem{mcmahan2017}
+B. McMahan, E. Moore, D. Ramage, S. Hampson, and B. A. y. Arcas,
+``Communication-Efficient Learning of Deep Networks from Decentralized Data,''
+in \emph{AISTATS}, 2017.
+
+\bibitem{dwork2006}
+C. Dwork,
+``Differential Privacy,''
+in \emph{ICALP}, 2006.
+
+\bibitem{abadi2016}
+M. Abadi et al.,
+``Deep Learning with Differential Privacy,''
+in \emph{ACM CCS}, 2016.
+
+\bibitem{zhu2019dlg}
+L. Zhu, Z. Liu, and S. Han,
+``Deep Leakage from Gradients,''
+in \emph{NeurIPS}, 2019.
+
+\bibitem{geiping2020inverting}
+J. Geiping, H. Bauermeister, H. Dr\"oge, and M. Moeller,
+``Inverting Gradients -- How Easy Is It to Break Privacy in Federated Learning?''
+in \emph{NeurIPS}, 2020.
+
+\bibitem{nasr2023tight}
+M. Nasr, J. Hayes, T. Steinke, B. Balle, F. Tram\`er, M. Jagielski, N. Carlini, and A. Terzis,
+``Tight Auditing of Differentially Private Machine Learning,''
+in \emph{USENIX Security Symposium}, 2023.
+
+\bibitem{bonawitz2017}
+K. Bonawitz et al.,
+``Practical Secure Aggregation for Privacy-Preserving Machine Learning,''
+in \emph{ACM CCS}, 2017.
+
+\bibitem{shakeb2025}
+S. Ahmed, M. K. Bhatia, W. A. K. Ahmad, G. D, S. Suneel, and S. Singh,
+``Zero-Knowledge AI: Enhancing Data Privacy in Federated Learning Models,''
+in \emph{2025 4th International Conference on Innovative Mechanisms for Industry Applications (ICIMIA)}, 2025,
+doi: 10.1109/ICIMIA67127.2025.11200577.
+
+\bibitem{mironov2017}
+I. Mironov,
+``R\'enyi Differential Privacy,''
+in \emph{30th IEEE Computer Security Foundations Symposium (CSF)}, 2017,
+pp. 263--275.
+
+\bibitem{blackard1998}
+J. Blackard,
+``Covertype,'' UCI Machine Learning Repository, 1998.
+doi: 10.24432/C50K5N.
+
+\bibitem{biswas2023}
+A. Biswas and G. Cormode,
+``Interactive Proofs for Differentially Private Counting,''
+in \emph{ACM CCS}, 2023, pp. 1919--1933.
+
+\bibitem{bontekoe2025}
+T. Bontekoe, H. J. Asghar, and F. Turkmen,
+``Efficient Verifiable Differential Privacy with Input Authenticity in the Local and Shuffle Model,''
+\emph{Proceedings on Privacy Enhancing Technologies}, vol. 2025, no. 2, pp. 543--563, 2025.
+
+\bibitem{bellclark2026}
+J. Bell-Clark, A. Gasc\'on, B. Li, M. Raykova, and A. R. Chowdhury,
+``V$\epsilon$rity: Verifiable Local Differential Privacy,''
+in \emph{USENIX Security Symposium}, 2026.
+
+\bibitem{lai2022fedscale}
+F. Lai et al.,
+``FedScale: Benchmarking Model and System Performance of Federated Learning at Scale,''
+in \emph{ICML}, 2022, pp. 11814--11827.
+
+\end{thebibliography}
+
+\end{document}

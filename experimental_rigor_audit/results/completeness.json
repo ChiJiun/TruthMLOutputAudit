@@ -1,0 +1,32 @@
+{
+  "expected": {
+    "large_data_mode_runs": 27,
+    "noniid_mode_runs": 90,
+    "threat_trajectories": 48,
+    "threat_client_decisions": 1440
+  },
+  "actual": {
+    "large_data_mode_runs": 27,
+    "noniid_mode_runs": 90,
+    "threat_trajectories": 48,
+    "threat_client_decisions": 1440
+  },
+  "all_primary_keys_unique": true,
+  "all_core_matrices_complete": true,
+  "paired_seed_sets_checked": true,
+  "preprocessing_code_audit": {
+    "train_test_split_before_scaler_fit": true,
+    "standard_scaler_fit_on_train_only": true,
+    "paired_modes_share_split_partition_initialization_shuffle": true
+  },
+  "proof_scope": {
+    "actual_ezkl_evidence_sources": [
+      "ezkl_constraint_integration",
+      "multiclass_vdp_zk",
+      "zk_cost_scaling",
+      "covertype_large_dataset_scaling"
+    ],
+    "threat_matrix_is_policy_simulation": true,
+    "threat_matrix_actual_proof_count_claimed": false
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "seeds": [
+    42,
+    52,
+    62,
+    72,
+    82,
+    92,
+    102,
+    112,
+    122,
+    132
+  ],
+  "runs": 10,
+  "verified_runs": 10,
+  "unique_proof_hashes": 10,
+  "metrics": {
+    "keygen_seconds": {
+      "mean": 1.30681169,
+      "sd": 0.08890501573790177,
+      "ci95_half_width": 0.06359881698511008,
+      "min": 1.1721746,
+      "max": 1.4423168
+    },
+    "prove_seconds": {
+      "mean": 1.8451846,
+      "sd": 0.05686729341891815,
+      "ci95_half_width": 0.04068041107208838,
+      "min": 1.7287471,
+      "max": 1.9542465
+    },
+    "verify_seconds": {
+      "mean": 0.06189076,
+      "sd": 0.012705114740065207,
+      "ci95_half_width": 0.0090886915706799,
+      "min": 0.0464142,
+      "max": 0.0831306
+    },
+    "peak_rss_mib": {
+      "mean": 246.21329999999998,
+      "sd": 1.0287009121540955,
+      "ci95_half_width": 0.7358883017059369,
+      "min": 244.914,
+      "max": 248.102
+    },
+    "proof_bytes": {
+      "mean": 3840.0,
+      "sd": 0.0,
+      "ci95_half_width": 0.0,
+      "min": 3840.0,
+      "max": 3840.0
+    }
+  },
+  "hardware_label": "local-windows",
+  "backend_scope": "Halo2 actual proofs; EZKL evidence is reported separately and is not an identical circuit"
+}

@@ -1,0 +1,9 @@
+profile,mode,model,seeds,parameter_count,clients,rounds,client_updates,final_accuracy_mean,final_accuracy_ci95,training_sec_mean,training_sec_ci95,single_actual_prove_sec_mean,estimated_serial_all_update_prove_hours,estimated_all_update_proof_mib,estimate_not_executed_end_to_end
+linear_k10_r3,clean,linear,5,385,10,3,30,0.56576,0.059111,3.575689,0.830673,0.530392,0.00442,0.351,True
+linear_k10_r3,vdp_cbd,linear,5,385,10,3,30,0.55207,0.063506,3.148166,0.952114,0.530392,0.00442,0.351,True
+linear_k25_r10,clean,linear,5,385,25,10,250,0.62595,0.01075,7.835079,0.680505,0.530392,0.036833,2.924999,True
+linear_k25_r10,vdp_cbd,linear,5,385,25,10,250,0.62434,0.009196,7.748404,0.428812,0.530392,0.036833,2.924999,True
+linear_k50_r20,clean,linear,5,385,50,20,1000,0.63837,0.007496,28.351332,5.335127,0.530392,0.147331,11.699994,True
+linear_k50_r20,vdp_cbd,linear,5,385,50,20,1000,0.63517,0.010802,26.939238,7.781841,0.530392,0.147331,11.699994,True
+mlp16_k25_r10,clean,mlp_16,5,999,25,10,250,0.60071,0.03009,13.249862,1.9565,1.524477,0.105866,2.929131,True
+mlp16_k25_r10,vdp_cbd,mlp_16,5,999,25,10,250,0.6004,0.029091,14.590019,0.910566,1.524477,0.105866,2.929131,True

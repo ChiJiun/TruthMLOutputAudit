@@ -1,0 +1,73 @@
+scenario,adjacency,rounds,raw_noise_multiplier,effective_noise_multiplier,delta,epsilon,best_alpha,formal_dp_valid,reason
+current_public_deterministic_seed,not_applicable,5,0.08,0.0,1e-05,inf,n/a,False,public seed makes noise reconstructible and removable by the verifier
+ideal_secret_independent_gaussian,add_remove,5,0.08,0.08,1e-05,524.747877,1.171677,True,conditional bound: seed/noise must remain secret and Gaussian
+ideal_secret_independent_gaussian,replace_one,5,0.08,0.04,1e-05,1830.745753,1.085839,True,conditional bound: seed/noise must remain secret and Gaussian
+current_public_deterministic_seed,not_applicable,5,0.5,0.0,1e-05,inf,n/a,False,public seed makes noise reconstructible and removable by the verifier
+ideal_secret_independent_gaussian,add_remove,5,0.5,0.5,1e-05,31.45966,2.072983,True,conditional bound: seed/noise must remain secret and Gaussian
+ideal_secret_independent_gaussian,replace_one,5,0.5,0.25,1e-05,82.919321,1.536492,True,conditional bound: seed/noise must remain secret and Gaussian
+current_public_deterministic_seed,not_applicable,5,0.5312278818678022,0.0,1e-05,inf,n/a,False,public seed makes noise reconstructible and removable by the verifier
+ideal_secret_independent_gaussian,add_remove,5,0.5312278818678022,0.531227882,1e-05,29.057037,2.139997,True,conditional bound: seed/noise must remain secret and Gaussian
+ideal_secret_independent_gaussian,replace_one,5,0.5312278818678022,0.265613941,1e-05,75.831813,1.569998,True,conditional bound: seed/noise must remain secret and Gaussian
+current_public_deterministic_seed,not_applicable,5,1.0,0.0,1e-05,inf,n/a,False,public seed makes noise reconstructible and removable by the verifier
+ideal_secret_independent_gaussian,add_remove,5,1.0,1.0,1e-05,13.22983,3.145966,True,conditional bound: seed/noise must remain secret and Gaussian
+ideal_secret_independent_gaussian,replace_one,5,1.0,0.5,1e-05,31.45966,2.072983,True,conditional bound: seed/noise must remain secret and Gaussian
+current_public_deterministic_seed,not_applicable,5,1.3960754849660169,0.0,1e-05,inf,n/a,False,public seed makes noise reconstructible and removable by the verifier
+ideal_secret_independent_gaussian,add_remove,5,1.3960754849660169,1.396075485,1e-05,8.968401,3.995931,True,conditional bound: seed/noise must remain secret and Gaussian
+ideal_secret_independent_gaussian,replace_one,5,1.3960754849660169,0.698037742,1e-05,20.502184,2.497965,True,conditional bound: seed/noise must remain secret and Gaussian
+current_public_deterministic_seed,not_applicable,5,2.0,0.0,1e-05,inf,n/a,False,public seed makes noise reconstructible and removable by the verifier
+ideal_secret_independent_gaussian,add_remove,5,2.0,2.0,1e-05,5.989915,5.291932,True,conditional bound: seed/noise must remain secret and Gaussian
+ideal_secret_independent_gaussian,replace_one,5,2.0,1.0,1e-05,13.22983,3.145966,True,conditional bound: seed/noise must remain secret and Gaussian
+current_public_deterministic_seed,not_applicable,5,4.0,0.0,1e-05,inf,n/a,False,public seed makes noise reconstructible and removable by the verifier
+ideal_secret_independent_gaussian,add_remove,5,4.0,4.0,1e-05,2.838708,9.583864,True,conditional bound: seed/noise must remain secret and Gaussian
+ideal_secret_independent_gaussian,replace_one,5,4.0,2.0,1e-05,5.989915,5.291932,True,conditional bound: seed/noise must remain secret and Gaussian
+current_public_deterministic_seed,not_applicable,5,4.366154116419907,0.0,1e-05,inf,n/a,False,public seed makes noise reconstructible and removable by the verifier
+ideal_secret_independent_gaussian,add_remove,5,4.366154116419907,4.366154116,1e-05,2.588643,10.369618,True,conditional bound: seed/noise must remain secret and Gaussian
+ideal_secret_independent_gaussian,replace_one,5,4.366154116419907,2.183077058,1e-05,5.439571,5.684809,True,conditional bound: seed/noise must remain secret and Gaussian
+current_public_deterministic_seed,not_applicable,10,0.08,0.0,1e-05,inf,n/a,False,public seed makes noise reconstructible and removable by the verifier
+ideal_secret_independent_gaussian,add_remove,10,0.08,0.08,1e-05,970.928391,1.121394,True,conditional bound: seed/noise must remain secret and Gaussian
+ideal_secret_independent_gaussian,replace_one,10,0.08,0.04,1e-05,3504.356782,1.060697,True,conditional bound: seed/noise must remain secret and Gaussian
+current_public_deterministic_seed,not_applicable,10,0.5,0.0,1e-05,inf,n/a,False,public seed makes noise reconstructible and removable by the verifier
+ideal_secret_independent_gaussian,add_remove,10,0.5,0.5,1e-05,50.348543,1.758714,True,conditional bound: seed/noise must remain secret and Gaussian
+ideal_secret_independent_gaussian,replace_one,10,0.5,0.25,1e-05,140.697085,1.379357,True,conditional bound: seed/noise must remain secret and Gaussian
+current_public_deterministic_seed,not_applicable,10,0.5312278818678022,0.0,1e-05,inf,n/a,False,public seed makes noise reconstructible and removable by the verifier
+ideal_secret_independent_gaussian,add_remove,10,0.5312278818678022,0.531227882,1e-05,46.282262,1.8061,True,conditional bound: seed/noise must remain secret and Gaussian
+ideal_secret_independent_gaussian,replace_one,10,0.5312278818678022,0.265613941,1e-05,128.0,1.40305,True,conditional bound: seed/noise must remain secret and Gaussian
+current_public_deterministic_seed,not_applicable,10,1.0,0.0,1e-05,inf,n/a,False,public seed makes noise reconstructible and removable by the verifier
+ideal_secret_independent_gaussian,add_remove,10,1.0,1.0,1e-05,20.174271,2.517427,True,conditional bound: seed/noise must remain secret and Gaussian
+ideal_secret_independent_gaussian,replace_one,10,1.0,0.5,1e-05,50.348543,1.758714,True,conditional bound: seed/noise must remain secret and Gaussian
+current_public_deterministic_seed,not_applicable,10,1.3960754849660169,0.0,1e-05,inf,n/a,False,public seed makes noise reconstructible and removable by the verifier
+ideal_secret_independent_gaussian,add_remove,10,1.3960754849660169,1.396075485,1e-05,13.434617,3.118443,True,conditional bound: seed/noise must remain secret and Gaussian
+ideal_secret_independent_gaussian,replace_one,10,1.3960754849660169,0.698037742,1e-05,32.0,2.059221,True,conditional bound: seed/noise must remain secret and Gaussian
+current_public_deterministic_seed,not_applicable,10,2.0,0.0,1e-05,inf,n/a,False,public seed makes noise reconstructible and removable by the verifier
+ideal_secret_independent_gaussian,add_remove,10,2.0,2.0,1e-05,8.837136,4.034854,True,conditional bound: seed/noise must remain secret and Gaussian
+ideal_secret_independent_gaussian,replace_one,10,2.0,1.0,1e-05,20.174271,2.517427,True,conditional bound: seed/noise must remain secret and Gaussian
+current_public_deterministic_seed,not_applicable,10,4.0,0.0,1e-05,inf,n/a,False,public seed makes noise reconstructible and removable by the verifier
+ideal_secret_independent_gaussian,add_remove,10,4.0,4.0,1e-05,4.106068,7.069709,True,conditional bound: seed/noise must remain secret and Gaussian
+ideal_secret_independent_gaussian,replace_one,10,4.0,2.0,1e-05,8.837136,4.034854,True,conditional bound: seed/noise must remain secret and Gaussian
+current_public_deterministic_seed,not_applicable,10,4.366154116419907,0.0,1e-05,inf,n/a,False,public seed makes noise reconstructible and removable by the verifier
+ideal_secret_independent_gaussian,add_remove,10,4.366154116419907,4.366154116,1e-05,3.737716,7.625321,True,conditional bound: seed/noise must remain secret and Gaussian
+ideal_secret_independent_gaussian,replace_one,10,4.366154116419907,2.183077058,1e-05,8.0,4.31266,True,conditional bound: seed/noise must remain secret and Gaussian
+current_public_deterministic_seed,not_applicable,15,0.08,0.0,1e-05,inf,n/a,False,public seed makes noise reconstructible and removable by the verifier
+ideal_secret_independent_gaussian,add_remove,15,0.08,0.08,1e-05,1404.182637,1.099118,True,conditional bound: seed/noise must remain secret and Gaussian
+ideal_secret_independent_gaussian,replace_one,15,0.08,0.04,1e-05,5152.115274,1.049559,True,conditional bound: seed/noise must remain secret and Gaussian
+current_public_deterministic_seed,not_applicable,15,0.5,0.0,1e-05,inf,n/a,False,public seed makes noise reconstructible and removable by the verifier
+ideal_secret_independent_gaussian,add_remove,15,0.5,0.5,1e-05,67.169222,1.619487,True,conditional bound: seed/noise must remain secret and Gaussian
+ideal_secret_independent_gaussian,replace_one,15,0.5,0.25,1e-05,194.338444,1.309744,True,conditional bound: seed/noise must remain secret and Gaussian
+current_public_deterministic_seed,not_applicable,15,0.5312278818678022,0.0,1e-05,inf,n/a,False,public seed makes noise reconstructible and removable by the verifier
+ideal_secret_independent_gaussian,add_remove,15,0.5312278818678022,0.531227882,1e-05,61.560861,1.658178,True,conditional bound: seed/noise must remain secret and Gaussian
+ideal_secret_independent_gaussian,replace_one,15,0.5312278818678022,0.265613941,1e-05,176.274937,1.329089,True,conditional bound: seed/noise must remain secret and Gaussian
+current_public_deterministic_seed,not_applicable,15,1.0,0.0,1e-05,inf,n/a,False,public seed makes noise reconstructible and removable by the verifier
+ideal_secret_independent_gaussian,add_remove,15,1.0,1.0,1e-05,26.084611,2.238974,True,conditional bound: seed/noise must remain secret and Gaussian
+ideal_secret_independent_gaussian,replace_one,15,1.0,0.5,1e-05,67.169222,1.619487,True,conditional bound: seed/noise must remain secret and Gaussian
+current_public_deterministic_seed,not_applicable,15,1.3960754849660169,0.0,1e-05,inf,n/a,False,public seed makes noise reconstructible and removable by the verifier
+ideal_secret_independent_gaussian,add_remove,15,1.3960754849660169,1.396075485,1e-05,17.160113,2.729701,True,conditional bound: seed/noise must remain secret and Gaussian
+ideal_secret_independent_gaussian,replace_one,15,1.3960754849660169,0.698037742,1e-05,42.016375,1.864851,True,conditional bound: seed/noise must remain secret and Gaussian
+current_public_deterministic_seed,not_applicable,15,2.0,0.0,1e-05,inf,n/a,False,public seed makes noise reconstructible and removable by the verifier
+ideal_secret_independent_gaussian,add_remove,15,2.0,2.0,1e-05,11.167305,3.477948,True,conditional bound: seed/noise must remain secret and Gaussian
+ideal_secret_independent_gaussian,replace_one,15,2.0,1.0,1e-05,26.084611,2.238974,True,conditional bound: seed/noise must remain secret and Gaussian
+current_public_deterministic_seed,not_applicable,15,4.0,0.0,1e-05,inf,n/a,False,public seed makes noise reconstructible and removable by the verifier
+ideal_secret_independent_gaussian,add_remove,15,4.0,4.0,1e-05,5.114903,5.955896,True,conditional bound: seed/noise must remain secret and Gaussian
+ideal_secret_independent_gaussian,replace_one,15,4.0,2.0,1e-05,11.167305,3.477948,True,conditional bound: seed/noise must remain secret and Gaussian
+current_public_deterministic_seed,not_applicable,15,4.366154116419907,0.0,1e-05,inf,n/a,False,public seed makes noise reconstructible and removable by the verifier
+ideal_secret_independent_gaussian,add_remove,15,4.366154116419907,4.366154116,1e-05,4.649943,6.409552,True,conditional bound: seed/noise must remain secret and Gaussian
+ideal_secret_independent_gaussian,replace_one,15,4.366154116419907,2.183077058,1e-05,10.086739,3.704776,True,conditional bound: seed/noise must remain secret and Gaussian

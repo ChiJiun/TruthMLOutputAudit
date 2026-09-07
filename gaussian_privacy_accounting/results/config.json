@@ -1,0 +1,64 @@
+{
+  "datasets": [
+    "iris",
+    "wine",
+    "digits"
+  ],
+  "seeds": [
+    42,
+    52,
+    62
+  ],
+  "rounds": 10,
+  "accounting_rounds": [
+    5,
+    10,
+    15
+  ],
+  "frontier_epsilons": [
+    128.0,
+    32.0,
+    8.0
+  ],
+  "target_epsilons": [
+    1.0,
+    2.0,
+    4.0,
+    8.0,
+    32.0,
+    128.0
+  ],
+  "delta": 1e-05,
+  "baseline_noise_multiplier": 0.08,
+  "local_epochs": 2,
+  "batch_size": 64,
+  "lr": 0.03,
+  "clients": 3,
+  "clip_norm": 1.0,
+  "skip_training": false,
+  "profiles": [
+    {
+      "profile": "current_utility_setting",
+      "target_epsilon": null,
+      "noise_multiplier": 0.08
+    },
+    {
+      "profile": "conditional_target_eps_128",
+      "target_epsilon": 128.0,
+      "noise_multiplier": 0.5312278818678022
+    },
+    {
+      "profile": "conditional_target_eps_32",
+      "target_epsilon": 32.0,
+      "noise_multiplier": 1.3960754849660169
+    },
+    {
+      "profile": "conditional_target_eps_8",
+      "target_epsilon": 8.0,
+      "noise_multiplier": 4.366154116419907
+    }
+  ],
+  "current_public_seed_epsilon": "inf",
+  "accounting_scope": "client-level direct per-client release; q=1",
+  "conditional_assumption": "secret independent Gaussian noise unknown to verifier"
+}

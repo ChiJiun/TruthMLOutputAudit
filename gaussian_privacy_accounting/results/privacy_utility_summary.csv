@@ -1,0 +1,13 @@
+dataset,profile,runs,rounds,noise_multiplier,conditional_replace_epsilon,current_public_seed_epsilon,fl_final_mean,fl_final_std,dp_final_mean,dp_final_std,dp_fl_retention
+digits,current_utility_setting,3,10,0.08,3504.356782,inf,0.961111,0.006,0.946296,0.007291,0.984586
+digits,conditional_target_eps_128,3,10,0.531227882,128.0,inf,0.961111,0.006,0.515741,0.033666,0.536609
+digits,conditional_target_eps_32,3,10,1.396075485,32.0,inf,0.961111,0.006,0.242593,0.015438,0.252409
+digits,conditional_target_eps_8,3,10,4.366154116,8.0,inf,0.961111,0.006,0.164815,0.004721,0.171483
+iris,current_utility_setting,3,10,0.08,3504.356782,inf,0.866667,0.054433,0.866666,0.04714,1.0
+iris,conditional_target_eps_128,3,10,0.531227882,128.0,inf,0.866667,0.054433,0.677778,0.109995,0.782051
+iris,conditional_target_eps_32,3,10,1.396075485,32.0,inf,0.866667,0.054433,0.433333,0.151535,0.5
+iris,conditional_target_eps_8,3,10,4.366154116,8.0,inf,0.866667,0.054433,0.333333,0.190516,0.384615
+wine,current_utility_setting,3,10,0.08,3504.356782,inf,0.972222,0.022681,0.981481,0.026189,1.009524
+wine,conditional_target_eps_128,3,10,0.531227882,128.0,inf,0.972222,0.022681,0.851852,0.094426,0.87619
+wine,conditional_target_eps_32,3,10,1.396075485,32.0,inf,0.972222,0.022681,0.592593,0.250856,0.609524
+wine,conditional_target_eps_8,3,10,4.366154116,8.0,inf,0.972222,0.022681,0.444444,0.163551,0.457143

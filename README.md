@@ -1,214 +1,81 @@
 # TruthMLOutputAudit
 
-專案現在改成以「每週進度一個資料夾」的方式整理。
-
-## 專案結構
-
-- `week1_demo/`：Week 1 的 EZKL demo 與產物
-- `week2_uci_model/`：Week 2 的 UCI Adult Income 模型實驗
-- `week3_scale_sweep/`：Week 3 的 scale sweep 實驗
-- `week4_baseline_charts/`：Week 4 的 baseline 圖表整理
-- `week5_fedavg_simulator/`：Week 5 的 FedAvg 聯邦學習 baseline
-- `week6_s0_charts/`：Week 6 的 S0 Round vs Accuracy 圖表
-- `week7_dp_updater/`：Week 7 的 DP updater baseline
-- `week8_epsilon_sweep/`：Week 8 的 epsilon sweep 與圖表
-- `week9_clipping_verification/`：Week 9 的 clipping 驗證原型
-- `week10_noise_verification/`：Week 10 的 noise 驗證原型
-- `week11_quantized_constraints/`：Week 11 的整數 constraint 檢查原型
-- `week12_canonical_witness/`：Week 12 的 canonical witness 實驗
-- `week13_recommended_constraints/`：Week 13 的推薦 constraint profile
-- `week14_constraint_artifacts/`：Week 14 的 constraint artifact 匯出
-- `week15_zk_backend_stub/`：Week 15 的 backend-ready bundle
-- `week16_s2_integration/`：Week 16 的 S2 整合 demo
-- `week17_proof_gated_round/`：Week 17 的 proof-gated round 實驗
-- `week18_end_to_end_s2_round/`：Week 18 的 end-to-end S2 round outcome
-- `week19_breast_cancer_repeatability/`：Week 19 的相似資料集重複實驗
-- `week20_multi_dataset_repeatability/`：Week 20 的多資料集重複實驗
-- `docs/`：研究規劃與筆記
-- `requirements.txt`：目前專案使用的 Python 套件清單
-
-## 每週內容
-
-### `week1_demo/`
-
-簡化版的 EZKL demo 流程，包含：
-
-- `1_train_and_export.py` 到 `4_verify.py`
-- `ezkl_pipeline.py`
-- `common.py`
-- demo 相關產物，例如 `demo_model.onnx`、`settings.json`、`proof.json`
-
-### `week2_uci_model/`
-
-正式的 UCI Adult Income 實驗，包含：
-
-- `data_preprocessing.py`
-- `train_model.py`
-- `train_model_simple.py`
-- `ezkl_pipeline.py`
-- `data/`、`models/`、`src/`、`results/`
-
-### `week3_scale_sweep/`
-
-Week 3 的 scale sweep，包含：
-
-- `run_scale_sweep.py`
-- `results/scale_sweep_results.csv`
-- `artifacts/` 中各 scale 的 EZKL 產物
-
-### `week4_baseline_charts/`
-
-Week 4 的 baseline 圖表，包含：
-
-- `generate_charts.py`
-- `results/scale_vs_accuracy.png`
-- `results/scale_vs_proving_time.png`
-- `results/summary.md`
-
-### `week5_fedavg_simulator/`
-
-Week 5 的 FedAvg baseline，包含：
-
-- `run_fedavg.py`
-- `results/round_metrics.csv`
-- `results/summary.md`
-- `models/fedavg_global_model.pt`
-
-### `week6_s0_charts/`
-
-Week 6 的 S0 圖表，包含：
-
-- `generate_round_accuracy_chart.py`
-- `results/round_vs_accuracy.png`
-- `results/summary.md`
-
-### `week7_dp_updater/`
-
-Week 7 的 DP baseline，包含：
-
-- `run_dp_fedavg.py`
-- `dp_fedavg_core.py`
-- `results/round_metrics_dp.csv`
-- `results/summary.md`
-
-### `week8_epsilon_sweep/`
-
-Week 8 的 epsilon sweep，包含：
-
-- `run_epsilon_sweep.py`
-- `generate_epsilon_chart.py`
-- `results/epsilon_sweep_results.csv`
-- `results/epsilon_vs_accuracy.png`
-- `results/summary.md`
-
-### `week9_clipping_verification/`
-
-Week 9 的 clipping 驗證原型，包含：
-
-- `run_clipping_verification.py`
-- `results/clipping_verification_cases.csv`
-- `results/summary.md`
-
-### `week10_noise_verification/`
-
-Week 10 的 noise 驗證原型，包含：
-
-- `run_noise_verification.py`
-- `results/noise_verification_cases.csv`
-- `results/summary.md`
-
-### `week11_quantized_constraints/`
-
-Week 11 的整數 constraint 檢查原型，包含：
-
-- `run_quantized_constraint_checks.py`
-- `results/quantized_constraint_cases.csv`
-- `results/summary.md`
-
-### `week12_canonical_witness/`
-
-Week 12 的 canonical witness 實驗，包含：
-
-- `run_canonical_witness_experiment.py`
-- `results/canonical_witness_cases.csv`
-- `results/summary.md`
-
-### `week13_recommended_constraints/`
-
-Week 13 的推薦 constraint profile，包含：
-
-- `run_recommended_constraint_profile.py`
-- `results/recommended_constraint_cases.csv`
-- `results/summary.md`
-
-### `week14_constraint_artifacts/`
-
-Week 14 的 constraint artifact 匯出，包含：
-
-- `run_constraint_artifact_export.py`
-- `results/artifact_index.csv`
-- `results/artifacts/*.json`
-- `results/summary.md`
-
-### `week15_zk_backend_stub/`
-
-Week 15 的 backend-ready bundle，包含：
-
-- `run_zk_backend_stub.py`
-- `results/bundle_index.csv`
-- `results/bundles/*/io_bundle.json`
-- `results/bundles/*/verification_hint.json`
-- `results/summary.md`
-
-### `week16_s2_integration/`
-
-Week 16 的 S2 整合 demo，包含：
-
-- `run_s2_integration_demo.py`
-- `run_actual_ezkl_constraint_demo.py`
-- `results/s2_round_decisions.csv`
-- `results/actual_ezkl_summary.md`
-- `results/summary.md`
-
-### `week17_proof_gated_round/`
-
-Week 17 的 proof-gated round 實驗，包含：
-
-- `run_actual_proof_gated_round.py`
-- `results/proof_gated_round.csv`
-- `results/accepted_aggregate.json`
-- `results/summary.md`
-
-### `week18_end_to_end_s2_round/`
-
-Week 18 的 end-to-end S2 round outcome，包含：
-
-- `run_end_to_end_s2_round.py`
-- `results/accepted_average_q_noisy.json`
-- `results/ungated_average_q_noisy.json`
-- `results/summary.md`
-
-### `week19_breast_cancer_repeatability/`
-
-Week 19 的相似資料集重複實驗，包含：
-
-- `run_breast_cancer_repeats.py`
-- `results/repeat_runs.csv`
-- `results/summary.md`
-- `results/config.json`
-
-### `week20_multi_dataset_repeatability/`
-
-Week 20 的多資料集重複實驗，包含：
-
-- `run_multi_dataset_repeats.py`
-- `results/multi_dataset_runs.csv`
-- `results/multi_dataset_summary.csv`
-- `results/summary.md`
-- `results/config.json`
-
-## 備註
-
-- 目前 Week 1 與 Week 2 都各自維持獨立可執行
-- 各週腳本支援兩種執行方式：從專案根目錄執行 `python weekX_xxx/script.py`，或先進入該週資料夾再執行 `python script.py`
-- 若後續再延伸，建議直接沿用同樣命名方式新增資料夾
+本專案研究如何將聯邦學習中的差分隱私更新轉換為可由零知識證明審計的介面，並讓驗證結果實際控制聚合。Repository 依研究功能與實驗里程碑組織，不再使用週次編號。
+
+## 研究主線
+
+| 研究單元 | 內容 | 主要目錄 |
+|---|---|---|
+| 基礎模型與證明流程 | PyTorch／ONNX／EZKL、Adult Income、量化尺度、FedAvg 與 DP baseline | `zk_ezkl_demo/`、`adult_income_model/`、`quantization_scale_sweep/`、`fedavg_baseline/`、`dp_fedavg_baseline/` |
+| DP update 約束工程 | Clipping、noise relation、canonical quantized witness、constraint profile 與 artifact | `clipping_verification/`、`noise_relation_verification/`、`quantized_constraint_analysis/`、`canonical_witness/`、`constraint_profile/`、`constraint_artifacts/` |
+| Proof-gated aggregation | Backend bundle、actual EZKL integration、驗證後聚合與端到端 round | `zk_backend_bundle/`、`ezkl_constraint_integration/`、`proof_gated_round/`、`end_to_end_proof_gated_round/` |
+| 泛化與成本評估 | Binary／multiclass repeatability、完整 update proof、ZK cost 與 CoverType scaling | `breast_cancer_repeatability/`、`binary_dataset_repeatability/`、`multiclass_repeatability/`、`multiclass_vdp_zk/`、`zk_cost_scaling/`、`covertype_large_dataset_scaling/` |
+| Privacy 與威脅分析 | Gaussian accountant、non-IID clients、多輪攻擊矩陣及統計稽核 | `gaussian_privacy_accounting/`、`noniid_client_scaling/`、`multiround_threat_matrix/`、`experimental_rigor_audit/` |
+| 可驗證隨機性 | Commit-before-challenge、hidden randomness、Poseidon PRG、離散 sampler 與正式 accountant | `context_bound_randomness_protocol/`、`halo2_verifiable_randomness/`、`discrete_noise_accounting/` |
+| 投稿強化 | Cross-backend／硬體重現、較大型 federation 與 bounded-poisoning defense | `cross_backend_reproducibility/`、`production_scaling/`、`robust_aggregation/` |
+
+## 核心成果
+
+- 建立 S0 FedAvg、S1 DP update、S2 proof-gated aggregation 的完整實驗鏈。
+- 以 canonical quantized witness 解決浮點到整數 constraint 的 rounding 不一致。
+- 在 EZKL 中實際證明完整 update-vector clipping 與 additive-noise relation。
+- 在 Zcash Halo2 中實作 context-bound Poseidon PRG、canonical field decomposition 與 centered-binomial sampler。
+- 對固定四維、`k=16`、十輪 profile 建立 replacement client-level PLD accountant：`epsilon <= 28.840669` at `delta=1e-5`。
+- 完成 10-seed Halo2 reproducibility、Windows/Linux CI 與 EZKL/Halo2 backend coverage。
+- CoverType 實驗擴至 50 clients、20 rounds、1,991 維 constraint profile。
+- 以 10-seed paired experiment 評估 coordinate median 與 trimmed mean 對 20% bounded poisoning 的緩解效果。
+
+## 目錄說明
+
+### 基礎模型與 FL／DP baselines
+
+- `zk_ezkl_demo/`：最小 EZKL train/export/prove/verify pipeline。
+- `adult_income_model/`：Adult Income preprocessing、模型訓練與 EZKL artifacts。
+- `quantization_scale_sweep/`：量化 scale 對 accuracy 與 proving cost 的影響。
+- `baseline_charts/`：基礎實驗視覺化。
+- `fedavg_baseline/`、`fedavg_round_charts/`：FedAvg 與 round-accuracy baseline。
+- `dp_fedavg_baseline/`、`privacy_utility_sweep/`：clipping/noise updater 與早期 privacy-utility sweep。
+
+### 約束、proof 與聚合
+
+- `clipping_verification/`、`noise_relation_verification/`：DP update 原始條件驗證。
+- `quantized_constraint_analysis/`、`canonical_witness/`、`constraint_profile/`：fixed-point constraint、canonical witness 與 slack policy。
+- `constraint_artifacts/`、`zk_backend_bundle/`：可重現 statement/witness bundles。
+- `ezkl_constraint_integration/`：actual EZKL constraint proof。
+- `proof_gated_round/`、`end_to_end_proof_gated_round/`：accepted-only aggregation 與模型回寫。
+
+### 泛化、成本與隱私分析
+
+- `breast_cancer_repeatability/`、`binary_dataset_repeatability/`、`multiclass_repeatability/`：跨資料集 paired experiments。
+- `multiclass_vdp_zk/`、`zk_cost_scaling/`：完整 update proof 與 rows/time/RSS/payload scaling。
+- `gaussian_privacy_accounting/`：public-seed limitation、Gaussian RDP 與 privacy-utility frontier。
+- `covertype_large_dataset_scaling/`、`noniid_client_scaling/`：581,012-row CoverType、IID/Dirichlet 與 client-count scaling。
+- `multiround_threat_matrix/`：relation tamper、clip bypass、replay、zero noise 與 bounded sign flip。
+- `experimental_rigor_audit/`：矩陣完整性、paired statistics、Holm correction、環境與 SHA-256 稽核。
+
+### 可驗證隨機性與投稿強化
+
+- `context_bound_randomness_protocol/`：setup commitment、commit-before-challenge、freshness 與 replay semantics。
+- `halo2_verifiable_randomness/`：actual Halo2/Poseidon hidden-randomness sampler circuit。
+- `discrete_noise_accounting/`：exact centered-binomial PLD theorem/accountant。
+- `cross_backend_reproducibility/`：10-seed proofs、硬體 manifest 與跨 OS CI。
+- `production_scaling/`：385–1,991 維 actual EZKL，以及 K=10–50、R=3–20 FL scaling。
+- `robust_aggregation/`：mean、coordinate median、trimmed mean 的 bounded-poisoning evaluation。
+
+## 主要執行方式
+
+各模組可以從 repository root 執行，也可以進入模組目錄執行其主程式。投稿強化流程例如：
+
+```powershell
+cd halo2_verifiable_randomness
+cargo test --release
+cargo run --release -- results/halo2_context_noise_proof.json 42
+
+cd ..
+python discrete_noise_accounting/centered_binomial_accountant.py
+python cross_backend_reproducibility/run_halo2_seed_benchmark.py
+python production_scaling/run_production_scaling.py
+python robust_aggregation/run_robust_aggregation.py
+```
+
+正式結論、限制與可使用主張見 `docs/publication_strengthening_report.md`；研究規劃見 `docs/VDP-FL-research-plan.md`。

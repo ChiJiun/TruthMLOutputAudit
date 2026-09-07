@@ -1,0 +1,11 @@
+seed,backend,proof_verified,proof_bytes,proof_sha256,keygen_seconds,prove_seconds,verify_seconds,wall_seconds,peak_rss_mib,stdout
+42,zcash-halo2-ipa,True,3840,c4b6f69b4f920c73c9c781a56ae15db609eb6cde5310dc65eac38a1573669fcf,1.2814447,1.8068134,0.0562639,6.8545417,246.738,Halo2 proof verified=true bytes=3840 prove=1.807s verify=0.056s
+52,zcash-halo2-ipa,True,3840,0c5ab1b1dcf367d59de13ecd89733179d905d8a3d783a166956698326c11b962,1.1721746,1.7287471,0.0464142,6.2023302,247.102,Halo2 proof verified=true bytes=3840 prove=1.729s verify=0.046s
+62,zcash-halo2-ipa,True,3840,4448cb478b5d068d23a1a5bf98d4edcfe5d1573bedfa14d4c81b0c1767b6c68d,1.1931941,1.8737332,0.0619183,6.7434444,245.145,Halo2 proof verified=true bytes=3840 prove=1.874s verify=0.062s
+72,zcash-halo2-ipa,True,3840,99b223404de0ae936d2a73bad2950d05be4c35ebac9ba9b8d0577659901cfc78,1.3019326,1.8277991,0.0608122,6.5490158,246.82,Halo2 proof verified=true bytes=3840 prove=1.828s verify=0.061s
+82,zcash-halo2-ipa,True,3840,57bac7594bb97d7cd395b768a287506b68522abba91fb4f8beeb148a8b9f131f,1.2545471,1.8517825,0.0496606,6.4701499,245.922,Halo2 proof verified=true bytes=3840 prove=1.852s verify=0.050s
+92,zcash-halo2-ipa,True,3840,b4bea742c19c737672a9f5a18d2987532027c99072bc194349c73b9ddaaa0e9e,1.3838327000000001,1.8284249,0.081657,6.7401014,244.914,Halo2 proof verified=true bytes=3840 prove=1.828s verify=0.082s
+102,zcash-halo2-ipa,True,3840,9cc8513fd3bfa06ad54d3e319ecc9e30162b7e17104ebedab36baec3a689454a,1.2817638,1.9542465,0.0831306,7.2361319,246.449,Halo2 proof verified=true bytes=3840 prove=1.954s verify=0.083s
+112,zcash-halo2-ipa,True,3840,d83aa496ebb16335122f2e8be3bedaa457805d732f08cc40b03867c4f7dee84c,1.3509319,1.8646796,0.0516692,7.3272675,245.945,Halo2 proof verified=true bytes=3840 prove=1.865s verify=0.052s
+122,zcash-halo2-ipa,True,3840,0385e00e78d4210d27fad3dbf9a72ac411814b8061f99798f0e68d793dd565dc,1.4059786,1.8533423999999998,0.0574435,7.5048314,244.996,Halo2 proof verified=true bytes=3840 prove=1.853s verify=0.057s
+132,zcash-halo2-ipa,True,3840,1e53e90d1a3cd57a1c5f89129f5a48772352ce550cb359ee43f27bf82296cabd,1.4423168,1.8622773000000001,0.0699381,6.7217041,248.102,Halo2 proof verified=true bytes=3840 prove=1.862s verify=0.070s

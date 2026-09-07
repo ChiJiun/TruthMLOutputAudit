@@ -1,0 +1,11 @@
+case,expected_accept,accepted,matches_expectation,first_submission_accepted,failed_checks,protocol_error,public_contains_secret_or_seed
+honest,True,True,True,,[],,False
+replay,False,False,True,True,"[""freshness_ok"",""replay_ok""]",,False
+round_swap,False,False,True,,"[""context_ok"",""noise_generation_ok""]",,False
+model_swap,False,False,True,,"[""context_ok"",""noise_generation_ok""]",,False
+challenge_swap,False,False,True,,"[""context_ok"",""noise_generation_ok""]",,False
+zero_noise,False,False,True,,"[""noise_generation_ok""]",,False
+secret_swap,False,False,True,,"[""secret_commitment_ok"",""noise_generation_ok""]",,False
+clip_bypass,False,False,True,,"[""clip_ok""]",,False
+noisy_tamper,False,False,True,,"[""relation_ok""]",,False
+challenge_reissue,False,False,True,,"[""one_challenge_per_commitment""]",Only one server challenge may be issued per update commitment,False
