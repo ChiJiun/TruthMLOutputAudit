@@ -1,0 +1,4 @@
+aggregator,seeds,clean_accuracy_mean,clean_accuracy_ci95,attack_accuracy_mean,attack_accuracy_ci95,paired_accuracy_change_mean,paired_accuracy_change_ci95,retention_mean,retention_ci95,attack_effect_exact_signflip_p,attacker_acceptance_rate_mean
+mean,10,0.601215,0.009624,0.232685,0.026875,-0.36853,0.024857,0.386719,0.042973,0.001953,1.0
+coordinate_median,10,0.591075,0.009996,0.346305,0.037554,-0.24477,0.035008,0.585479,0.060619,0.001953,1.0
+trimmed_mean,10,0.598005,0.010299,0.3237,0.030889,-0.274305,0.027454,0.540828,0.048022,0.001953,1.0

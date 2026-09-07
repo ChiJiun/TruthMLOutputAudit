@@ -1,0 +1,26 @@
+{
+  "seeds": [
+    42,
+    52,
+    62,
+    72,
+    82
+  ],
+  "proof_seeds": [
+    42,
+    52,
+    62
+  ],
+  "train_size": 50000,
+  "test_size": 20000,
+  "test_fraction": 0.2,
+  "partition": "dirichlet_0.5",
+  "min_client_size": 32,
+  "local_epochs": 1,
+  "batch_size": 2048,
+  "lr": 0.01,
+  "clip_norm": 1.0,
+  "binomial_k": 16,
+  "noise_unit": 0.01,
+  "torch_threads": 4
+}
