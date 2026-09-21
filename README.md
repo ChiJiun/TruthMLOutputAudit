@@ -64,6 +64,10 @@
 
 ## 主要執行方式
 
+新增逐更新 Halo2 多輪實驗：[actual_multiround_halo2/README.md](actual_multiround_halo2/README.md)。
+以四參數合成資料訓練，逐份產生／驗證 proof、重用 circuit keys，並從磁碟重建
+model chain；這是固定範圍的整合證據，不代表高維 production 或完整 transcript DP。
+
 各模組可以從 repository root 執行，也可以進入模組目錄執行其主程式。投稿強化流程例如：
 
 ```powershell
