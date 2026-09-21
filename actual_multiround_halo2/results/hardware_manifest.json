@@ -1,0 +1,24 @@
+{
+  "label": "actual-multiround-local",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "system": "Windows",
+  "release": "11",
+  "machine": "AMD64",
+  "processor": "Intel64 Family 6 Model 154 Stepping 4, GenuineIntel",
+  "physical_cores": 10,
+  "logical_cores": 12,
+  "memory_bytes": 34049417216,
+  "python": "3.12.3 | packaged by conda-forge | (main, Apr 15 2024, 18:20:11) [MSC v.1938 64 bit (AMD64)]",
+  "rustc": "rustc 1.91.1 (ed61e7d7e 2025-11-07)",
+  "cargo": "cargo 1.91.1 (ea2d97820 2025-10-10)",
+  "packages": {
+    "psutil": "5.9.0",
+    "scipy": "1.11.4"
+  },
+  "ci": false,
+  "github_runner_os": null,
+  "github_run_id": null,
+  "git_head": "995345c22251ad0a00a13f1e860465b57dc68249",
+  "git_status_at_start": " M .gitignore\n M halo2_verifiable_randomness/src/main.rs\n?? actual_multiround_halo2/\n?? covertype_large_dataset_scaling/smoke_results/\n?? halo2_verifiable_randomness/src/federated.rs\n?? noniid_client_scaling/smoke_results/\n",
+  "binary_sha256": "a3575671a08fac34a71a63e86d4552631af9179d5748f65c52cbb3d94655cd54"
+}

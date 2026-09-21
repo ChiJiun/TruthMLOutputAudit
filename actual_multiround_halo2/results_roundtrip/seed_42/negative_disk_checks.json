@@ -1,0 +1,20 @@
+[
+  {
+    "case": "model_chain",
+    "rejected": true,
+    "returncode": 101,
+    "output": "\nthread 'main' (36732) panicked at src\\federated.rs:473:9:\nassertion `left == right` failed\n  left: [1.1333333333333333, 0.13333333333333333, 0.10000000000000002, 0.0]\n right: [0.13333333333333333, 0.13333333333333333, 0.10000000000000002, 0.0]\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+  },
+  {
+    "case": "noisy_value",
+    "rejected": true,
+    "returncode": 101,
+    "output": "\nthread 'main' (27212) panicked at src\\federated.rs:448:17:\nassertion `left == right` failed\n  left: 0x0000000000000000000000000000000000000000000000000000000000000004\n right: 0x0000000000000000000000000000000000000000000000000000000000000005\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+  },
+  {
+    "case": "proof_bytes",
+    "rejected": true,
+    "returncode": 101,
+    "output": "\nthread 'main' (29564) panicked at src\\federated.rs:462:13:\nsaved proof invalid\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+  }
+]

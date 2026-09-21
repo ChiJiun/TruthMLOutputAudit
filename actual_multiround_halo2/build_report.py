@@ -65,6 +65,11 @@ def main():
         return '\n'.join(f"| {r['dimension']} | {r['rounds']} | {r['k']} | {r['support_floor']:.6g} | "
                          + (f"{r['basic_composition_epsilon']:.6f}" if r['basic_composition_epsilon'] is not None else '此 δ 下不可用')+' |' for r in privacy)
     branch_url = 'https://github.com/ChiJiun/TruthMLOutputAudit/tree/codex/actual-multiround-halo2/actual_multiround_halo2'
+    ci_path = directory/'ci_evidence.json'
+    ci_text = '此結果目錄尚未保存對應的 CI 證據。'
+    if ci_path.exists():
+        ci = json.loads(ci_path.read_text())
+        ci_text = f"相關程式 commit {ci['tested_source_commit']} 的 [GitHub CI]({ci['url']}) 已在 Windows／Linux 通過；每個環境另完成 2 clients × 2 rounds、4 份 actual proofs、4 份磁碟重驗與 28 個拒絕 probes。它是乾淨環境的小型重現，與本機 150 份正式矩陣分開計數。"
     note = f'''# VDP-FL 實驗紀錄：逐更新 Halo2 多輪整合與隱私邊界
 
 更新日期：{datetime.now().astimezone().date().isoformat()}
@@ -120,6 +125,8 @@ Wall time 包含訓練、proof、負面 probes、儲存與 setup，但不含 Rus
 
 所有 honest rounds 中，gate 與相同 noisy updates 的直接聚合差異均為 0。
 
+{ci_text}
+
 ## 四、隱私參數延伸分析
 
 這次額外用精確有理數計算有限支撐的失配機率，並用 70 位 Decimal 計算逐座標隱私損失的保守基本組合上界。基本組合把各次 ε／δ 相加，可作較保守的適應性分析起點。數值程式並非經形式驗證的區間算術。
@@ -128,7 +135,7 @@ Wall time 包含訓練、proof、負面 probes、儲存與 setup，但不含 Rus
 |---:|---:|---:|---:|---:|
 {budget_table()}
 
-原 PLD accountant 的 28.840669 保留為既有固定 profile 計算；本次基本組合給出较鬆上界，不能把兩個數字的差異說成實測隱私惡化。要把緊的 PLD 數字用到依賴先前模型的多輪訓練，仍須檢查 dominating-pair 與適應性組合證明。
+原 PLD accountant 的 28.840669 保留為既有固定 profile 計算；本次基本組合給出較鬆上界，不能把兩個數字的差異說成實測隱私惡化。要把緊的 PLD 數字用到依賴先前模型的多輪訓練，仍須檢查 dominating-pair 與適應性組合證明。
 
 385／1,991 維列是「每座標仍允許 ±1、noise k=16、20 輪」的假設延伸；其 δ floor 已超過 10⁻⁵，所以該延伸不能在此 δ 下取得有限 ε。現有 production_scaling 的量化範圍與 noise unit 不同，不能把這張表直接當成那些模型的 accountant。
 
@@ -144,7 +151,7 @@ Wall time 包含訓練、proof、負面 probes、儲存與 setup，但不含 Rus
 
 ## 六、這次可以得出的結論
 
-固定四參數、{config['clients']} clients、{config['rounds']} rounds 的設定中，本地訓練、秘密噪聲電路、逐更新 actual proof、accepted-only aggregation 與下一輪模型綁定可以完整串接，且保存後可以独立重驗。這補上了原先單次 Halo2 展示與分離式 FL 成本量測之間的實作證據。
+固定四參數、{config['clients']} clients、{config['rounds']} rounds 的設定中，本地訓練、秘密噪聲電路、逐更新 actual proof、accepted-only aggregation 與下一輪模型綁定可以完整串接，且保存後可以獨立重驗。這補上了原先單次 Halo2 展示與分離式 FL 成本量測之間的實作證據。
 
 目前還沒有證明本地訓練來源正確、任意 poisoning 防禦、私有資料完整 transcript 的 DP 或高維 production 成本。下一步優先做自然 client 資料的同規格實驗，以及 commitment／PRF／適應性 composition 的第三方審查；再依資源擴大逐更新 proof 數量。
 
@@ -157,7 +164,7 @@ python actual_multiround_halo2/run_experiment.py --output-dir actual_multiround_
 python actual_multiround_halo2/privacy_boundary.py --output-dir actual_multiround_halo2/my-privacy
 ```
 
-使用新的輸出資料夾以保留本次原始結果。OS-random secrets 讓 proof bytes 與 noisy accuracy 不會與上次完全相同；应核對流程、矩陣完整性與驗證結果。
+使用新的輸出資料夾以保留本次原始結果。OS-random secrets 讓 proof bytes 與 noisy accuracy 不會與上次完全相同；應核對流程、矩陣完整性與驗證結果。
 
 證據：[實驗目錄與重現說明]({branch_url})；results_roundtrip/summary.json、seed_*/run.json、seed_*/proofs/、disk_verification.json、config.json、hardware_manifest.json。圖表為 results_roundtrip/experiment.png。正式資料與 pilot 分開保存。
 '''

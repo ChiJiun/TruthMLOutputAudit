@@ -41,6 +41,7 @@ python -m unittest discover -s actual_multiround_halo2 -p "test*.py" -v
 python actual_multiround_halo2/run_experiment.py --output-dir actual_multiround_halo2/my-run
 python actual_multiround_halo2/privacy_boundary.py --output-dir actual_multiround_halo2/my-privacy
 python actual_multiround_halo2/build_report.py --results-dir actual_multiround_halo2/my-run
+python actual_multiround_halo2/verify_artifacts.py --results-dir actual_multiround_halo2/my-run
 ```
 
 Standalone disk verification (repository root):
@@ -91,3 +92,10 @@ Evidence includes proofs, run.json, disk-verification logs, negative-check logs,
 seed-level metrics, hardware/binary/source hashes and a plot. CIs use complete
 seeded trajectories as independent units. Five-seed accuracy is descriptive and
 does not establish population utility or production readiness.
+
+Result directories use `-text` Git attributes so JSON/Markdown newline conversion
+does not break their artifact hashes on another OS. Source hashes in each run
+describe the working-copy bytes at execution time; Git HEAD/dirty state is also
+recorded. The checked-in proof/circuit code corresponds to commit `f2ca1cf`;
+the run began before that source commit, so source hashes are the run's primary
+code provenance, not the base HEAD value alone.

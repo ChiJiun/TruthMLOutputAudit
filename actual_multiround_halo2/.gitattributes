@@ -1,0 +1,4 @@
+# Preserve exact experiment bytes for cross-OS artifact SHA-256 verification.
+results/** -text
+results_roundtrip/** -text
+privacy_results/** -text

@@ -1,0 +1,79 @@
+[
+  {
+    "dimension": 4,
+    "rounds": 3,
+    "k": 16,
+    "scalar_releases": 12,
+    "target_delta": 1e-05,
+    "support_floor": 9.220093099063513e-08,
+    "below_support_floor": false,
+    "basic_composition_epsilon": 51.25106889197625,
+    "scope": "ideal independent binomial bits; coordinatewise +/-1 update envelope; not full transcript or production-model theorem"
+  },
+  {
+    "dimension": 4,
+    "rounds": 10,
+    "k": 16,
+    "scalar_releases": 40,
+    "target_delta": 1e-05,
+    "support_floor": 3.0733640357596194e-07,
+    "below_support_floor": false,
+    "basic_composition_epsilon": 195.85256107488235,
+    "scope": "ideal independent binomial bits; coordinatewise +/-1 update envelope; not full transcript or production-model theorem"
+  },
+  {
+    "dimension": 4,
+    "rounds": 20,
+    "k": 16,
+    "scalar_releases": 80,
+    "target_delta": 1e-05,
+    "support_floor": 6.146727126962589e-07,
+    "below_support_floor": false,
+    "basic_composition_epsilon": 400.8852256327651,
+    "scope": "ideal independent binomial bits; coordinatewise +/-1 update envelope; not full transcript or production-model theorem"
+  },
+  {
+    "dimension": 4,
+    "rounds": 10,
+    "k": 32,
+    "scalar_releases": 40,
+    "target_delta": 1e-05,
+    "support_floor": 1.4094628242311558e-16,
+    "below_support_floor": false,
+    "basic_composition_epsilon": 106.6499853648781,
+    "scope": "ideal independent binomial bits; coordinatewise +/-1 update envelope; not full transcript or production-model theorem"
+  },
+  {
+    "dimension": 4,
+    "rounds": 10,
+    "k": 64,
+    "scalar_releases": 40,
+    "target_delta": 1e-05,
+    "support_floor": 1.516387712560751e-35,
+    "below_support_floor": false,
+    "basic_composition_epsilon": 68.9935183026751,
+    "scope": "ideal independent binomial bits; coordinatewise +/-1 update envelope; not full transcript or production-model theorem"
+  },
+  {
+    "dimension": 385,
+    "rounds": 20,
+    "k": 16,
+    "scalar_releases": 7700,
+    "target_delta": 1e-05,
+    "support_floor": 5.9160516727339556e-05,
+    "below_support_floor": true,
+    "basic_composition_epsilon": null,
+    "scope": "ideal independent binomial bits; coordinatewise +/-1 update envelope; not full transcript or production-model theorem"
+  },
+  {
+    "dimension": 1991,
+    "rounds": 20,
+    "k": 16,
+    "scalar_releases": 39820,
+    "target_delta": 1e-05,
+    "support_floor": 0.00030590663779534095,
+    "below_support_floor": true,
+    "basic_composition_epsilon": null,
+    "scope": "ideal independent binomial bits; coordinatewise +/-1 update envelope; not full transcript or production-model theorem"
+  }
+]

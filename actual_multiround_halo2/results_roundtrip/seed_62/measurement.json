@@ -1,0 +1,5 @@
+{
+  "wall_seconds": 87.56984520000697,
+  "peak_rss_mib": 238.37109375,
+  "stdout": "seed=62 round=0 verified=3/3 accuracy=0.3770\nseed=62 round=1 verified=3/3 accuracy=0.6484\nseed=62 round=2 verified=3/3 accuracy=0.7188\nseed=62 round=3 verified=3/3 accuracy=0.6289\nseed=62 round=4 verified=3/3 accuracy=0.5566\nseed=62 round=5 verified=3/3 accuracy=0.6816\nseed=62 round=6 verified=3/3 accuracy=0.6660\nseed=62 round=7 verified=3/3 accuracy=0.6738\nseed=62 round=8 verified=3/3 accuracy=0.7324\nseed=62 round=9 verified=3/3 accuracy=0.7070"
+}

@@ -1,0 +1,57 @@
+[
+  {
+    "seed": 42,
+    "wall_seconds": 49.20470380000188,
+    "peak_rss_mib": 237.953125,
+    "stdout": "seed=42 round=0 verified=3/3 accuracy=0.5586\nseed=42 round=1 verified=3/3 accuracy=0.7168\nseed=42 round=2 verified=3/3 accuracy=0.8477\nseed=42 round=3 verified=3/3 accuracy=0.8770\nseed=42 round=4 verified=3/3 accuracy=0.8652\nseed=42 round=5 verified=3/3 accuracy=0.8125\nseed=42 round=6 verified=3/3 accuracy=0.9023\nseed=42 round=7 verified=3/3 accuracy=0.8555\nseed=42 round=8 verified=3/3 accuracy=0.8633\nseed=42 round=9 verified=3/3 accuracy=0.8828",
+    "prove_mean_seconds": 1.28580659,
+    "verify_mean_seconds": 0.028482433333333335,
+    "keygen_seconds": 0.9874908,
+    "proof_gated_final_accuracy": 0.8828125,
+    "quantized_no_noise_final_accuracy": 0.93359375
+  },
+  {
+    "seed": 52,
+    "wall_seconds": 64.51243859999522,
+    "peak_rss_mib": 238.63671875,
+    "stdout": "seed=52 round=0 verified=3/3 accuracy=0.4902\nseed=52 round=1 verified=3/3 accuracy=0.6895\nseed=52 round=2 verified=3/3 accuracy=0.7402\nseed=52 round=3 verified=3/3 accuracy=0.8242\nseed=52 round=4 verified=3/3 accuracy=0.8809\nseed=52 round=5 verified=3/3 accuracy=0.7988\nseed=52 round=6 verified=3/3 accuracy=0.7676\nseed=52 round=7 verified=3/3 accuracy=0.8574\nseed=52 round=8 verified=3/3 accuracy=0.8633\nseed=52 round=9 verified=3/3 accuracy=0.8613",
+    "prove_mean_seconds": 1.7096112466666669,
+    "verify_mean_seconds": 0.04022500666666667,
+    "keygen_seconds": 0.9633147,
+    "proof_gated_final_accuracy": 0.861328125,
+    "quantized_no_noise_final_accuracy": 0.953125
+  },
+  {
+    "seed": 62,
+    "wall_seconds": 87.56984520000697,
+    "peak_rss_mib": 238.37109375,
+    "stdout": "seed=62 round=0 verified=3/3 accuracy=0.3770\nseed=62 round=1 verified=3/3 accuracy=0.6484\nseed=62 round=2 verified=3/3 accuracy=0.7188\nseed=62 round=3 verified=3/3 accuracy=0.6289\nseed=62 round=4 verified=3/3 accuracy=0.5566\nseed=62 round=5 verified=3/3 accuracy=0.6816\nseed=62 round=6 verified=3/3 accuracy=0.6660\nseed=62 round=7 verified=3/3 accuracy=0.6738\nseed=62 round=8 verified=3/3 accuracy=0.7324\nseed=62 round=9 verified=3/3 accuracy=0.7070",
+    "prove_mean_seconds": 2.3272238400000003,
+    "verify_mean_seconds": 0.05354835333333333,
+    "keygen_seconds": 1.8928797,
+    "proof_gated_final_accuracy": 0.70703125,
+    "quantized_no_noise_final_accuracy": 0.943359375
+  },
+  {
+    "seed": 72,
+    "wall_seconds": 58.85463039999013,
+    "peak_rss_mib": 239.34375,
+    "stdout": "seed=72 round=0 verified=3/3 accuracy=0.6953\nseed=72 round=1 verified=3/3 accuracy=0.7227\nseed=72 round=2 verified=3/3 accuracy=0.6758\nseed=72 round=3 verified=3/3 accuracy=0.5898\nseed=72 round=4 verified=3/3 accuracy=0.6133\nseed=72 round=5 verified=3/3 accuracy=0.6309\nseed=72 round=6 verified=3/3 accuracy=0.6738\nseed=72 round=7 verified=3/3 accuracy=0.7656\nseed=72 round=8 verified=3/3 accuracy=0.8301\nseed=72 round=9 verified=3/3 accuracy=0.7988",
+    "prove_mean_seconds": 1.5628822766666666,
+    "verify_mean_seconds": 0.03429236,
+    "keygen_seconds": 1.0355546,
+    "proof_gated_final_accuracy": 0.798828125,
+    "quantized_no_noise_final_accuracy": 0.958984375
+  },
+  {
+    "seed": 82,
+    "wall_seconds": 105.91685409999627,
+    "peak_rss_mib": 238.26953125,
+    "stdout": "seed=82 round=0 verified=3/3 accuracy=0.7070\nseed=82 round=1 verified=3/3 accuracy=0.7988\nseed=82 round=2 verified=3/3 accuracy=0.8047\nseed=82 round=3 verified=3/3 accuracy=0.7930\nseed=82 round=4 verified=3/3 accuracy=0.8164\nseed=82 round=5 verified=3/3 accuracy=0.7910\nseed=82 round=6 verified=3/3 accuracy=0.8125\nseed=82 round=7 verified=3/3 accuracy=0.7812\nseed=82 round=8 verified=3/3 accuracy=0.7637\nseed=82 round=9 verified=3/3 accuracy=0.9043",
+    "prove_mean_seconds": 2.874250646666667,
+    "verify_mean_seconds": 0.06867309,
+    "keygen_seconds": 1.0691515,
+    "proof_gated_final_accuracy": 0.904296875,
+    "quantized_no_noise_final_accuracy": 0.931640625
+  }
+]
