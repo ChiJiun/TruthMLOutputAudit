@@ -1,0 +1,11 @@
+{
+  "status": "excluded_initial_pilot_then_reverified_after_parser_fix",
+  "seed": 42,
+  "actual_live_verified_proofs": 30,
+  "initial_disk_verification": "failed_model_chain_equality",
+  "initial_error": "assertion left == right failed: left [-6.938893903907227e-17, -0.5333333333333332, 0.6666666666666667, 0.3666666666666667]; right [-6.938893903907228e-17, -0.5333333333333332, 0.6666666666666667, 0.3666666666666667]",
+  "cause": "default serde_json float parsing did not preserve the original model f64 bit pattern",
+  "fix": "serde_json float_roundtrip feature and exact-bit regression test",
+  "same_saved_pilot_after_fix": "verified_from_disk=30 rounds=10 model_chain_valid=true",
+  "formal_matrix": "../results_roundtrip; generated afresh after fix; pilot not counted"
+}

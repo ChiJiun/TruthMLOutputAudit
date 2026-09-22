@@ -1,0 +1,23 @@
+{
+  "seeds": [
+    42,
+    52,
+    62,
+    72,
+    82
+  ],
+  "clients": 3,
+  "rounds": 10,
+  "quantization_unit": 0.1,
+  "dimension": 4,
+  "k": 16,
+  "data": "public synthetic, 64/client, 512 test, seeded client feature shift",
+  "negative_probes": "isolated ticket copies except duplicate live submissions; no poisoning trajectory",
+  "predeclared_use": "integration and cost, descriptive accuracy only; no seed selection",
+  "source_sha256": {
+    "halo2_verifiable_randomness\\src\\main.rs": "e8d2fa51eabb601a27d2c50b361498a2a28d9386aabd78875b0d84e834ee6593",
+    "halo2_verifiable_randomness\\src\\federated.rs": "7502fa06bcc1da52b317f9ff2c597f1e7f4a449f13b47b6b0d6201f1b39d6564",
+    "halo2_verifiable_randomness\\Cargo.lock": "4a24c2467b70ddbd49aa5ca0df7bfb7bc53f5eee97b691a4666905520c66a7b2",
+    "actual_multiround_halo2\\run_experiment.py": "6cab79600479e5561beb2541537ed906d29181bb2cbf8e5ba5532652beddfbb0"
+  }
+}

@@ -47,6 +47,8 @@ const INSTANCE_Q_NOISY_START: usize = 8;
 
 type PoseidonChip = Pow5Chip<Fp, WIDTH, RATE>;
 
+mod federated;
+
 #[derive(Clone, Debug)]
 struct CanonicalBitsConfig {
     bit: Column<Advice>,
@@ -849,18 +851,40 @@ fn demo_bundle_with_material(
     salt: Fp,
     challenge: Fp,
 ) -> DemoBundle {
-    let q_clipped = [1_i64, -1, 0, 1];
-    let client_id = Fp::from(7);
-    let round_id = Fp::from(11);
-    let model_hash = Fp::from(0xabc0_1234);
-    let nonce = Fp::from(0x9001 ^ experiment_seed.rotate_left(17));
+    contextual_bundle(
+        [1_i64, -1, 0, 1],
+        [
+            Fp::from(7),
+            Fp::from(11),
+            Fp::from(0xabc0_1234),
+            Fp::from(0x9001 ^ experiment_seed.rotate_left(17)),
+        ],
+        secret,
+        salt,
+        challenge,
+    )
+}
+
+fn update_commitment_for(q_clipped: [i64; DIMENSION], salt: Fp) -> Fp {
+    let mut commitment = native_hash2(Fp::from(TAG_UPDATE), salt);
+    for coordinate in q_clipped {
+        commitment = native_hash2(commitment, fp_from_i64(coordinate));
+    }
+    commitment
+}
+
+fn contextual_bundle(
+    q_clipped: [i64; DIMENSION],
+    context: [Fp; 4],
+    secret: Fp,
+    salt: Fp,
+    challenge: Fp,
+) -> DemoBundle {
+    let [client_id, round_id, model_hash, nonce] = context;
 
     let secret_domain = native_hash2(Fp::from(TAG_SECRET), client_id);
     let secret_commitment = native_hash2(secret_domain, secret);
-    let mut update_commitment = native_hash2(Fp::from(TAG_UPDATE), salt);
-    for coordinate in q_clipped {
-        update_commitment = native_hash2(update_commitment, fp_from_i64(coordinate));
-    }
+    let update_commitment = update_commitment_for(q_clipped, salt);
     let mut context = Fp::from(TAG_CONTEXT);
     for field in [
         client_id,
@@ -1029,6 +1053,14 @@ fn fp_le_hex(value: &Fp) -> String {
 
 fn main() {
     let arguments: Vec<String> = std::env::args().collect();
+    if arguments.get(1).map(String::as_str) == Some("--federated") {
+        federated::run(&arguments[2..]);
+        return;
+    }
+    if arguments.get(1).map(String::as_str) == Some("--verify-federated") {
+        federated::verify_saved(&PathBuf::from(arguments.get(2).expect("run.json path")));
+        return;
+    }
     let output = arguments
         .get(1)
         .map(PathBuf::from)

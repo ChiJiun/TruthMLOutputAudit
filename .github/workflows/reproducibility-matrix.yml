@@ -2,7 +2,7 @@ name: Reproducibility matrix
 
 on:
   push:
-    branches: ["codex/context-bound-randomness"]
+    branches: ["main", "codex/**"]
   pull_request:
   workflow_dispatch:
 
@@ -33,7 +33,16 @@ jobs:
           --seeds 42 52 62
           --label ${{ runner.os }}-${{ runner.arch }}
           --output-dir cross_backend_reproducibility/ci-results/${{ runner.os }}
+      - name: Test multi-round audit and sampler boundary analysis
+        run: python -m unittest discover -s actual_multiround_halo2 -p "test*.py" -v
+      - name: Prove and reverify a complete two-client two-round trajectory
+        run: >-
+          python actual_multiround_halo2/run_experiment.py
+          --seeds 42 --clients 2 --rounds 2
+          --output-dir actual_multiround_halo2/ci-results/${{ runner.os }}
       - uses: actions/upload-artifact@v6
         with:
           name: reproducibility-${{ runner.os }}
-          path: cross_backend_reproducibility/ci-results/${{ runner.os }}
+          path: |
+            cross_backend_reproducibility/ci-results/${{ runner.os }}/
+            actual_multiround_halo2/ci-results/${{ runner.os }}/

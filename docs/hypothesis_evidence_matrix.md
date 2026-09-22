@@ -24,6 +24,8 @@ non-IID client scaling 固定 100,000 筆 CoverType training subset，以 5 seed
 
 ## 核心假設的結案判定
 
+補充實驗：`actual_multiround_halo2/` 將四參數合成資料訓練、逐更新 Halo2 proof、model context 與跨輪聚合接在同一程式中，保存後由獨立執行重驗 proof 與模型鏈。結果見 `actual_multiround_halo2/hackmd_update.md`。它補強 H3/H8 的固定-profile 整合證據；不把 H10 的高維 cost experiment 自動升格為逐更新全量證明，也不替代完整 transcript 的 DP 安全分析。
+
 若核心假設定義為：
 
 > 聯邦學習中的 DP update clipping 與 additive relation，可以被轉換成可由 ZKML/constraint 檢查、並能控制 aggregation 的可重現審計介面。

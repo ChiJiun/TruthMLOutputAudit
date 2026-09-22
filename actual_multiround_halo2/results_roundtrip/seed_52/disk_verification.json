@@ -1,0 +1,5 @@
+{
+  "passed": true,
+  "stdout": "verified_from_disk=30 rounds=10 model_chain_valid=true\n",
+  "wall_seconds": 8.155040500001633
+}

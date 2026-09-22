@@ -2,6 +2,8 @@
 
 日期：2026-08-06
 
+> 後續更新：新增 `actual_multiround_halo2/`，以四參數合成資料評估逐更新 actual Halo2 proof 與模型鏈磁碟重驗。完成數量、成本、失敗紀錄與可貼入 HackMD 的正文見 `actual_multiround_halo2/hackmd_update.md`。該實驗不將本文固定-profile accountant 直接升格為完整自適應 FL transcript 的 DP 證明；commitment hiding、PRF/ZK simulation 與適應性 composition 仍須整體安全審查。
+
 ## 摘要與判定
 
 本階段針對前一版結案報告列出的五個投稿缺口逐項實作。結果不再只是協定草圖：context-bound hidden randomness、Poseidon PRG 與 centered-binomial sampler 已進入真正的 Zcash Halo2 circuit；exact sampler 已有 replacement client-level DP theorem 與可執行的 conservative privacy-loss accountant；新增 10 個 independent seeds、硬體 manifest、Halo2/EZKL 兩種 actual proof backend 及 Windows/Linux CI；CoverType 實驗擴至 1,991 個參數、50 clients、20 rounds；bounded poisoning 則以 coordinate median 與 trimmed mean 實測緩解。

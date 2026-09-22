@@ -1,0 +1,41 @@
+{
+  "seed_count": 5,
+  "actual_proofs": 150,
+  "unique_proof_hashes": 150,
+  "proof_bytes_total": 576000,
+  "disk_reverified_proofs": 150,
+  "negative_probes": 1050,
+  "negative_probes_rejected": 1050,
+  "metrics": {
+    "prove_mean_seconds": {
+      "mean": 1.95195492,
+      "ci95_half_width": 0.7963408313795552
+    },
+    "verify_mean_seconds": {
+      "mean": 0.04504424866666667,
+      "ci95_half_width": 0.020057427129901724
+    },
+    "wall_seconds": {
+      "mean": 73.2116944199981,
+      "ci95_half_width": 28.67895706186483
+    },
+    "peak_rss_mib": {
+      "mean": 238.51484375,
+      "ci95_half_width": 0.6506335126608366
+    },
+    "keygen_seconds": {
+      "mean": 1.18967826,
+      "ci95_half_width": 0.4907688921643559
+    },
+    "proof_gated_final_accuracy": {
+      "mean": 0.830859375,
+      "ci95_half_width": 0.09890526748263402
+    },
+    "quantized_no_noise_final_accuracy": {
+      "mean": 0.944140625,
+      "ci95_half_width": 0.014811141940212321
+    }
+  },
+  "ci_unit": "one complete seeded trajectory (not individual proofs)",
+  "scope": "fixed four-dimensional synthetic logistic FL; real proofs per update; no local training provenance or full-transcript DP certification"
+}

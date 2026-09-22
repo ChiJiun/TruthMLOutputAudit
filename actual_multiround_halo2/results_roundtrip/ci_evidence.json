@@ -1,0 +1,12 @@
+{
+  "run_id": 35562459492,
+  "url": "https://github.com/ChiJiun/TruthMLOutputAudit/actions/runs/35562459492",
+  "tested_source_commit": "f2ca1cf",
+  "conclusion": "success",
+  "observed_date": "2026-09-21",
+  "jobs": [
+    {"os": "windows-latest", "conclusion": "success", "rust_tests": 8, "new_python_tests": 3, "standalone_actual_proofs": 3, "multiround_actual_proofs": 4, "multiround_disk_reverified_proofs": 4, "negative_probes_rejected": 28},
+    {"os": "ubuntu-latest", "conclusion": "success", "rust_tests": 8, "new_python_tests": 3, "standalone_actual_proofs": 3, "multiround_actual_proofs": 4, "multiround_disk_reverified_proofs": 4, "negative_probes_rejected": 28}
+  ],
+  "scope": "Each CI multiround job ran one seed, two clients, two rounds; separate from the local five-seed matrix. Evidence checked in actual job logs."
+}

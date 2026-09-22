@@ -1,5 +1,7 @@
 # 以 ZKML 實現可驗證差分隱私聯邦學習之原型研究
 
+> 最新補充：逐更新 Halo2 多輪整合、原始 proofs、精確模型鏈重驗與 sampler 隱私邊界，請見 `actual_multiround_halo2/hackmd_update.md`。本文件舊階段的 public-seed、尚未 circuit 化等描述屬歷史結果，不應當成新模組現況；完整 transcript 的 DP 與訓練來源正確性仍未由這些工程實驗證明。
+
 > 2026-08-06 更新：the publication-strengthening modules 已完成 actual Halo2 hidden-randomness/sampler circuit、finite-profile client-level accountant、10-seed/CI reproducibility、K=50/R=20與1,991維scaling，以及bounded-poisoning robust aggregation。最新投稿強化結果與主張邊界請見 `docs/publication_strengthening_report.md`；本文件其餘內容保留原結案版本脈絡。
 
 ## 一、研究背景與目的
