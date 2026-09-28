@@ -1,8 +1,72 @@
-# TruthMLOutputAudit
+# zk-verifiable-dp-fl
 
-本專案研究如何將聯邦學習中的差分隱私更新轉換為可由零知識證明審計的介面，並讓驗證結果實際控制聚合。Repository 依研究功能與實驗里程碑組織，不再使用週次編號。
+**可驗證差分隱私聯邦學習（VDP-FL）**：讓每一份 client update 附上零知識證明，證明它確實經過 clipping、並以秘密且綁定情境的隨機性加入差分隱私噪聲；server 只聚合驗證通過的更新。
+
+*Verifiable differential privacy for federated learning — every client update carries a zero-knowledge proof (Halo2 / EZKL) that it was clipped and noised correctly, and only verified updates are aggregated.*
+
+[![Reproducibility matrix](https://github.com/ChiJiun/zk-verifiable-dp-fl/actions/workflows/reproducibility-matrix.yml/badge.svg)](https://github.com/ChiJiun/zk-verifiable-dp-fl/actions/workflows/reproducibility-matrix.yml)
+
+## 為什麼需要
+
+在一般的 DP 聯邦學習中，server 只能「相信」client 有照規定 clip 並加噪。惡意或偷懶的 client 可以送出未加噪、未 clip 的更新，而 server 無從察覺。本專案把 DP update 轉成可由零知識證明審計的介面：
+
+- **隱私**：client 的原始更新、秘密種子與噪聲值都留在 private witness，不公開。
+- **可驗證**：proof 綁定 client、round、model、nonce 與 server challenge，無法重播或挪用到其他情境。
+- **可控制聚合**：驗證結果直接決定該更新是否進入 FedAvg／robust aggregation。
+
+## 系統架構
+
+![One proof-gated federated round](assets/readme/architecture.svg)
+
+1. **Client** 在本地訓練得到 `Δw`，clip 並量化成 `q_clipped`，先送出 Poseidon commitment。
+2. **Server** 在收到 commitment *之後*才發出一次性的 challenge（commit-before-challenge）。
+3. **Halo2 circuit** 以 setup 時承諾的秘密 `s` 與完整 context 產生 Poseidon PRG 輸出，經 canonical 255-bit 分解後取 bits，組成 `k=16` 的 centered-binomial 噪聲，並證明 `q_noisy = q_clipped + q_noise`。
+4. **Server** 驗證 proof、context 與 replay cache，只把通過的更新送進 mean／coordinate median／trimmed mean 聚合，再廣播下一輪模型。
+
+## 實驗結果
+
+![Evidence at a glance](assets/readme/evidence.svg)
+
+![Proof cost and robust aggregation](assets/readme/scaling-and-robustness.svg)
+
+右圖是本專案刻意保留的負面結果：在 clipping 範圍內反向放大更新的攻擊者，其 300/300 份更新全數通過 ZK gate。**Update-level proof 不等於 local-training provenance**，因此另外以 robust aggregation 緩解，但仍無法完全消除 utility loss。
+
+### 主張邊界
+
+| 可以宣稱 | 不可以宣稱 |
+|---|---|
+| Hidden randomness、Poseidon PRG、centered-binomial sampler、clipping 與 additive-noise relation 已整合進 actual Halo2 proof | 任意維度、任意 rounds 的統一 ε；高維實驗不繼承四維 theorem |
+| 固定四維 profile（`d=4, k=16`, 10 rounds）下 replacement client-level `ε ≤ 28.840669` at `δ = 1e-5` | 完整自適應 FL transcript 的 DP（commitment hiding、PRF/ZK simulation 仍待審查） |
+| 3 clients × 10 rounds × 5 seeds 共 150 份逐更新 proof 全數通過，並可從磁碟重建模型鏈 | 已證明 local training 正確，或能防禦任意 poisoning／Byzantine 攻擊 |
+| 385–1,991 維 EZKL constraint proof、50 clients × 20 rounds 的 FL scaling | Production 部署效能；1,000-proof workload 為外推值 |
+
+Poseidon 的 computational-DP 結論依賴 PRF、unique context、setup commitment、commit-before-challenge 與 secret non-disclosure 等假設。完整討論見 [`docs/publication_strengthening_report.md`](docs/publication_strengthening_report.md)。
+
+## 快速開始
+
+需求：Python（CI 使用 3.12）、Rust stable。
+
+```powershell
+pip install -r requirements.txt
+
+# Halo2 可驗證隨機性 circuit：測試與單次 actual proof
+cd halo2_verifiable_randomness
+cargo test --release
+cargo run --release -- results/halo2_context_noise_proof.json 42
+cd ..
+
+# 離散噪聲 accountant、跨 seed 重現、scaling 與 robust aggregation
+python discrete_noise_accounting/centered_binomial_accountant.py
+python cross_backend_reproducibility/run_halo2_seed_benchmark.py
+python production_scaling/run_production_scaling.py
+python robust_aggregation/run_robust_aggregation.py
+```
+
+逐更新 Halo2 多輪實驗（產生 proof、驗證後聚合、從磁碟重驗模型鏈）請見 [`actual_multiround_halo2/README.md`](actual_multiround_halo2/README.md)。
 
 ## 研究主線
+
+Repository 依研究功能與實驗里程碑組織：從 S0 FedAvg、S1 DP update，到 S2 proof-gated aggregation，再延伸至可驗證隨機性與投稿強化。
 
 | 研究單元 | 內容 | 主要目錄 |
 |---|---|---|
@@ -13,19 +77,10 @@
 | Privacy 與威脅分析 | Gaussian accountant、non-IID clients、多輪攻擊矩陣及統計稽核 | `gaussian_privacy_accounting/`、`noniid_client_scaling/`、`multiround_threat_matrix/`、`experimental_rigor_audit/` |
 | 可驗證隨機性 | Commit-before-challenge、hidden randomness、Poseidon PRG、離散 sampler 與正式 accountant | `context_bound_randomness_protocol/`、`halo2_verifiable_randomness/`、`discrete_noise_accounting/` |
 | 投稿強化 | Cross-backend／硬體重現、較大型 federation 與 bounded-poisoning defense | `cross_backend_reproducibility/`、`production_scaling/`、`robust_aggregation/` |
+| 逐更新多輪證明 | 每份更新產生 actual Halo2 proof、accepted-only aggregation、磁碟重驗 | `actual_multiround_halo2/` |
 
-## 核心成果
-
-- 建立 S0 FedAvg、S1 DP update、S2 proof-gated aggregation 的完整實驗鏈。
-- 以 canonical quantized witness 解決浮點到整數 constraint 的 rounding 不一致。
-- 在 EZKL 中實際證明完整 update-vector clipping 與 additive-noise relation。
-- 在 Zcash Halo2 中實作 context-bound Poseidon PRG、canonical field decomposition 與 centered-binomial sampler。
-- 對固定四維、`k=16`、十輪 profile 建立 replacement client-level PLD accountant：`epsilon <= 28.840669` at `delta=1e-5`。
-- 完成 10-seed Halo2 reproducibility、Windows/Linux CI 與 EZKL/Halo2 backend coverage。
-- CoverType 實驗擴至 50 clients、20 rounds、1,991 維 constraint profile。
-- 以 10-seed paired experiment 評估 coordinate median 與 trimmed mean 對 20% bounded poisoning 的緩解效果。
-
-## 目錄說明
+<details>
+<summary><b>完整目錄說明</b></summary>
 
 ### 基礎模型與 FL／DP baselines
 
@@ -61,25 +116,18 @@
 - `cross_backend_reproducibility/`：10-seed proofs、硬體 manifest 與跨 OS CI。
 - `production_scaling/`：385–1,991 維 actual EZKL，以及 K=10–50、R=3–20 FL scaling。
 - `robust_aggregation/`：mean、coordinate median、trimmed mean 的 bounded-poisoning evaluation。
+- `actual_multiround_halo2/`：四參數合成資料、3 clients × 10 rounds 的逐更新 actual Halo2 proof 與模型鏈重驗。
 
-## 主要執行方式
+</details>
 
-新增逐更新 Halo2 多輪實驗：[actual_multiround_halo2/README.md](actual_multiround_halo2/README.md)。
-以四參數合成資料訓練，逐份產生／驗證 proof、重用 circuit keys，並從磁碟重建
-model chain；這是固定範圍的整合證據，不代表高維 production 或完整 transcript DP。
+## 文件
 
-各模組可以從 repository root 執行，也可以進入模組目錄執行其主程式。投稿強化流程例如：
+- [`docs/publication_strengthening_report.md`](docs/publication_strengthening_report.md)：正式結論、限制與可使用主張
+- [`docs/VDP-FL-research-plan.md`](docs/VDP-FL-research-plan.md)：研究規劃
+- [`docs/system_architecture_explanation.md`](docs/system_architecture_explanation.md)：系統架構逐節點說明
+- [`docs/hypothesis_evidence_matrix.md`](docs/hypothesis_evidence_matrix.md)：假說與證據對照
+- [`actual_multiround_halo2/hackmd_update.md`](actual_multiround_halo2/hackmd_update.md)：逐更新多輪實驗報告
 
-```powershell
-cd halo2_verifiable_randomness
-cargo test --release
-cargo run --release -- results/halo2_context_noise_proof.json 42
+## 主要參考
 
-cd ..
-python discrete_noise_accounting/centered_binomial_accountant.py
-python cross_backend_reproducibility/run_halo2_seed_benchmark.py
-python production_scaling/run_production_scaling.py
-python robust_aggregation/run_robust_aggregation.py
-```
-
-正式結論、限制與可使用主張見 `docs/publication_strengthening_report.md`；研究規劃見 `docs/VDP-FL-research-plan.md`。
+[Zcash Halo2](https://github.com/zcash/halo2) · [EZKL](https://github.com/zkonduit/ezkl) · [Koskela et al., exact PLD accounting](https://proceedings.mlr.press/v130/koskela21a.html) · [cpSGD binomial mechanism](https://arxiv.org/abs/1805.10559) · [Byzantine-robust median / trimmed mean](https://arxiv.org/abs/1803.01498)

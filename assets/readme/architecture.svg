@@ -1,0 +1,110 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 700" width="1200" height="700" font-family="'Segoe UI', -apple-system, 'Helvetica Neue', Helvetica, sans-serif">
+  <title>Proof-gated federated round: client, Halo2 circuit, server</title>
+  <defs>
+    <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#57606A"/>
+    </marker>
+    <marker id="ahw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#C9D6E6"/>
+    </marker>
+    <marker id="aho" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#B45309"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="700" rx="20" fill="#F7F5F0"/>
+
+  <text x="40" y="52" font-size="26" font-weight="700" fill="#1F2328">One proof-gated federated round</text>
+  <text x="40" y="80" font-size="16" fill="#57606A">Each update carries a Halo2 proof that it was clipped and noised with secret, context-bound randomness. The server aggregates only what verifies.</text>
+
+  <!-- Zone A: client -->
+  <rect x="32" y="106" width="330" height="440" rx="16" fill="#EAF1FB" stroke="#2458A6" stroke-width="1.5"/>
+  <text x="54" y="138" font-size="14" font-weight="700" letter-spacing="1.5" fill="#2458A6">CLIENT i · PRIVATE</text>
+
+  <rect x="52" y="156" width="290" height="76" rx="10" fill="#FFFFFF" stroke="#B9CCE6"/>
+  <text x="70" y="186" font-size="17" font-weight="600" fill="#1F2328">1  Local training</text>
+  <text x="70" y="214" font-size="15" fill="#57606A">Δw = w_local − w_global</text>
+
+  <rect x="52" y="262" width="290" height="76" rx="10" fill="#FFFFFF" stroke="#B9CCE6"/>
+  <text x="70" y="292" font-size="17" font-weight="600" fill="#1F2328">2  Clip &amp; quantize</text>
+  <text x="70" y="320" font-size="15" fill="#57606A">q_clipped ∈ {−1, 0, 1}ᵈ,  ‖q‖² ≤ C²</text>
+
+  <rect x="52" y="368" width="290" height="76" rx="10" fill="#FFFFFF" stroke="#B9CCE6"/>
+  <text x="70" y="398" font-size="17" font-weight="600" fill="#1F2328">3  Commit, then get challenge</text>
+  <text x="70" y="426" font-size="15" fill="#57606A">Poseidon(q_clipped, salt)</text>
+
+  <rect x="52" y="474" width="290" height="52" rx="10" fill="#DCE7F6" stroke="#B9CCE6" stroke-dasharray="4 4"/>
+  <text x="70" y="506" font-size="15" fill="#2458A6">secret s · committed at setup</text>
+
+  <line x1="197" y1="232" x2="197" y2="258" stroke="#57606A" stroke-width="2" marker-end="url(#ah)"/>
+  <line x1="197" y1="338" x2="197" y2="364" stroke="#57606A" stroke-width="2" marker-end="url(#ah)"/>
+
+  <!-- Zone B: Halo2 circuit -->
+  <rect x="408" y="106" width="400" height="440" rx="16" fill="#1F2A37"/>
+  <text x="430" y="138" font-size="14" font-weight="700" letter-spacing="1.5" fill="#9FB7D9">HALO2 CIRCUIT · ZERO-KNOWLEDGE</text>
+
+  <rect x="428" y="156" width="360" height="76" rx="10" fill="#2B3A4B" stroke="#3E5068"/>
+  <text x="446" y="186" font-size="17" font-weight="600" fill="#FFFFFF">Context binding</text>
+  <text x="446" y="214" font-size="15" fill="#C9D6E6">client · round · model · nonce · challenge</text>
+
+  <rect x="428" y="262" width="360" height="76" rx="10" fill="#2B3A4B" stroke="#3E5068"/>
+  <text x="446" y="292" font-size="17" font-weight="600" fill="#FFFFFF">Poseidon PRG → canonical bits</text>
+  <text x="446" y="320" font-size="15" fill="#C9D6E6">255-bit decomposition + modulus check</text>
+
+  <rect x="428" y="368" width="360" height="76" rx="10" fill="#2B3A4B" stroke="#3E5068"/>
+  <text x="446" y="398" font-size="17" font-weight="600" fill="#FFFFFF">Centered-binomial noise, k = 16</text>
+  <text x="446" y="426" font-size="15" fill="#C9D6E6">q_noisy = q_clipped + q_noise</text>
+
+  <rect x="428" y="474" width="360" height="52" rx="26" fill="#1F2A37" stroke="#E08A3C" stroke-width="2"/>
+  <text x="608" y="506" font-size="16" font-weight="600" fill="#FFFFFF" text-anchor="middle">proof π  +  public q_noisy</text>
+
+  <line x1="608" y1="232" x2="608" y2="258" stroke="#C9D6E6" stroke-width="2" marker-end="url(#ahw)"/>
+  <line x1="608" y1="338" x2="608" y2="364" stroke="#C9D6E6" stroke-width="2" marker-end="url(#ahw)"/>
+  <line x1="608" y1="444" x2="608" y2="470" stroke="#C9D6E6" stroke-width="2" marker-end="url(#ahw)"/>
+
+  <!-- witness arrow A -> B -->
+  <line x1="362" y1="300" x2="404" y2="300" stroke="#2458A6" stroke-width="2.5" marker-end="url(#ah)"/>
+  <text x="385" y="288" font-size="13" fill="#2458A6" text-anchor="middle">witness</text>
+
+  <!-- Zone C: server -->
+  <rect x="854" y="106" width="314" height="440" rx="16" fill="#FBF0E6" stroke="#B45309" stroke-width="1.5"/>
+  <text x="876" y="138" font-size="14" font-weight="700" letter-spacing="1.5" fill="#B45309">SERVER · PUBLIC</text>
+
+  <rect x="874" y="156" width="274" height="76" rx="10" fill="#FFFFFF" stroke="#EBCFB3"/>
+  <text x="892" y="186" font-size="17" font-weight="600" fill="#1F2328">Issue challenge</text>
+  <text x="892" y="214" font-size="15" fill="#57606A">single-use, after commitment</text>
+
+  <rect x="874" y="262" width="274" height="76" rx="10" fill="#FFFFFF" stroke="#EBCFB3"/>
+  <text x="892" y="292" font-size="17" font-weight="600" fill="#1F2328">Verify gate</text>
+  <text x="892" y="320" font-size="15" fill="#57606A">proof · context · replay cache</text>
+
+  <rect x="874" y="368" width="274" height="76" rx="10" fill="#FFFFFF" stroke="#EBCFB3"/>
+  <text x="892" y="398" font-size="17" font-weight="600" fill="#1F2328">Accepted-only aggregation</text>
+  <text x="892" y="426" font-size="15" fill="#57606A">mean · median · trimmed mean</text>
+
+  <rect x="874" y="474" width="274" height="52" rx="10" fill="#FFFFFF" stroke="#EBCFB3"/>
+  <text x="892" y="506" font-size="16" font-weight="600" fill="#1F2328">Global model w(t+1)</text>
+
+  <line x1="1011" y1="338" x2="1011" y2="364" stroke="#57606A" stroke-width="2" marker-end="url(#ah)"/>
+  <line x1="1011" y1="444" x2="1011" y2="470" stroke="#57606A" stroke-width="2" marker-end="url(#ah)"/>
+
+  <!-- challenge C1 -> B1 -->
+  <line x1="874" y1="194" x2="792" y2="194" stroke="#B45309" stroke-width="2.5" marker-end="url(#aho)"/>
+  <!-- proof -> verify -->
+  <path d="M788 500 L830 500 L830 300 L870 300" fill="none" stroke="#B45309" stroke-width="2.5" marker-end="url(#aho)"/>
+  <!-- next round loop -->
+  <path d="M1011 526 L1011 578 L197 578 L197 548" fill="none" stroke="#57606A" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#ah)"/>
+  <rect x="520" y="566" width="170" height="24" fill="#F7F5F0"/>
+  <text x="605" y="584" font-size="14" fill="#57606A" text-anchor="middle">broadcast · next round</text>
+
+  <!-- rejected probes -->
+  <rect x="32" y="612" width="1136" height="60" rx="12" fill="#FFFFFF" stroke="#D0D7DE"/>
+  <text x="54" y="648" font-size="15" font-weight="700" fill="#1F2328">Rejected in tests</text>
+  <g font-size="15" fill="#57606A">
+    <text x="200" y="648">✕ tampered q_noisy</text>
+    <text x="362" y="648">✕ swapped client / round / model</text>
+    <text x="604" y="648">✕ zero-noise forgery</text>
+    <text x="776" y="648">✕ corrupted proof</text>
+    <text x="930" y="648">✕ replayed proof</text>
+  </g>
+</svg>

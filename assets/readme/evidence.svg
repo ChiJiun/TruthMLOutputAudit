@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 440" width="1200" height="440" font-family="'Segoe UI', -apple-system, 'Helvetica Neue', Helvetica, sans-serif">
+  <title>Evidence at a glance: key measured results</title>
+  <rect x="0" y="0" width="1200" height="440" rx="20" fill="#F7F5F0"/>
+  <text x="40" y="52" font-size="26" font-weight="700" fill="#1F2328">Evidence at a glance</text>
+  <text x="40" y="80" font-size="16" fill="#57606A">Measured on actual proofs and trajectories. Each number holds only within the scope printed under it.</text>
+
+  <!-- row 1 -->
+  <g>
+    <rect x="32" y="104" width="266" height="148" rx="14" fill="#FFFFFF" stroke="#D0D7DE"/>
+    <text x="52" y="160" font-size="40" font-weight="700" fill="#2458A6">150 / 150</text>
+    <text x="52" y="192" font-size="16" font-weight="600" fill="#1F2328">actual Halo2 proofs verified</text>
+    <text x="52" y="216" font-size="14" fill="#57606A">5 seeds × 3 clients × 10 rounds,</text>
+    <text x="52" y="236" font-size="14" fill="#57606A">model chain re-verified from disk</text>
+  </g>
+  <g>
+    <rect x="318" y="104" width="266" height="148" rx="14" fill="#FFFFFF" stroke="#D0D7DE"/>
+    <text x="338" y="160" font-size="40" font-weight="700" fill="#2458A6">ε ≤ 28.84</text>
+    <text x="338" y="192" font-size="16" font-weight="600" fill="#1F2328">client-level DP at δ = 10⁻⁵</text>
+    <text x="338" y="216" font-size="14" fill="#57606A">exact PLD accountant, fixed</text>
+    <text x="338" y="236" font-size="14" fill="#57606A">profile d = 4, k = 16, 10 rounds</text>
+  </g>
+  <g>
+    <rect x="604" y="104" width="266" height="148" rx="14" fill="#FFFFFF" stroke="#D0D7DE"/>
+    <text x="624" y="160" font-size="40" font-weight="700" fill="#2458A6">1.85 s</text>
+    <text x="624" y="192" font-size="16" font-weight="600" fill="#1F2328">Halo2 prove · 0.06 s verify</text>
+    <text x="624" y="216" font-size="14" fill="#57606A">3,840-byte proof, mean of</text>
+    <text x="624" y="236" font-size="14" fill="#57606A">10 seeds, 10/10 unique hashes</text>
+  </g>
+  <g>
+    <rect x="890" y="104" width="278" height="148" rx="14" fill="#FFFFFF" stroke="#D0D7DE"/>
+    <text x="910" y="160" font-size="40" font-weight="700" fill="#2458A6">2 backends</text>
+    <text x="910" y="192" font-size="16" font-weight="600" fill="#1F2328">EZKL/KZG and Halo2/IPA</text>
+    <text x="910" y="216" font-size="14" fill="#57606A">Windows + Linux CI; different</text>
+    <text x="910" y="236" font-size="14" fill="#57606A">relations, not a speed contest</text>
+  </g>
+
+  <!-- row 2 -->
+  <g>
+    <rect x="32" y="268" width="266" height="148" rx="14" fill="#FFFFFF" stroke="#D0D7DE"/>
+    <text x="52" y="324" font-size="40" font-weight="700" fill="#B45309">1,991</text>
+    <text x="52" y="356" font-size="16" font-weight="600" fill="#1F2328">update dimensions proven</text>
+    <text x="52" y="380" font-size="14" fill="#57606A">EZKL clipping + additive-noise</text>
+    <text x="52" y="400" font-size="14" fill="#57606A">relation (not local training)</text>
+  </g>
+  <g>
+    <rect x="318" y="268" width="266" height="148" rx="14" fill="#FFFFFF" stroke="#D0D7DE"/>
+    <text x="338" y="324" font-size="40" font-weight="700" fill="#B45309">50 × 20</text>
+    <text x="338" y="356" font-size="16" font-weight="600" fill="#1F2328">clients × rounds</text>
+    <text x="338" y="380" font-size="14" fill="#57606A">CoverType, Dirichlet α = 0.5,</text>
+    <text x="338" y="400" font-size="14" fill="#57606A">5 seeds, 40 FL trajectories</text>
+  </g>
+  <g>
+    <rect x="604" y="268" width="266" height="148" rx="14" fill="#FFFFFF" stroke="#D0D7DE"/>
+    <text x="624" y="324" font-size="40" font-weight="700" fill="#B45309">0.39 → 0.59</text>
+    <text x="624" y="356" font-size="16" font-weight="600" fill="#1F2328">accuracy retained under attack</text>
+    <text x="624" y="380" font-size="14" fill="#57606A">mean → coordinate median,</text>
+    <text x="624" y="400" font-size="14" fill="#57606A">20% bounded sign-flip, p = 0.002</text>
+  </g>
+  <g>
+    <rect x="890" y="268" width="278" height="148" rx="14" fill="#FFFFFF" stroke="#D0D7DE"/>
+    <text x="910" y="324" font-size="40" font-weight="700" fill="#B45309">7 probes</text>
+    <text x="910" y="356" font-size="16" font-weight="600" fill="#1F2328">per update, all rejected</text>
+    <text x="910" y="380" font-size="14" fill="#57606A">replay, swaps, tamper, corrupt</text>
+    <text x="910" y="400" font-size="14" fill="#57606A">proof, retry after failure</text>
+  </g>
+</svg>

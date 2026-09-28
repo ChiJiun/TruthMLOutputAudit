@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 480" width="1200" height="480" font-family="'Segoe UI', -apple-system, 'Helvetica Neue', Helvetica, sans-serif">
+  <title>EZKL proof cost by update dimension, and robust aggregation under bounded poisoning</title>
+  <rect x="0" y="0" width="1200" height="480" rx="20" fill="#F7F5F0"/>
+
+  <!-- ===== Left: proof cost ===== -->
+  <rect x="24" y="24" width="564" height="432" rx="16" fill="#FFFFFF" stroke="#D0D7DE"/>
+  <text x="48" y="62" font-size="20" font-weight="700" fill="#1F2328">Proving stays under 2 s up to 1,991 dims</text>
+  <text x="48" y="88" font-size="15" fill="#57606A">EZKL prove time per update (s), mean ± 95% CI, 3 seeds</text>
+
+  <g stroke="#E6E8EB" stroke-width="1">
+    <line x1="110" y1="130" x2="560" y2="130"/>
+    <line x1="110" y1="180" x2="560" y2="180"/>
+    <line x1="110" y1="230" x2="560" y2="230"/>
+    <line x1="110" y1="280" x2="560" y2="280"/>
+    <line x1="110" y1="330" x2="560" y2="330"/>
+  </g>
+  <line x1="110" y1="380" x2="560" y2="380" stroke="#8C959F" stroke-width="1.5"/>
+  <g font-size="14" fill="#6E7781" text-anchor="end">
+    <text x="98" y="385">0</text>
+    <text x="98" y="335">0.5</text>
+    <text x="98" y="285">1.0</text>
+    <text x="98" y="235">1.5</text>
+    <text x="98" y="185">2.0</text>
+    <text x="98" y="135">2.5</text>
+  </g>
+
+  <g fill="#2458A6">
+    <path d="M152 380 V331 a4 4 0 0 1 4 -4 H224 a4 4 0 0 1 4 4 V380 Z"/>
+    <path d="M297 380 V231.6 a4 4 0 0 1 4 -4 H369 a4 4 0 0 1 4 4 V380 Z"/>
+    <path d="M442 380 V218.2 a4 4 0 0 1 4 -4 H514 a4 4 0 0 1 4 4 V380 Z"/>
+  </g>
+  <g stroke="#1F2328" stroke-width="1.5">
+    <line x1="190" y1="340.6" x2="190" y2="313.4"/><line x1="182" y1="340.6" x2="198" y2="340.6"/><line x1="182" y1="313.4" x2="198" y2="313.4"/>
+    <line x1="335" y1="252.5" x2="335" y2="202.7"/><line x1="327" y1="252.5" x2="343" y2="252.5"/><line x1="327" y1="202.7" x2="343" y2="202.7"/>
+    <line x1="480" y1="257.3" x2="480" y2="171.1"/><line x1="472" y1="257.3" x2="488" y2="257.3"/><line x1="472" y1="171.1" x2="488" y2="171.1"/>
+  </g>
+  <g font-size="15" font-weight="600" fill="#1F2328" text-anchor="middle">
+    <text x="190" y="302">0.53 s</text>
+    <text x="335" y="192">1.52 s</text>
+    <text x="480" y="160">1.66 s</text>
+  </g>
+  <g font-size="15" fill="#1F2328" text-anchor="middle">
+    <text x="190" y="404">385</text>
+    <text x="335" y="404">999</text>
+    <text x="480" y="404">1,991</text>
+  </g>
+  <g font-size="13" fill="#6E7781" text-anchor="middle">
+    <text x="190" y="422">Linear</text>
+    <text x="335" y="422">MLP-16</text>
+    <text x="480" y="422">MLP-32</text>
+  </g>
+  <text x="335" y="444" font-size="13" fill="#6E7781" text-anchor="middle">update dimension · verify stays ≈ 0.05 s</text>
+
+  <!-- ===== Right: robust aggregation ===== -->
+  <rect x="612" y="24" width="564" height="432" rx="16" fill="#FFFFFF" stroke="#D0D7DE"/>
+  <text x="636" y="62" font-size="20" font-weight="700" fill="#1F2328">A valid proof is not honest training</text>
+  <text x="636" y="88" font-size="15" fill="#57606A">Attack / clean accuracy retention, 20% attackers, 10 seeds</text>
+
+  <g stroke="#E6E8EB" stroke-width="1">
+    <line x1="690" y1="130" x2="1150" y2="130"/>
+    <line x1="690" y1="192.5" x2="1150" y2="192.5"/>
+    <line x1="690" y1="255" x2="1150" y2="255"/>
+    <line x1="690" y1="317.5" x2="1150" y2="317.5"/>
+  </g>
+  <line x1="690" y1="380" x2="1150" y2="380" stroke="#8C959F" stroke-width="1.5"/>
+  <g font-size="14" fill="#6E7781" text-anchor="end">
+    <text x="678" y="385">0</text>
+    <text x="678" y="322.5">0.25</text>
+    <text x="678" y="260">0.50</text>
+    <text x="678" y="197.5">0.75</text>
+    <text x="678" y="135">1.00</text>
+  </g>
+
+  <path fill="#8C959F" d="M732 380 V287.3 a4 4 0 0 1 4 -4 H804 a4 4 0 0 1 4 4 V380 Z"/>
+  <path fill="#B45309" d="M877 380 V237.6 a4 4 0 0 1 4 -4 H949 a4 4 0 0 1 4 4 V380 Z"/>
+  <path fill="#B45309" d="M1022 380 V248.8 a4 4 0 0 1 4 -4 H1094 a4 4 0 0 1 4 4 V380 Z"/>
+  <g stroke="#1F2328" stroke-width="1.5">
+    <line x1="770" y1="294.1" x2="770" y2="272.6"/><line x1="762" y1="294.1" x2="778" y2="294.1"/><line x1="762" y1="272.6" x2="778" y2="272.6"/>
+    <line x1="915" y1="248.8" x2="915" y2="218.5"/><line x1="907" y1="248.8" x2="923" y2="248.8"/><line x1="907" y1="218.5" x2="923" y2="218.5"/>
+    <line x1="1060" y1="256.8" x2="1060" y2="232.8"/><line x1="1052" y1="256.8" x2="1068" y2="256.8"/><line x1="1052" y1="232.8" x2="1068" y2="232.8"/>
+  </g>
+  <g font-size="15" font-weight="600" fill="#1F2328" text-anchor="middle">
+    <text x="770" y="262">0.39</text>
+    <text x="915" y="208">0.59</text>
+    <text x="1060" y="222">0.54</text>
+  </g>
+  <g font-size="15" fill="#1F2328" text-anchor="middle">
+    <text x="770" y="404">Mean</text>
+    <text x="915" y="404">Coord. median</text>
+    <text x="1060" y="404">Trimmed mean</text>
+  </g>
+  <text x="915" y="436" font-size="13" fill="#6E7781" text-anchor="middle">all 300 malicious updates passed the ZK gate; robust aggregators</text>
+  <text x="915" y="452" font-size="13" fill="#6E7781" text-anchor="middle">recover part of the loss (paired sign-flip p = 0.002)</text>
+</svg>
