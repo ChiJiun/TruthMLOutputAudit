@@ -13,13 +13,26 @@ env/
 # Editor settings
 .idea/
 .vs/
+.serena/
 
-# Office / presentation files
+# Local report exports and presentation source files
 ~$*.ppt*
 *.ppt
 *.pptx
-docs/*.pdf
-docs/*.png
+docs/local/
 
-# Local experiment outputs
+# Local build and experiment outputs
 *.log
+$auditBuildDir/
+**/ci-results/
+**/smoke_results/
+
+# Generated proving artifacts. These are reproducible and can be very large.
+**/*.key
+**/*.srs
+experiments/multiclass_vdp_zk/results/ezkl_cases/
+
+# Downloaded and derived UCI Adult data
+experiments/adult_income_model/data/raw/
+experiments/adult_income_model/data/processed/
+experiments/adult_income_model/data/clients/*.npy

@@ -1,3 +1,6 @@
+# 完整 ML／EZKL 實驗環境（以 Python 3.12 為準）。
+# Accountant、Halo2 CI 與 Docker 核心重現請改用 requirements-core.txt。
+
 # ZK 核心
 ezkl==10.2.7         # 穩定版本，若報錯可試試其他
 onnx>=1.14.0         # 處理模型結構

@@ -7,6 +7,16 @@ on:
   workflow_dispatch:
 
 jobs:
+  repository-hygiene:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Check repository structure and generated artifacts
+        run: python scripts/check_repository.py
+
   halo2-and-accountant:
     strategy:
       fail-fast: false
@@ -21,28 +31,36 @@ jobs:
           python-version: "3.12"
       - uses: dtolnay/rust-toolchain@stable
       - name: Install focused Python dependencies
-        run: python -m pip install --upgrade numpy scipy psutil
+        run: python -m pip install --upgrade -r requirements-core.txt
       - name: Run exact accountant tests
-        run: python -m unittest discrete_noise_accounting.test_centered_binomial_accountant -v
+        run: >-
+          python -m unittest discover
+          -s experiments/discrete_noise_accounting -p "test*.py" -v
+      - name: Run context-bound protocol tests
+        run: >-
+          python -m unittest discover
+          -s experiments/context_bound_randomness_protocol -p "test*.py" -v
       - name: Run Halo2 constraint tests
-        working-directory: halo2_verifiable_randomness
+        working-directory: experiments/halo2_verifiable_randomness
         run: cargo test --release
       - name: Generate three actual proofs and hardware manifest
         run: >-
-          python cross_backend_reproducibility/run_halo2_seed_benchmark.py
+          python experiments/cross_backend_reproducibility/run_halo2_seed_benchmark.py
           --seeds 42 52 62
           --label ${{ runner.os }}-${{ runner.arch }}
-          --output-dir cross_backend_reproducibility/ci-results/${{ runner.os }}
+          --output-dir experiments/cross_backend_reproducibility/ci-results/${{ runner.os }}
       - name: Test multi-round audit and sampler boundary analysis
-        run: python -m unittest discover -s actual_multiround_halo2 -p "test*.py" -v
+        run: >-
+          python -m unittest discover
+          -s experiments/actual_multiround_halo2 -p "test*.py" -v
       - name: Prove and reverify a complete two-client two-round trajectory
         run: >-
-          python actual_multiround_halo2/run_experiment.py
+          python experiments/actual_multiround_halo2/run_experiment.py
           --seeds 42 --clients 2 --rounds 2
-          --output-dir actual_multiround_halo2/ci-results/${{ runner.os }}
+          --output-dir experiments/actual_multiround_halo2/ci-results/${{ runner.os }}
       - uses: actions/upload-artifact@v6
         with:
           name: reproducibility-${{ runner.os }}
           path: |
-            cross_backend_reproducibility/ci-results/${{ runner.os }}/
-            actual_multiround_halo2/ci-results/${{ runner.os }}/
+            experiments/cross_backend_reproducibility/ci-results/${{ runner.os }}/
+            experiments/actual_multiround_halo2/ci-results/${{ runner.os }}/
